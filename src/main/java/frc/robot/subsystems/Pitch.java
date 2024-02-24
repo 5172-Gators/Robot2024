@@ -56,20 +56,14 @@ public class Pitch extends SubsystemBase {
 
   }
 
-  public void pitchPosition(double position){
-
-    
-
-  }
-
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // double m_currentPosition = pitchEncoder.getPosition().getValueAsDouble();
+    double m_currentPosition = pitchEncoder.getPosition().getValueAsDouble();
 
-    // SmartDashboard.putNumber("Tilt Encoder Value", m_currentPosition);
+    SmartDashboard.putNumber("Tilt Encoder Value", m_currentPosition);
 
   }
 }

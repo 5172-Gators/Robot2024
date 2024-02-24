@@ -22,19 +22,22 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
 
+    /* define + configure the winch motor for the climber */
     winchMotor = new CANSparkMax(Constants.Climber.winchMotorID, MotorType.kBrushless);
     winchMotor.restoreFactoryDefaults();
     winchMotor.setIdleMode(IdleMode.kBrake);
 
+    /* define + configure the climber motor */
     climbMotor = new CANSparkFlex(Constants.Climber.climberMotor, MotorType.kBrushless);
     climbMotor.restoreFactoryDefaults();
     climbMotor.setIdleMode(IdleMode.kBrake);
 
+
   }
 
-
   public void joystickControl (double speed){
-
+    // allows the climber motors to be controlled using a joystick.
+    
     double slowSpeed = speed / 2;
     
     climbMotor.set(speed / 2);

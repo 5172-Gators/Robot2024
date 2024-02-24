@@ -54,7 +54,7 @@ public class IntakeCommand extends Command {
       new WaitCommand(0.5);
 
       // set the position of the pitch to intake position
-      s_Pitch.pitchPosition(Constants.Pitch.P_intakingPosition);
+      // s_Pitch.pitchPosition(Constants.Pitch.P_intakingPosition);
 
       // wait until position is set
       new WaitCommand(0.5);

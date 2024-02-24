@@ -70,7 +70,7 @@ public class Turret extends SubsystemBase {
 
     // position is in motor rotations
 
-    m_pidController.setReference(position, ControlType.kPosition);
+    m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
 
   }
 

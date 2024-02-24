@@ -21,14 +21,17 @@ public class TrapScore extends SubsystemBase {
 
   public TrapScore() {
 
+    /* define + configure the motor for the trap arm */
     trapArm = new CANSparkFlex(Constants.TrapScorer.armMotorID, MotorType.kBrushless);
     trapArm.restoreFactoryDefaults();
     trapArm.setIdleMode(IdleMode.kBrake);
 
   }
 
+  
   public void setSpeedZero (){
-
+    // sets the speed of the trap arm to 0
+    
     trapArm.set(0);
 
   }

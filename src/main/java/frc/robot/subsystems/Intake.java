@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkFlex;
@@ -38,7 +37,7 @@ public class Intake extends SubsystemBase {
     jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setInverted(false);
 
-    // defines + configures the PID controller for the joint
+    // defines + configures the PID controller for the joint so set positions can be used
     jointPID = jointMotor.getPIDController();
 
     jointPID.setP(Constants.Intake.kP);
@@ -62,14 +61,13 @@ public class Intake extends SubsystemBase {
 
   public void deployIntake(){
 
-    jointMotor.set(0.5);
-    // jointPID.setReference(Constants.Intake.deployedPosition, CANSparkMax.ControlType.kPosition);
+    jointPID.setReference(Constants.Intake.deployedPosition, CANSparkMax.ControlType.kPosition);
 
   }
 
   public void stowIntake(){
 
-    jointMotor.set(-0.5);
+    jointPID.setReference(Constants.Intake.stowedPosition, CANSparkMax.ControlType.kPosition);
 
   }
 
