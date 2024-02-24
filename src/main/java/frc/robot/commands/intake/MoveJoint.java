@@ -20,7 +20,7 @@ public class MoveJoint extends Command {
     this.s_Intake = s_Intake;
     addRequirements(s_Intake);
 
-    this.speed=speed;
+    this.speed = speed;
 
   }
 

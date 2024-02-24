@@ -52,7 +52,7 @@ public class TeleopShoot extends Command {
 
       if (rightSpeed == s_Shooter.getRightSpeed() && leftSpeed == s_Shooter.getLeftSpeed()){
 
-        new setKicker(s_Shooter);
+        new SetKicker(s_Shooter);
 
       } else {
 

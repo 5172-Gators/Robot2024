@@ -20,8 +20,10 @@ public final class Constants {
     public static double maxModuleSpeed;
 
 
-    public enum LimelightPositions{ // TODO: FIND LIMELIGHT POSITIONS
+    public enum LimelightPosition{ // TODO: FIND LIMELIGHT POSITIONS
 
+        // speaker positions
+        AGAINSTSPEAKER(0.0, 0.0, 0.0),
         SPEAKER(0.0, 0.0, 0.0),
         AMP(0.0, 0.0, 0.0);
 
@@ -29,7 +31,7 @@ public final class Constants {
         private double TYposition;
         private double TAposition;
 
-        private LimelightPositions(double tX, double tY, double tA){
+        private LimelightPosition(double tX, double tY, double tA){
 
             this.TXposition = tX;
             this.TYposition = tY;
@@ -37,29 +39,19 @@ public final class Constants {
 
         }
 
-        private double getTX() {
+        public double getTX() {
             return TXposition;
         }
 
-        private double getTY() {
+        public double getTY() {
 
             return TYposition;
         }
 
-        private double getTA(){
+        public double getTA(){
 
             return TAposition;
         }
-    }
-
-    public static final class Limelight {
-
-        /* Positions */
-        public static final double crosshairPosition = 0;
-
-        
-
-
     }
 
     public static final class Shooter{

@@ -19,9 +19,9 @@ import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.movePitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.MoveJoint;
-import frc.robot.commands.intake.intakeCommand;
-import frc.robot.commands.intake.testIntake;
-import frc.robot.commands.shooter.setKicker;
+import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.intake.TestIntake;
+import frc.robot.commands.shooter.SetKicker;
 import frc.robot.commands.shooter.TeleopShoot;
 
 import frc.robot.subsystems.Climber;
@@ -186,7 +186,7 @@ public class RobotContainer {
 
         stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
 
-        runKicker.whileTrue(new setKicker(s_Shooter));
+        runKicker.whileTrue(new SetKicker(s_Shooter));
 
         intake.onTrue(new InstantCommand(() -> s_Intake.runIntake(1)));
 

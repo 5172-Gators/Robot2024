@@ -13,10 +13,10 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -68,19 +68,10 @@ public class Turret extends SubsystemBase {
 
   public void setPosition(double position) {
 
-    // 0.5 is the speed that the motor is being set to, will probably change later
-    double targetPosition = position;
-  
+    // position is in motor rotations
 
-    if (rotateEncoder.getPosition() > targetPosition) {
+    m_pidController.setReference(position, ControlType.kPosition);
 
-      rotateMotor.set((0.5 * (((Math.abs((rotateEncoder.getPosition() - targetPosition)) ))) - Constants.Turret.allowableError));
-
-    } else if (rotateEncoder.getPosition() < targetPosition) {
-
-      rotateMotor.set((-0.5 * (((Math.abs((rotateEncoder.getPosition() - targetPosition))))) + Constants.Turret.allowableError));
-
-    }
   }
 
   @Override

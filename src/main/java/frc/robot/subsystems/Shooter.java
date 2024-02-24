@@ -51,10 +51,22 @@ public class Shooter extends SubsystemBase {
 
   public void setShooter(double speed, double rightSpeedRatio, double leftSpeedRatio) {
     // controls the shooter + kicker motors
-    
-    leftShooter.set(speed * leftSpeedRatio);
-    rightShooter.set(speed * rightSpeedRatio);
+   
+    boolean sensorValue = getSensor();
 
+    if (sensorValue == false) {
+      
+      leftShooter.set(speed * leftSpeedRatio);
+      rightShooter.set(speed * rightSpeedRatio);
+    
+    }
+
+    if (sensorValue == true){
+
+      leftShooter.set(0);
+      rightShooter.set(0);
+
+    }
   }
 
   public void setKicker(double speed, double kickerSpeedRatio){

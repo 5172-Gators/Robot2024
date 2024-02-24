@@ -14,7 +14,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Turret;
 
 
-public class intakeCommand extends Command {
+public class IntakeCommand extends Command {
   /** Creates a new intake. */
 
   Shooter s_Shooter;
@@ -24,7 +24,7 @@ public class intakeCommand extends Command {
 
   boolean sensorValue;
 
-  public intakeCommand(Intake m_Intake, Shooter m_Shooter) {
+  public IntakeCommand(Intake m_Intake, Shooter m_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Shooter = m_Shooter;
     this.s_Intake = m_Intake;

@@ -7,12 +7,12 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class setKicker extends Command {
+public class SetKicker extends Command {
   /** Creates a new setKicker. */
 
   Shooter s_Shooter;
 
-  public setKicker(Shooter m_Shooter) {
+  public SetKicker(Shooter m_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.s_Shooter = m_Shooter;

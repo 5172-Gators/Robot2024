@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Intake;
 
-public class testIntake extends Command {
+public class TestIntake extends Command {
   /** Creates a new testIntake. */
 
   Intake s_Intake;
 
-  public testIntake(Intake m_Intake) {
+  public TestIntake(Intake m_Intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = m_Intake;
 

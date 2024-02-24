@@ -14,6 +14,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import frc.robot.Constants.LimelightPosition;
+
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   
@@ -64,7 +66,7 @@ public class Limelight extends SubsystemBase {
     return ta.getDouble(0.0);
   }
 
-  public boolean isInRange(double desiredTXposition, double desiredTYposition, double desiredTAposition){
+  public boolean isInRange(LimelightPosition desiredPosition){
 
     /* 
       (probably) checks to see if the desired positions for shooting are the same or greater than the actual limelight positions.
@@ -81,15 +83,15 @@ public class Limelight extends SubsystemBase {
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
 
-    if (x >= desiredTXposition){
+    if (x >= desiredPosition.getTX()){
       
       return true;
 
-    } else if (y >= desiredTYposition){
+    } else if (y >= desiredPosition.getTY()){
 
       return true;
 
-    } else if (area >= desiredTAposition){
+    } else if (area >= desiredPosition.getTA()){
 
       return true;
 
