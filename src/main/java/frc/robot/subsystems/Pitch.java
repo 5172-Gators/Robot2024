@@ -40,11 +40,11 @@ public class Pitch extends SubsystemBase {
   
     double currentPitch = pitchEncoder.getPosition().getValueAsDouble();
    
-    if (currentPitch >= Constants.Pitch.minPitchPosition && speed > 0){
+    if (speed > 0){
 
       pitchMotor.set(speed);
 
-    } else if (currentPitch <= Constants.Pitch.maxPitchPosition && speed < 0){
+    } else if (speed < 0){
 
       pitchMotor.set(speed);
 

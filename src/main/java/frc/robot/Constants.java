@@ -121,11 +121,11 @@ public final class Constants {
         public static final int armID = 55;
 
         /* Positions */
-        public static final double stowedPosition = 0;
-        public static final double deployedPosition = 0;
+        public static final double stowedPosition = 3.881;
+        public static final double deployedPosition = 1;
 
         /* PID */
-        public static final double kP = 0;
+        public static final double kP = 0.5;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;

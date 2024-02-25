@@ -8,14 +8,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Intake;
 
-public class TestIntake extends Command {
+public class SetIntakeWheels extends Command {
   /** Creates a new testIntake. */
 
   Intake s_Intake;
+  double speed;
 
-  public TestIntake(Intake m_Intake) {
+  public SetIntakeWheels(Intake m_Intake, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = m_Intake;
+    this.speed = speed;
 
     addRequirements(m_Intake);
 
@@ -29,7 +31,7 @@ public class TestIntake extends Command {
   @Override
   public void execute() {
 
-    s_Intake.runIntake(1);
+    s_Intake.runIntake(speed);
 
   }
 

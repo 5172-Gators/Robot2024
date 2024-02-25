@@ -2,20 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
 
-public class StopKicker extends Command {
-  /** Creates a new StopKicker. */
+public class StowIntake extends Command {
+  /** Creates a new StowIntake. */
+  Intake s_Intake;
 
-  Shooter s_Shooter;
-
-  public StopKicker() {
+  public StowIntake(Intake s_Intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.s_Shooter = s_Shooter;
+    this.s_Intake = s_Intake;
+    addRequirements(s_Intake);
 
   }
 
@@ -27,7 +26,8 @@ public class StopKicker extends Command {
   @Override
   public void execute() {
 
-    s_Shooter.setKicker(0, 0);
+    // stows the intake
+    s_Intake.stowIntake();
 
   }
 
@@ -38,6 +38,9 @@ public class StopKicker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    
+    s_Intake.moveArm(0);
+    return true;
+    
   }
 }

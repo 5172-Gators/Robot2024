@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -20,7 +22,7 @@ import frc.robot.commands.turret.movePitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.MoveJoint;
 import frc.robot.commands.intake.IntakeCommand;
-import frc.robot.commands.intake.TestIntake;
+import frc.robot.commands.intake.SetIntakeWheels;
 import frc.robot.commands.shooter.SetKicker;
 import frc.robot.commands.shooter.TeleopShoot;
 
@@ -59,21 +61,23 @@ public class RobotContainer {
     /* Driver Buttons */
 
     // Drive Stick
+    private final JoystickButton deployIntake = new JoystickButton(driveStick, 1);
+    private final JoystickButton stowIntake = new JoystickButton(driveStick, 4);
+    private final JoystickButton justDeploy = new JoystickButton(driveStick, 2);
     private final JoystickButton robotCentric = new JoystickButton(driveStick, 12);
-    private final JoystickButton kickerStart = new JoystickButton(driveStick, 1);
+    
    
     // Rotate Stick
     private final JoystickButton zeroGyroButton = new JoystickButton(rotateStick, 2);
-    private final JoystickButton robotWashButton = new JoystickButton(rotateStick, 5);
+    
 
     /* Operator Controls */
     private static final int pitchAdjust = Joystick.AxisType.kY.value;
     private static final int turretRotate = Joystick.AxisType.kX.value;
     
     /* Operator Buttons */
-    private final JoystickButton runKicker = new JoystickButton(operatorStick, 1);
     private final JoystickButton stopShooter = new JoystickButton(operatorStick, 2);
-    private final JoystickButton startShooter = new JoystickButton(operatorStick, 3);
+    private final JoystickButton startShooter = new JoystickButton(operatorStick, 1);
 
     // private final JoystickButton trapScore = new JoystickButton(operatorStick, 6);
     // private final JoystickButton deployTrapScore = new JoystickButton(operatorStick, 7);
@@ -129,25 +133,24 @@ public class RobotContainer {
        s_Turret.setDefaultCommand(
            new TeleopTurret(
             s_Turret,
-            () -> -operatorStick.getRawAxis(turretRotate)
+            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
            )
        );
 
         s_Pitch.setDefaultCommand(
            new movePitch(
             s_Pitch,
-          //  () -> -operatorStick.getRawAxis(pitchAdjust)
-            () -> s_Limelight.getTX()
+            () -> -operatorStick.getRawAxis(pitchAdjust)
            )
        );
 
-        s_Climber.setDefaultCommand(
-            new JoystickClimberControl(
-             s_Climber,
-             () -> -testStick.getRawAxis(pitchAdjust)                
-            )
+        // s_Climber.setDefaultCommand(
+        //     new JoystickClimberControl(
+        //      s_Climber,
+        //      () -> -testStick.getRawAxis(pitchAdjust)                
+        //     )
 
-        );
+        // );
 
         s_TrapScore.setDefaultCommand(
            new StopArm(
@@ -155,12 +158,12 @@ public class RobotContainer {
            )
         );
 
-        s_Intake.setDefaultCommand(
-            new MoveJoint(
-                s_Intake,
-                () -> testStick.getRawAxis(pitchAdjust)
-            )
-        );
+        // s_Intake.setDefaultCommand(
+        //     new MoveJoint(
+        //         s_Intake,
+        //         () -> testStick.getRawAxis(pitchAdjust)
+        //     )
+        // );
 
 
         // Configure the button bindings
@@ -178,15 +181,17 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        robotWashButton.onTrue(new InstantCommand(() -> s_Shooter.robotWash()));
+        // robotWashButton.onTrue(new InstantCommand(() -> s_Shooter.robotWash()));
+
+
 
         /* Operator Buttons */
         
-        startShooter.onTrue(new InstantCommand(() -> s_Shooter.setShooter(1, 0.8, 0.4)));
+        startShooter.onTrue(new SequentialCommandGroup(new TeleopShoot(s_Shooter, 0.8, 0.4)).andThen(
+                            new WaitCommand(1)).andThen(
+                            new SetKicker(s_Shooter)));
 
         stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
-
-        runKicker.whileTrue(new SetKicker(s_Shooter));
 
         intake.onTrue(new InstantCommand(() -> s_Intake.runIntake(1)));
 
