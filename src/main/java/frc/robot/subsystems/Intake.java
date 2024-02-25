@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -19,6 +21,8 @@ public class Intake extends SubsystemBase {
 
   CANSparkFlex intakeMotor;
   CANSparkFlex jointMotor;
+
+  RelativeEncoder jointPosition;
 
   SparkPIDController jointPID;
 
@@ -36,6 +40,9 @@ public class Intake extends SubsystemBase {
     jointMotor.restoreFactoryDefaults();
     jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setInverted(false);
+
+    // create instance of relative encoder
+    jointPosition = jointMotor.getEncoder();
 
     // defines + configures the PID controller for the joint so set positions can be used
     jointPID = jointMotor.getPIDController();
@@ -75,5 +82,9 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    double m_currentPosition = jointPosition.getPosition();
+
+    SmartDashboard.putNumber("Intake Arm Position", m_currentPosition);
   }
 }

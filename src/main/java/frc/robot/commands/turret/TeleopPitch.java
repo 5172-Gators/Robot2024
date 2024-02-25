@@ -10,12 +10,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Pitch;
 
 /* Rotate Command for Turret During Teleop */
-public class movePitch extends Command {
+public class TeleopPitch extends Command {
   /** Creates a new TeleopTurret. */
   private Pitch s_Pitch;
   private DoubleSupplier m_joystickPosition;
 
-  public movePitch (Pitch s_Pitch, DoubleSupplier m_joystickPosition) {
+  public TeleopPitch (Pitch s_Pitch, DoubleSupplier m_joystickPosition) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Pitch = s_Pitch;
     addRequirements(s_Pitch);

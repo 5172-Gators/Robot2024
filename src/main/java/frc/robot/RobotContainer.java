@@ -18,11 +18,14 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.trap.StopArm;
 import frc.robot.commands.turret.TeleopTurret;
-import frc.robot.commands.turret.movePitch;
+import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.MoveJoint;
+import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.SetIntakeWheels;
+import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.shooter.SetKicker;
 import frc.robot.commands.shooter.TeleopShoot;
 
@@ -138,19 +141,19 @@ public class RobotContainer {
        );
 
         s_Pitch.setDefaultCommand(
-           new movePitch(
+           new TeleopPitch(
             s_Pitch,
             () -> -operatorStick.getRawAxis(pitchAdjust)
            )
        );
 
-        // s_Climber.setDefaultCommand(
-        //     new JoystickClimberControl(
-        //      s_Climber,
-        //      () -> -testStick.getRawAxis(pitchAdjust)                
-        //     )
+        s_Climber.setDefaultCommand(
+            new JoystickClimberControl(
+             s_Climber,
+             () -> -testStick.getRawAxis(pitchAdjust) // y-axis           
+            )
 
-        // );
+        );
 
         s_TrapScore.setDefaultCommand(
            new StopArm(
@@ -181,8 +184,11 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        // robotWashButton.onTrue(new InstantCommand(() -> s_Shooter.robotWash()));
+        deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
 
+        stowIntake.onTrue(new StopIntake(s_Shooter, s_Intake));
+
+        justDeploy.onTrue(new DeployIntake(s_Intake));
 
 
         /* Operator Buttons */

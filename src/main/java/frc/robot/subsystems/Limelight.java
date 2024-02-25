@@ -33,9 +33,10 @@ public class Limelight extends SubsystemBase {
   public Limelight() {
 
     // allows access to apriltags in code
-    m_Tid = m_limelightTable.getIntegerTopic("tid").subscribe(-1);
-
+    
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    m_Tid = m_limelightTable.getIntegerTopic("tid").subscribe(-1);
     
     tx = m_limelightTable.getEntry("tx");
     ty = m_limelightTable.getEntry("ty");
