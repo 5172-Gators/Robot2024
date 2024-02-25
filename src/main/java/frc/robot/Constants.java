@@ -69,15 +69,15 @@ public final class Constants {
         public static final int rotateMotorID = 2;
         
         /* Max + Min Positions, Allowable Error */
-        public static final double minTurretPosition = -24.023666381835938;
-        public static final double maxTurretPosition = 23.071300506591797;
+        // public static final double minTurretPosition = -24.023666381835938;
+        // public static final double maxTurretPosition = 23.071300506591797;
         public static final double allowableError = 0.0; //TODO: find allowable error
 
         /* Positions */
         public static final double R_intakingPosition = 0; //TODO: find position
 
         /* PID */
-        public static final double kP = 0;
+        public static final double kP = 0.5;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;
@@ -121,11 +121,11 @@ public final class Constants {
         public static final int armID = 55;
 
         /* Positions */
-        public static final double stowedPosition = 0;
-        public static final double deployedPosition = 0;
+        public static final double stowedPosition = 0.2; //TODO: find this position again
+        public static final double deployedPosition = -3;
 
         /* PID */
-        public static final double kP = 0;
+        public static final double kP = 0.5;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;

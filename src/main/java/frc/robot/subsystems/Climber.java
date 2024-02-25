@@ -36,9 +36,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void joystickControl (double speed){
-    // allows the climber motors to be controlled using a joystick.
-    
-    double slowSpeed = speed / 2;
+    // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
     
     climbMotor.set(speed / 2);
 

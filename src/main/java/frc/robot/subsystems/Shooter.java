@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase {
 
     /* define + configure kicker motor */
     kicker = new CANSparkFlex(Constants.Shooter.kickerMotorID, MotorType.kBrushless);
-    kicker.setIdleMode(IdleMode.kCoast);
+    kicker.setIdleMode(IdleMode.kBrake);
 
     /* Set Inverted */
     leftShooter.setInverted(true);
@@ -53,20 +53,10 @@ public class Shooter extends SubsystemBase {
     // controls the shooter + kicker motors depending on the value of the beam break
    
     boolean sensorValue = getSensor();
-
-    if (sensorValue == false) {
       
       leftShooter.set(speed * leftSpeedRatio);
       rightShooter.set(speed * rightSpeedRatio);
     
-    }
-
-    if (sensorValue == true){
-
-      leftShooter.set(0);
-      rightShooter.set(0);
-
-    }
   }
 
   public void setKicker(double speed, double kickerSpeedRatio){

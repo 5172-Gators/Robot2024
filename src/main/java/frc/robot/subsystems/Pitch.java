@@ -19,6 +19,8 @@ public class Pitch extends SubsystemBase {
   CANcoder pitchEncoder;
   CANSparkMax pitchMotor;
 
+  boolean atPosition;
+
   public Pitch() {
 
     // define + configure pitch motor
@@ -40,11 +42,11 @@ public class Pitch extends SubsystemBase {
   
     double currentPitch = pitchEncoder.getPosition().getValueAsDouble();
    
-    if (currentPitch >= Constants.Pitch.minPitchPosition && speed > 0){
+    if (speed > 0){
 
       pitchMotor.set(speed);
 
-    } else if (currentPitch <= Constants.Pitch.maxPitchPosition && speed < 0){
+    } else if (speed < 0){
 
       pitchMotor.set(speed);
 
@@ -56,6 +58,39 @@ public class Pitch extends SubsystemBase {
 
   }
 
+  public double getPosition(){
+
+    return pitchEncoder.getPosition().getValueAsDouble();
+
+  }
+
+  public void setPosition(double position){
+
+    // positive speed moves up, negative speed moves down
+
+    double currentPitch = pitchEncoder.getPosition().getValueAsDouble();
+    atPosition = false;
+
+    if (currentPitch < position){
+
+      pitchMotor.set(0.5);
+      atPosition = false;
+
+    } else if (currentPitch > position){
+
+      pitchMotor.set(-0.5);
+      atPosition = false;
+
+    } else if (currentPitch == position){
+
+      pitchMotor.set(0);
+      atPosition = true;
+
+    }
+
+
+  }
+
 
   @Override
   public void periodic() {
@@ -64,6 +99,7 @@ public class Pitch extends SubsystemBase {
     double m_currentPosition = pitchEncoder.getPosition().getValueAsDouble();
 
     SmartDashboard.putNumber("Tilt Encoder Value", m_currentPosition);
+    SmartDashboard.putBoolean("Pitch at Position", atPosition);
 
   }
 }

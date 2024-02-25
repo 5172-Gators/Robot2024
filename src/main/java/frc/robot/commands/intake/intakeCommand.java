@@ -45,39 +45,25 @@ public class IntakeCommand extends Command {
 
     sensorValue = s_Shooter.getSensor();
 
-    if (sensorValue == true){
-
       // deploys the intake
       s_Intake.deployIntake();
 
       // wait to deploy
       new WaitCommand(0.5);
 
-      // set the position of the pitch to intake position
-      // s_Pitch.pitchPosition(Constants.Pitch.P_intakingPosition);
+      // stops the arm motor when the intake is deployed
+      s_Intake.moveArm(0);
 
-      // wait until position is set
-      new WaitCommand(0.5);
+      // starts the intake
+      s_Intake.runIntake(0.85);
 
-      // set the position of the turret
-      s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+      // if a piece hasn't already been intaked, set the kicker to intake a piece
+      if (sensorValue == true){
 
-      // starts the intake and kicker to intake the note
-      s_Intake.runIntake(1);
+        s_Shooter.setKicker(1, 0.55);
 
-      s_Shooter.setKicker(1, 0.8);
+      }
 
-    } else if (sensorValue == false){
-
-      // stows the intake 
-      s_Intake.stowIntake();
-
-      // stops the kicker + the shooter
-      s_Shooter.setKicker(0, 0);
-      s_Intake.runIntake(0);
-
-    }
-      
     }
 
 

@@ -2,22 +2,25 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.Pitch;
 
-import frc.robot.subsystems.Intake;
+public class SetPitchPosition extends Command {
+  /** Creates a new SetPitchPosition. */
 
-public class TestIntake extends Command {
-  /** Creates a new testIntake. */
+  Pitch s_Pitch;
+  double position;
 
-  Intake s_Intake;
-
-  public TestIntake(Intake m_Intake) {
+  public SetPitchPosition(Pitch s_Pitch, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.s_Intake = m_Intake;
 
-    addRequirements(m_Intake);
+    this.s_Pitch = s_Pitch;
+    this.position = position;
+
+    addRequirements(s_Pitch);
 
   }
 
@@ -29,17 +32,12 @@ public class TestIntake extends Command {
   @Override
   public void execute() {
 
-    s_Intake.runIntake(1);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    s_Intake.runIntake(0);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
