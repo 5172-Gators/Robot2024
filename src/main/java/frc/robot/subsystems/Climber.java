@@ -32,7 +32,6 @@ public class Climber extends SubsystemBase {
     climbMotor.restoreFactoryDefaults();
     climbMotor.setIdleMode(IdleMode.kBrake);
 
-
   }
 
   public void joystickControl (double speed){

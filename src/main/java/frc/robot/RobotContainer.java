@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.trap.StopArm;
 import frc.robot.commands.turret.TeleopTurret;
+import frc.robot.commands.turret.SetPitchPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.MoveJoint;
@@ -89,7 +90,7 @@ public class RobotContainer {
 
     // private final JoystickButton alignLimelight = new JoystickButton(operatorStick, 4);
 
-    private final JoystickButton intake = new JoystickButton(testStick, 1);
+    private final JoystickButton testSetPosition = new JoystickButton(testStick, 1);
 
     /* Test Buttons */
     
@@ -104,9 +105,6 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Climber s_Climber = new Climber();
     private final TrapScore s_TrapScore = new TrapScore();
-
-    // private final LimelightTurretPitch s_LLPitch = new LimelightTurretPitch();
-    // private final Testing s_test = new Testing();
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -182,6 +180,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
         /* Driver Buttons */
+        
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
@@ -193,13 +192,13 @@ public class RobotContainer {
 
         /* Operator Buttons */
         
-        startShooter.onTrue(new SequentialCommandGroup(new TeleopShoot(s_Shooter, 0.8, 0.4)).andThen(
-                            new WaitCommand(1)).andThen(
-                            new SetKicker(s_Shooter)));
+        startShooter.onTrue(new TeleopShoot(s_Shooter));
 
         stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
 
-        intake.onTrue(new InstantCommand(() -> s_Intake.runIntake(1)));
+        /* Test Buttons */
+
+        testSetPosition.onTrue(new SetPitchPosition(s_Pitch, 0));
 
 
     }

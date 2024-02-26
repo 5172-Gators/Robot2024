@@ -14,6 +14,8 @@ public class SetPitchPosition extends Command {
   Pitch s_Pitch;
   double position;
 
+  double currentPosition;
+
   public SetPitchPosition(Pitch s_Pitch, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -21,6 +23,8 @@ public class SetPitchPosition extends Command {
     this.position = position;
 
     addRequirements(s_Pitch);
+
+    this.currentPosition = s_Pitch.getPosition();
 
   }
 
@@ -32,6 +36,21 @@ public class SetPitchPosition extends Command {
   @Override
   public void execute() {
 
+    if (currentPosition < position){
+
+      s_Pitch.movePitch(Math.abs(position - currentPosition) / -0.1);
+      
+
+    } else if (currentPosition > position){
+
+      s_Pitch.movePitch(Math.abs(position - currentPosition) / 0.1);
+      
+
+    } else if (currentPosition == position + Constants.Pitch.allowableError || currentPosition == position - Constants.Pitch.allowableError){
+
+      s_Pitch.movePitch(0);
+
+    }
 
   }
 
@@ -42,6 +61,19 @@ public class SetPitchPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    
+    if(currentPosition == position){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+
   }
+
 }
+
+

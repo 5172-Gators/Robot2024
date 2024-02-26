@@ -43,7 +43,7 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
 
-    sensorValue = s_Shooter.getSensor();
+    sensorValue = s_Shooter.getKickerSensor();
 
       // deploys the intake
       s_Intake.deployIntake();

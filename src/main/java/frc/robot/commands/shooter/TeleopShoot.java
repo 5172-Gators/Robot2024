@@ -22,7 +22,7 @@ public class TeleopShoot extends Command {
   
   // speed of the motor will always be 1
 
-  public TeleopShoot(Shooter s_Shooter, double rightSpeed, double leftSpeed) {
+  public TeleopShoot(Shooter s_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Shooter = s_Shooter;
 
@@ -37,9 +37,21 @@ public class TeleopShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    boolean sensorValue = s_Shooter.getKickerSensor();
     
     // sets the shooter speed
     s_Shooter.setShooter(1, 0.8, 0.4);
+
+    // waits for the shooter to get up to speed
+    new WaitCommand(1);
+
+    // sets the kicker speed if a note has been intaked
+    if (sensorValue == true) {
+
+      s_Shooter.setKicker(1, 0.45);
+
+    }
 
   }
 

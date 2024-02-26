@@ -31,7 +31,7 @@ public class TeleopPitch extends Command {
     double j_Position= m_joystickPosition.getAsDouble();
    
     // runs the motor based on the position of the joystick
-    s_Pitch.setPitch(j_Position);
+    s_Pitch.joystickPitchControl(j_Position);
         
   }
 

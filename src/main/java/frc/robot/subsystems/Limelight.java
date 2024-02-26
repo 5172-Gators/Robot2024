@@ -62,18 +62,21 @@ public class Limelight extends SubsystemBase {
 
   public double getTX(){
     // returns current tx value
+
     return tx.getDouble(0.0);
 
   }
 
   public double getTY(){
     // returns current ty value
+
     return ty.getDouble(0.0);
 
   }
 
   public double getTA(){
     // returns current ta value
+    
     return ta.getDouble(0.0);
   }
 

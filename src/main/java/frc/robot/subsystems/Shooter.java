@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
 
   CANSparkFlex kicker;
 
-  DigitalInput sensor;
+  DigitalInput kickerSensor;
   
   public Shooter() {
     
@@ -45,14 +45,14 @@ public class Shooter extends SubsystemBase {
     rightShooter.setInverted(false);
     kicker.setInverted(true);
 
-    sensor = new DigitalInput(0);
+    kickerSensor = new DigitalInput(0);
 
   }
 
   public void setShooter(double speed, double rightSpeedRatio, double leftSpeedRatio) {
     // controls the shooter + kicker motors depending on the value of the beam break
    
-    boolean sensorValue = getSensor();
+    boolean sensorValue = getKickerSensor();
       
       leftShooter.set(speed * leftSpeedRatio);
       rightShooter.set(speed * rightSpeedRatio);
@@ -81,9 +81,9 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public boolean getSensor(){
+  public boolean getKickerSensor(){
 
-    return sensor.get();
+    return kickerSensor.get();
 
   }
 
@@ -103,7 +103,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("Sensor Value", getSensor());
+    SmartDashboard.putBoolean("Sensor Value", getKickerSensor());
 
   }
 }
