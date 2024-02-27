@@ -51,8 +51,6 @@ public class Shooter extends SubsystemBase {
 
   public void setShooter(double speed, double rightSpeedRatio, double leftSpeedRatio) {
     // controls the shooter + kicker motors depending on the value of the beam break
-   
-    boolean sensorValue = getKickerSensor();
       
       leftShooter.set(speed * leftSpeedRatio);
       rightShooter.set(speed * rightSpeedRatio);

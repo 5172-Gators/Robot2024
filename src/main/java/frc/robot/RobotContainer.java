@@ -19,15 +19,12 @@ import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.trap.StopArm;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.SetPitchPosition;
+import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
-import frc.robot.commands.intake.MoveJoint;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
-import frc.robot.commands.intake.SetIntakeWheels;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.intake.StowIntake;
-import frc.robot.commands.shooter.SetKicker;
 import frc.robot.commands.shooter.TeleopShoot;
 
 import frc.robot.subsystems.Climber;
@@ -180,7 +177,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
         /* Driver Buttons */
-        
+
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));

@@ -41,7 +41,6 @@ public class Climber extends SubsystemBase {
 
     winchMotor.set(speed * 2);
 
-
   }
 
   @Override

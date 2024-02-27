@@ -77,7 +77,7 @@ public final class Constants {
         public static final double R_intakingPosition = 0; //TODO: find position
 
         /* PID */
-        public static final double kP = 0.5;
+        public static final double kP = 1;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;
@@ -94,7 +94,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.02;
+        public static final double allowableError = 0.08096;
         public static final double minPitchPosition = 0.918213; 
         public static final double maxPitchPosition = 0.969971;
 

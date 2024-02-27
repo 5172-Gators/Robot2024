@@ -74,22 +74,24 @@ public class Pitch extends SubsystemBase {
 
   public void setPosition(double position){
 
+    double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
     // positive speed moves down, negative speed moves up
 
-    if (currentPitch < position){
+    if (startingPitch < position){
 
-      pitchMotor.set(-0.1);
+      movePitch(-0.3);
       
 
-    } else if (currentPitch > position){
+    } else if (startingPitch > position){
 
-      pitchMotor.set(0.1);
+      movePitch(0.3);
       
 
-    } else if (currentPitch == position){
+    } else if (currentPitch == position + Constants.Pitch.allowableError || currentPitch == position - Constants.Pitch.allowableError){
+
+      movePitch(0);
 
     }
-
 
   }
 
@@ -98,12 +100,8 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // double m_relativePosition = relativeEncoder.getPosition();
-
     currentPitch = pitchEncoder.getPosition().getValueAsDouble();
 
     SmartDashboard.putNumber("Tilt Encoder Value", currentPitch);
-    // SmartDashboard.putNumber("relative encoder value", m_relativePosition);
-
   }
 }
