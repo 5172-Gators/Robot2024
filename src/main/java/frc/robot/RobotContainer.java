@@ -140,12 +140,12 @@ public class RobotContainer {
            )
        );
 
-        s_Pitch.setDefaultCommand(
-           new TeleopPitch(
-            s_Pitch,
-            () -> -operatorStick.getRawAxis(pitchAdjust)
-           )
-       );
+    //     s_Pitch.setDefaultCommand(
+    //        new TeleopPitch(
+    //         s_Pitch,
+    //         () -> -operatorStick.getRawAxis(pitchAdjust)
+    //        )
+    //    );
 
         s_Climber.setDefaultCommand(
             new JoystickClimberControl(
