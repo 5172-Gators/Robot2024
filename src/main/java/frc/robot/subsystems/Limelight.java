@@ -91,15 +91,15 @@ public class Limelight extends SubsystemBase {
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
 
-    if (x >= desiredPosition.getTX()){
+    if (x == desiredPosition.getTX()){
       
       return true;
 
-    } else if (y >= desiredPosition.getTY()){
+    } else if (y == desiredPosition.getTY()){
 
       return true;
 
-    } else if (area >= desiredPosition.getTA()){
+    } else if (area == desiredPosition.getTA()){
 
       return true;
 
@@ -108,22 +108,22 @@ public class Limelight extends SubsystemBase {
       return false;
 
     }
-
-  
-
   }
 
   public boolean targetInRange(int id) {
     // checks to see if the desired apriltag is in range
-
     return id == m_Tid.get();
 
   }
 
-  public Long currentTarget(){
+  public int currentTarget(){
     // returns the current apriltag that the limelight is reading
-    return m_Tid.get();
+
+    int currentTarget = (int) m_Tid.get();
+    return currentTarget;
 
   }
+
+
 
 }

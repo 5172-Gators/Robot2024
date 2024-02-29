@@ -100,6 +100,8 @@ public final class Constants {
 
         /* Positions */
         public static final double P_intakingPosition = 0; //TODO: find positions
+        public static final double P_againstSpeakerShootingPosition = 0;
+        public static final double P_ampScorePosition = 0;
 
     }
 
@@ -107,7 +109,7 @@ public final class Constants {
 
         /* Motor IDs */
         public static final int winchMotorID = 19;
-        public static final int climberMotor = 17;
+        public static final int climberMotor = 30;
 
         /* Positions */
         public static final double stowedPosition = 0;
@@ -140,8 +142,7 @@ public final class Constants {
         // commented out so it isn't accidentally called
 
         /* Motor IDs */
-        public static final int rollerMotorID = 0;
-        public static final int armMotorID = 30; // 55
+        // public static final int armMotorID = 30; // 55
 
         /* Positions */
         public static final double tScorerDeployed = 0;

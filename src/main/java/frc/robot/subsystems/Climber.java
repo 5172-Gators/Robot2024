@@ -31,15 +31,17 @@ public class Climber extends SubsystemBase {
     climbMotor = new CANSparkFlex(Constants.Climber.climberMotor, MotorType.kBrushless);
     climbMotor.restoreFactoryDefaults();
     climbMotor.setIdleMode(IdleMode.kBrake);
+    climbMotor.setSmartCurrentLimit(1);
+    climbMotor.setOpenLoopRampRate(0.5);
 
   }
 
   public void joystickControl (double speed){
     // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
     
-    climbMotor.set(speed / 2);
+    climbMotor.set(speed / 4);
 
-    winchMotor.set(speed * 2);
+    winchMotor.set(speed);
 
   }
 

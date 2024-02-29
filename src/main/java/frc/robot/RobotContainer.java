@@ -16,7 +16,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 
 import frc.robot.commands.swerve.TeleopSwerve;
-import frc.robot.commands.trap.StopArm;
+// import frc.robot.commands.trap.StopArm;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
@@ -36,7 +36,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.TrapScore;
+// import frc.robot.subsystems.TrapScore;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -103,7 +103,7 @@ public class RobotContainer {
     private final Limelight s_Limelight = new Limelight();
     private final Intake s_Intake = new Intake();
     private final Climber s_Climber = new Climber();
-    private final TrapScore s_TrapScore = new TrapScore();
+    // private final TrapScore s_TrapScore = new TrapScore();
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -130,19 +130,19 @@ public class RobotContainer {
             )
         );
 
-       s_Turret.setDefaultCommand(
-           new TeleopTurret(
-            s_Turret,
-            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
-           )
-       );
-
-    //     s_Pitch.setDefaultCommand(
-    //        new TeleopPitch(
-    //         s_Pitch,
-    //         () -> -operatorStick.getRawAxis(pitchAdjust)
+    //    s_Turret.setDefaultCommand(
+    //        new TeleopTurret(
+    //         s_Turret,
+    //         () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
     //        )
     //    );
+
+        s_Pitch.setDefaultCommand(
+           new TeleopPitch(
+            s_Pitch,
+            () -> -operatorStick.getRawAxis(pitchAdjust)
+           )
+       );
 
         s_Climber.setDefaultCommand(
             new JoystickClimberControl(
@@ -152,11 +152,11 @@ public class RobotContainer {
 
         );
 
-        s_TrapScore.setDefaultCommand(
-           new StopArm(
-            s_TrapScore
-           )
-        );
+        // s_TrapScore.setDefaultCommand(
+        //    new StopArm(
+        //     s_TrapScore
+        //    )
+        // );
 
         // s_Intake.setDefaultCommand(
         //     new MoveJoint(
@@ -197,7 +197,7 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        testSetPosition.onTrue(new SetPitchPosition(s_Pitch, 0));
+        // testSetPosition.onTrue(new SetPitchPosition(s_Pitch, 0));
 
 
     }

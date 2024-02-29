@@ -41,15 +41,15 @@ public class TeleopShoot extends Command {
     boolean sensorValue = s_Shooter.getKickerSensor();
     
     // sets the shooter speed
-    s_Shooter.setShooter(1, 0.8, 0.4);
+    s_Shooter.setShooter(1, 0.3, 0.25);
 
     // waits for the shooter to get up to speed
-    new WaitCommand(1);
+    new WaitCommand(0.1);
 
     // sets the kicker speed if a note has been intaked
-    if (sensorValue == true) {
+    if (sensorValue == false) {
 
-      s_Shooter.setKicker(1, 0.45);
+      // s_Shooter.setKicker(1, 0.45);
 
     }
 
@@ -57,11 +57,14 @@ public class TeleopShoot extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return true;
+    
   }
 }
