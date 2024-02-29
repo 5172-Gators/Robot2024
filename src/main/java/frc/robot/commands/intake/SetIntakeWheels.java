@@ -14,10 +14,9 @@ public class SetIntakeWheels extends Command {
   Intake s_Intake;
   double speed;
 
-  public SetIntakeWheels(Intake m_Intake, double speed) {
+  public SetIntakeWheels(Intake m_Intake, Double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = m_Intake;
-    this.speed = speed;
 
     addRequirements(m_Intake);
 

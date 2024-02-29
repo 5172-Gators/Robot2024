@@ -9,6 +9,7 @@ import frc.robot.subsystems.Intake;
 
 public class StowIntake extends Command {
   /** Creates a new StowIntake. */
+
   Intake s_Intake;
 
   public StowIntake(Intake s_Intake) {
@@ -26,9 +27,8 @@ public class StowIntake extends Command {
   @Override
   public void execute() {
 
-    // stows the intake
     s_Intake.stowIntake();
-
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -38,9 +38,6 @@ public class StowIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    s_Intake.moveArm(0);
-    return true;
-    
+    return false;
   }
 }
