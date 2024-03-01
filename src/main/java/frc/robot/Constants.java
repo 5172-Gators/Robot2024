@@ -125,6 +125,7 @@ public final class Constants {
         /* Positions */
         public static final double stowedPosition = 0;
         public static final double deployedPosition = 0;
+        public static final Double Deadband = 1.0;
     }
 
 
