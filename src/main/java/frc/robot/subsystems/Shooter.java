@@ -26,6 +26,7 @@ public class Shooter extends SubsystemBase {
 
   DigitalInput kickerSensor;
   DigitalInput shooterSensor;
+  DigitalInput kickerSensor2;
   
   public Shooter() {
     
@@ -47,7 +48,7 @@ public class Shooter extends SubsystemBase {
     kicker.setInverted(true);
 
     kickerSensor = new DigitalInput(0);
-    shooterSensor = new DigitalInput(2);
+    shooterSensor = new DigitalInput(1);
 
   }
 
@@ -90,7 +91,7 @@ public class Shooter extends SubsystemBase {
   public boolean getShooterSensor(){
 
     return shooterSensor.get();
-    
+
   }
 
   public double getRightSpeed(){
