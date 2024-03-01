@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -20,6 +22,8 @@ public class Pitch extends SubsystemBase {
   CANcoder pitchEncoder;
   CANSparkMax pitchMotor;
 
+  SparkPIDController pitchPID;
+
   double currentPitch;
   
 
@@ -29,6 +33,15 @@ public class Pitch extends SubsystemBase {
     pitchMotor = new CANSparkMax(Constants.Pitch.pitchMotorID, MotorType.kBrushed);
     pitchMotor.restoreFactoryDefaults();
     pitchMotor.setIdleMode(IdleMode.kBrake);
+
+    // pitch PID
+    pitchPID = pitchMotor.getPIDController();
+
+    pitchPID.setP(Constants.Pitch.kP);
+    pitchPID.setI(Constants.Pitch.kI);
+    pitchPID.setD(Constants.Pitch.kD);
+    pitchPID.setFF(Constants.Pitch.kFF);
+    pitchPID.setOutputRange(Constants.Pitch.minOutput, Constants.Pitch.maxOutput);
 
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
@@ -72,27 +85,31 @@ public class Pitch extends SubsystemBase {
 
   }
 
+  // public void setPosition(double position){
+
+  //   double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
+  //   // positive speed moves down, negative speed moves up
+
+  //   if (startingPitch < position){
+
+  //     movePitch(-0.3);
+      
+
+  //   } else if (startingPitch > position){
+
+  //     movePitch(0.3);
+      
+
+  //   } else if (currentPitch == position + Constants.Pitch.allowableError || currentPitch == position - Constants.Pitch.allowableError){
+
+  //     movePitch(0);
+
+  //   }
+
   public void setPosition(double position){
 
-    double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
-    // positive speed moves down, negative speed moves up
-
-    if (startingPitch < position){
-
-      movePitch(-0.3);
-      
-
-    } else if (startingPitch > position){
-
-      movePitch(0.3);
-      
-
-    } else if (currentPitch == position + Constants.Pitch.allowableError || currentPitch == position - Constants.Pitch.allowableError){
-
-      movePitch(0);
-
-    }
-
+    pitchPID.setReference(position, ControlType.kPosition);
+    
   }
 
 

@@ -26,7 +26,6 @@ public class Shooter extends SubsystemBase {
 
   DigitalInput kickerSensor;
   DigitalInput shooterSensor;
-  DigitalInput kickerSensor2;
   
   public Shooter() {
     
@@ -47,6 +46,7 @@ public class Shooter extends SubsystemBase {
     rightShooter.setInverted(false);
     kicker.setInverted(true);
 
+    /* Beam Break Sensors */
     kickerSensor = new DigitalInput(0);
     shooterSensor = new DigitalInput(1);
 

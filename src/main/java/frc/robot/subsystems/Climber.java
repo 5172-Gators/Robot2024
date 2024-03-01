@@ -22,16 +22,17 @@ public class Climber extends SubsystemBase {
   CANSparkMax winchMotor; // geared down
   CANSparkFlex climbMotor; // regular speed
   private RelativeEncoder winchEncoder;
-private RelativeEncoder climbEncoder;
+  private RelativeEncoder climbEncoder;
+
   public Climber() {
 
     /* define + configure the winch motor for the climber */
     winchMotor = new CANSparkMax(Constants.Climber.winchMotorID, MotorType.kBrushless);
     winchMotor.restoreFactoryDefaults();
     winchMotor.setIdleMode(IdleMode.kBrake);
-        winchMotor.setSmartCurrentLimit(10);
+    winchMotor.setSmartCurrentLimit(10);
     winchMotor.setOpenLoopRampRate(1);
-    winchEncoder = winchMotor.getEncoder();
+    
 
     /* define + configure the climber motor */
     climbMotor = new CANSparkFlex(Constants.Climber.climberMotor, MotorType.kBrushless);
@@ -39,8 +40,10 @@ private RelativeEncoder climbEncoder;
     climbMotor.setIdleMode(IdleMode.kBrake);
     climbMotor.setSmartCurrentLimit(1);
     climbMotor.setOpenLoopRampRate(0.5);
-     climbEncoder = climbMotor.getEncoder();
-
+     
+    /* create intstance of the climb + wince motors built-in encoders */
+    climbEncoder = climbMotor.getEncoder();
+    winchEncoder = winchMotor.getEncoder();
   }
 
   public void joystickControl (double speed){
@@ -51,15 +54,18 @@ private RelativeEncoder climbEncoder;
     //winchMotor.set(speed);
 
   }
-public double getEncoderPosition(){
 
-      SmartDashboard.putNumber("ClimbPosition2", climbEncoder.getPosition());
-        return climbEncoder.getPosition();
-}
-  public void setSpeed ( double speed){
+  public double getEncoderPosition(){
 
-climbMotor.set (speed/4);
-winchMotor.set (speed);
+    SmartDashboard.putNumber("ClimbPosition2", climbEncoder.getPosition());
+    return climbEncoder.getPosition();
+
+  }
+
+  public void setSpeed (double speed){
+
+    climbMotor.set (speed/4);
+    winchMotor.set (speed);
 
   }
 
@@ -67,9 +73,10 @@ winchMotor.set (speed);
   public void periodic() {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
+
     SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
-        SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
-SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
+    SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
+    SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }
 }
