@@ -68,7 +68,7 @@ public class ShooterPID extends SubsystemBase {
     kFF = 0.000015; 
     kMaxOutput = 1; 
     kMinOutput = -1;
-    maxRPM = 5700;
+    maxRPM = 6784;
 
     leftPidController.setP(kP);
     leftPidController.setI(kI);
@@ -98,6 +98,8 @@ public class ShooterPID extends SubsystemBase {
 
   public void setShooter(double speed, double rightSpeedRatio, double leftSpeedRatio) {
     // controls the shooter + kicker motors depending on the value of the beam break
+
+    
     leftPidController.setReference(speed*leftSpeedRatio, CANSparkMax.ControlType.kVelocity);
     rightPidController.setReference(speed*rightSpeedRatio, CANSparkMax.ControlType.kVelocity);
     SmartDashboard.putNumber("SetPoint", speed);
