@@ -51,7 +51,17 @@ public class Turret extends SubsystemBase {
 
   public void rotateTurret(double speed){
 
-    rotateMotor.set(speed);
+    if (rotateEncoder.getPosition() >= Constants.Turret.minTurretPosition && rotateEncoder.getPosition() <= Constants.Turret.maxTurretPosition){
+
+      rotateMotor.set(speed);
+
+    } else {
+
+      rotateMotor.set(0);
+      
+    }
+    
+      
 
   }
 

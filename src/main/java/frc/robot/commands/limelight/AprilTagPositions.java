@@ -84,6 +84,9 @@ public class AprilTagPositions extends Command {
       case 16:
         // move to climb
        break;
+      
+      default:
+       // intaking position
 
     }
 
@@ -122,6 +125,9 @@ public class AprilTagPositions extends Command {
         case 13:
           // set to climb
          break;
+
+        default:
+          // intaking position
 
       }
 

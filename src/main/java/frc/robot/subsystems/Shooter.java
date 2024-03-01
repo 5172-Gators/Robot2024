@@ -25,6 +25,7 @@ public class Shooter extends SubsystemBase {
   CANSparkFlex kicker;
 
   DigitalInput kickerSensor;
+  DigitalInput shooterSensor;
   
   public Shooter() {
     
@@ -46,6 +47,7 @@ public class Shooter extends SubsystemBase {
     kicker.setInverted(true);
 
     kickerSensor = new DigitalInput(0);
+    shooterSensor = new DigitalInput(2);
 
   }
 
@@ -83,6 +85,12 @@ public class Shooter extends SubsystemBase {
 
     return kickerSensor.get();
 
+  }
+
+  public boolean getShooterSensor(){
+
+    return shooterSensor.get();
+    
   }
 
   public double getRightSpeed(){

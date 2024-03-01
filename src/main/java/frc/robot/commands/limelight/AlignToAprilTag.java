@@ -19,15 +19,18 @@ public class AlignToAprilTag extends Command {
   Swerve s_Swerve;
   LimelightPosition desiredPosition;
 
-  public AlignToAprilTag(Limelight m_Limelight, Turret m_Turret, Pitch s_Pitch, LimelightPosition desiredPosition) {
+  int desiredTarget;
+
+  public AlignToAprilTag(Limelight m_Limelight, Turret m_Turret, Pitch s_Pitch, Swerve s_Swerve, LimelightPosition desiredPosition) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Limelight =  m_Limelight;
     this.s_Turret =  m_Turret;
     this.s_Pitch = s_Pitch;
     this.s_Swerve = s_Swerve;
     this.desiredPosition = desiredPosition;
+   
     
-    addRequirements(m_Limelight, m_Turret, s_Pitch);
+    addRequirements(m_Limelight, m_Turret, s_Pitch, s_Swerve);
 
   }
 
@@ -39,24 +42,28 @@ public class AlignToAprilTag extends Command {
   @Override
   public void execute() {
 
+    int currentTarget = s_Limelight.currentTarget();
+
     double currentX = s_Limelight.getTX();
     double currentY = s_Limelight.getTY();
     double currentTA = s_Limelight.getTA();
 
     /* (hopefully) moves the turret to a desired tX value */
+
     if (desiredPosition.getTX() > currentX){
 
-      s_Turret.rotateTurret(0.5);
+      s_Turret.rotateTurret(0.1);
  
     } else if (desiredPosition.getTX() < currentX) {
 
-      s_Turret.rotateTurret(-0.5);
+      s_Turret.rotateTurret(-0.1);
 
     } else if (desiredPosition.getTX() == currentX + Constants.Limelight.allowableError || desiredPosition.getTX() == currentX - Constants.Limelight.allowableError){
 
       s_Turret.rotateTurret(0);
 
     }
+
 
     /* (hopefully) moves the pitch up and down to meet a desired tY value */
     if (desiredPosition.getTY() > currentY){
@@ -73,19 +80,20 @@ public class AlignToAprilTag extends Command {
 
     }
 
-  if (desiredPosition.getTA() < currentTA){
 
-    s_Swerve.drive(new Translation2d(0.1, 0.0), 0.0, false, true);
+    if (desiredPosition.getTA() < currentTA){
 
-  } else if (desiredPosition.getTA() > currentTA){
+      s_Swerve.drive(new Translation2d(0.1, 0.0), 0.0, false, true);
 
-    s_Swerve.drive(new Translation2d(-0.1, 0.0), 0.0, false, true);
+    } else if (desiredPosition.getTA() > currentTA){
 
-  } else if (desiredPosition.getTA() == currentTA - Constants.Limelight.allowableError || desiredPosition.getTA() == currentY + Constants.Limelight.allowableError)
+      s_Swerve.drive(new Translation2d(-0.1, 0.0), 0.0, false, true);
 
-    s_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, true);
+    } else if (desiredPosition.getTA() == currentTA - Constants.Limelight.allowableError || desiredPosition.getTA() == currentY + Constants.Limelight.allowableError)
 
-  }
+      s_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, true);
+
+    }
 
   // Called once the command ends or is interrupted.
   @Override

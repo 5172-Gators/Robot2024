@@ -14,19 +14,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 // import com.pathplanner.lib.auto.AutoBuilder;
 
-
 import frc.robot.commands.swerve.TeleopSwerve;
-// import frc.robot.commands.trap.StopArm;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
-import frc.robot.commands.intake.MoveJoint;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
-import frc.robot.commands.intake.SetIntakeWheels;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.intake.StowIntake;
-import frc.robot.commands.shooter.SetKicker;
+import frc.robot.commands.limelight.AlignToAprilTag;
 import frc.robot.commands.shooter.TeleopShoot;
 
 import frc.robot.subsystems.Climber;
@@ -89,7 +84,8 @@ public class RobotContainer {
 
     // private final JoystickButton alignLimelight = new JoystickButton(operatorStick, 4);
 
-    private final JoystickButton testSetPosition = new JoystickButton(testStick, 1);
+    // private final JoystickButton testSetPosition = new JoystickButton(testStick, 1);
+    private final JoystickButton testAprilTag = new JoystickButton(testStick, 1);
 
     /* Test Buttons */
     
@@ -130,12 +126,12 @@ public class RobotContainer {
             )
         );
 
-    //    s_Turret.setDefaultCommand(
-    //        new TeleopTurret(
-    //         s_Turret,
-    //         () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
-    //        )
-    //    );
+       s_Turret.setDefaultCommand(
+           new TeleopTurret(
+            s_Turret,
+            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+           )
+       );
 
         s_Pitch.setDefaultCommand(
            new TeleopPitch(
@@ -151,12 +147,6 @@ public class RobotContainer {
             )
 
         );
-
-        // s_TrapScore.setDefaultCommand(
-        //    new StopArm(
-        //     s_TrapScore
-        //    )
-        // );
 
         // s_Intake.setDefaultCommand(
         //     new MoveJoint(
@@ -197,7 +187,11 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        // testSetPosition.onTrue(new SetPitchPosition(s_Pitch, 0));
+        testAprilTag.onTrue(new AlignToAprilTag(s_Limelight,
+                                                s_Turret,
+                                                s_Pitch, 
+                                                s_Swerve, 
+                                                Constants.LimelightPosition.AMP));
 
 
     }

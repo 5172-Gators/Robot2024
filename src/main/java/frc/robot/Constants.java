@@ -32,11 +32,12 @@ public final class Constants {
         // speaker positions
         AGAINSTSPEAKER(0.0, 0.0, 0.0),
         SPEAKER(0.0, 0.0, 0.0),
-        AMP(0.0, 0.0, 0.0);
+        AMP(8.69, 8.46, 0.787); // just a test position
 
         private double TXposition;
         private double TYposition;
         private double TAposition;
+        public int currentTag;
 
         private LimelightPosition(double tX, double tY, double tA){
 
@@ -78,8 +79,8 @@ public final class Constants {
         public static final int rotateMotorID = 2;
         
         /* Max + Min Positions, Allowable Error */
-        // public static final double minTurretPosition = -24.023666381835938;
-        // public static final double maxTurretPosition = 23.071300506591797;
+        public static final double minTurretPosition = -4.523804664611816;
+        public static final double maxTurretPosition = 4.285709381103516;
         public static final double allowableError = 0.0; //TODO: find allowable error
 
         /* Positions */
