@@ -19,6 +19,13 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
+    public static class Limelight{
+
+        // allowable error / deadband
+        public static final double allowableError = 0.0;
+
+    }
+
 
     public enum LimelightPosition{ // TODO: FIND LIMELIGHT POSITIONS
 
@@ -51,8 +58,9 @@ public final class Constants {
         public double getTA(){
 
             return TAposition;
-        }
+        }    
     }
+
 
     public static final class Shooter{
 
@@ -62,6 +70,7 @@ public final class Constants {
         public static final int kickerMotorID = 20;
 
     }
+
 
     public static final class Turret {
 
@@ -87,6 +96,7 @@ public final class Constants {
     
     }
 
+
     public static final class Pitch {
 
         /* Motor + Encoder IDs */
@@ -105,6 +115,7 @@ public final class Constants {
 
     }
 
+
     public static final class Climber {
 
         /* Motor IDs */
@@ -115,6 +126,7 @@ public final class Constants {
         public static final double stowedPosition = 0;
         public static final double deployedPosition = 0;
     }
+
 
     public static final class Intake {
 
@@ -137,6 +149,7 @@ public final class Constants {
 
     }
 
+
     public static final class TrapScorer {
 
         // commented out so it isn't accidentally called
@@ -149,6 +162,7 @@ public final class Constants {
         public static final double tScorerStowed = 0;
 
     }
+
 
     public static final class Swerve {
         public static final int pigeonID = 16;

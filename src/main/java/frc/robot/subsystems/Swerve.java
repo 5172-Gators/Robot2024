@@ -148,8 +148,7 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-     public void driveRobotRelative(ChassisSpeeds speeds)
-    {
+     public void driveRobotRelative(ChassisSpeeds speeds){
         SwerveModuleState[] moduleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         this.setModuleStates(moduleStates);
     }
