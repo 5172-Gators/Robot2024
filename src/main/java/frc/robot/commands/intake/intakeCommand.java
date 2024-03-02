@@ -45,6 +45,8 @@ public class IntakeCommand extends Command {
     kickerSensorValue = s_Shooter.getKickerSensor();
     shooterSensorValue = s_Shooter.getKickerSensor();
 
+    int getTheStupidIntakeToWork = 1;
+
       // deploys the intake
       // s_Intake.deployIntake();
 
@@ -57,6 +59,14 @@ public class IntakeCommand extends Command {
       // // starts the intake
       // s_Intake.runIntake(0.85);
 
+      // // waits to stop the intake 
+
+      // new WaitCommand(5);
+
+      // // stops the intake
+
+      // s_Intake.runIntake(0);
+
       /* 
        if a piece hasn't already been intaked, set the kicker to intake a piece
 
@@ -65,22 +75,29 @@ public class IntakeCommand extends Command {
        once the piece is in the right spot, stop the kicker completely
       */
 
-      new FirstIntakingStage(s_Shooter);
+      if (kickerSensorValue == true){
 
-      // waits to start the other command
+        s_Shooter.setKicker(1, 0.55);
+  
+      } else if (shooterSensorValue == false){
+  
+        s_Shooter.setKicker(-1, 0.1);
+  
+      } else if (shooterSensorValue == true && kickerSensorValue == false) {
+  
+        s_Shooter.setKicker(0, 0);
+
+        getTheStupidIntakeToWork = 2;
+  
+      }
+
+      // wait to start the other command
       
       new WaitCommand(0.5);
 
       // slowly moves the kicker until the beam break goes into the right position
-      if (shooterSensorValue == true){
-
-        s_Shooter.setKicker(1, 0.1);
-
-      } else {
-
-        s_Shooter.setKicker(0, 0);
-      }
-
+      
+      new SecondIntakingStage(s_Shooter);
 
   }
 

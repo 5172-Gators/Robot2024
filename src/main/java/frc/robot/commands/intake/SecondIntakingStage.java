@@ -50,14 +50,6 @@ public class SecondIntakingStage extends Command {
   @Override
   public boolean isFinished() {
 
-    if (shooterSensorValue == false){
-     
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    return false;
   }
 }
