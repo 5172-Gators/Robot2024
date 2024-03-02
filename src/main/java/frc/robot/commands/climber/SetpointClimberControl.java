@@ -20,14 +20,15 @@ public class SetpointClimberControl extends Command {
 
   private double s_Setpoint = 0.0;
   // private final double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput =0.0;
-private double s_CurrentPosition = 0.0;
+  private double s_CurrentPosition = 0.0;
+
   public SetpointClimberControl(Climber s_Climber, double s_Setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pidController = new PIDController(.1, 0, 0);
     this.s_Climber = s_Climber;
     this.s_Setpoint= s_Setpoint;
 
-s_CurrentPosition= s_Climber.getEncoderPosition();
+    s_CurrentPosition= s_Climber.getEncoderPosition();
     addRequirements(s_Climber);
 
   }
@@ -37,15 +38,16 @@ s_CurrentPosition= s_Climber.getEncoderPosition();
   public void initialize() {
 
     pidController.reset();
-        pidController.setSetpoint(s_Setpoint);
+    pidController.setSetpoint(s_Setpoint);
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     pidController.setSetpoint (s_Setpoint);
-s_CurrentPosition = s_Climber.getEncoderPosition();
+    s_CurrentPosition = s_Climber.getEncoderPosition();
     double speed = pidController.calculate(s_CurrentPosition);
 
     s_Climber.setSpeed(speed);

@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,7 +22,7 @@ public class Pitch extends SubsystemBase {
   
   CANcoder pitchEncoder;
   CANSparkMax pitchMotor;
-  SparkPIDController pitchPID;
+  PIDController pitchPID;
   double currentPitch;
   
   public Pitch() {
@@ -32,13 +33,8 @@ public class Pitch extends SubsystemBase {
     pitchMotor.setIdleMode(IdleMode.kBrake);
 
     // pitch PID
-    pitchPID = pitchMotor.getPIDController();
-
-    pitchPID.setP(Constants.Pitch.kP);
-    pitchPID.setI(Constants.Pitch.kI);
-    pitchPID.setD(Constants.Pitch.kD);
-    pitchPID.setFF(Constants.Pitch.kFF);
-    pitchPID.setOutputRange(Constants.Pitch.minOutput, Constants.Pitch.maxOutput);
+    pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
+  
 
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
@@ -84,27 +80,28 @@ public class Pitch extends SubsystemBase {
 
   public void setPosition(double position){
 
-    double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
+    currentPitch = pitchEncoder.getPosition().getValueAsDouble();
+    
     // positive speed moves down, negative speed moves up
 
-    if (startingPitch < position){
+    pitchMotor.set(-pitchPID.calculate(currentPitch, position));
+   
+    // if (currentPitch < position){
 
-      movePitch(-0.3);
+    //   movePitch(-0.3);
       
 
-    } else if (startingPitch > position){
+    // } else if (currentPitch > position){
 
-      movePitch(0.3);
+    //   movePitch(0.3);
       
-    }
+    // } else if (currentPitch == position){
+
+    //   movePitch(0);
+
+    // }
 
   }
-
-  // public void setPosition(double position){
-
-  //   pitchPID.setReference(position, ControlType.kPosition);
-
-  // }
 
 
   @Override

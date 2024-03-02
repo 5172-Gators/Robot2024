@@ -105,7 +105,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.16;
+        public static final double allowableError = 0.0;
         public static final double minPitchPosition = 0.918213; 
         public static final double maxPitchPosition = 0.969971;
 
@@ -115,10 +115,9 @@ public final class Constants {
         public static final double P_ampScorePosition = 0;
 
         /* PID Constants */
-        public static final double kP = 0.1;
+        public static final double kP = 3.2;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kFF = 0;
 
         public static final double minOutput = -1;
         public static final double maxOutput = 1;
