@@ -47,7 +47,7 @@ public class Shooter extends SubsystemBase {
     kicker.setInverted(true);
 
     /* Beam Break Sensors */
-    kickerSensor = new DigitalInput(0);
+    kickerSensor = new DigitalInput(9);
     shooterSensor = new DigitalInput(1);
 
   }

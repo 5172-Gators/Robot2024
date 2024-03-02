@@ -42,7 +42,7 @@ public class TeleopShoot extends Command {
     
     
     // sets the shooter speed
-    s_Shooter.setShooter(1, 0.3, 0.25);
+    s_Shooter.setShooter(1, 0.8, 0.4);
 
     // waits for the shooter to get up to speed
     new WaitCommand(0.1);

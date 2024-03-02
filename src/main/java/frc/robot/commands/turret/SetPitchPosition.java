@@ -44,7 +44,15 @@ public class SetPitchPosition extends Command {
   @Override
   public boolean isFinished() {
     
+    if (s_Pitch.getPosition() == position + Constants.Pitch.allowableError || s_Pitch.getPosition() == position - Constants.Pitch.allowableError){
+
+      return true;
+
+    } else {
+
       return false;
+
+    }
 
   }
 

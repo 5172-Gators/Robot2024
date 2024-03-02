@@ -25,7 +25,6 @@ public class IntakeCommand extends Command {
 
   boolean kickerSensorValue;
   boolean shooterSensorValue;
-
  
   int shooterState = 0;
 
@@ -49,6 +48,12 @@ public class IntakeCommand extends Command {
     kickerSensorValue = s_Shooter.getKickerSensor();
     shooterSensorValue = s_Shooter.getShooterSensor();
 
+    // new DeployIntake(s_Intake);
+
+    // new WaitCommand(0.75);
+
+    // new SetIntakeWheels(s_Intake, 0.85);
+
     switch (shooterState){
       case 0:
         if (kickerSensorValue == true){ // 1
@@ -61,11 +66,13 @@ public class IntakeCommand extends Command {
           break;
 
       case 1:
-        if (kickerSensorValue == true){ // 2
+        if (kickerSensorValue == false){ // 2
       // if the kicker is tripped, stop the wheels + up the trip count so the stupid command runs in order
 
         s_Shooter.setKicker(1, 0.55);
         SmartDashboard.putNumber("Debug", 2);
+
+        new SetIntakeWheels(s_Intake, 0.0);
 
         } 
 

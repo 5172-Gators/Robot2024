@@ -82,32 +82,29 @@ public class Pitch extends SubsystemBase {
 
   }
 
-  // public void setPosition(double position){
-
-  //   double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
-  //   // positive speed moves down, negative speed moves up
-
-  //   if (startingPitch < position){
-
-  //     movePitch(-0.3);
-      
-
-  //   } else if (startingPitch > position){
-
-  //     movePitch(0.3);
-      
-
-  //   } else if (currentPitch == position + Constants.Pitch.allowableError || currentPitch == position - Constants.Pitch.allowableError){
-
-  //     movePitch(0);
-
-  //   }
-
   public void setPosition(double position){
 
-    pitchPID.setReference(position, ControlType.kPosition);
+    double startingPitch = pitchEncoder.getPosition().getValueAsDouble();
+    // positive speed moves down, negative speed moves up
+
+    if (startingPitch < position){
+
+      movePitch(-0.3);
+      
+
+    } else if (startingPitch > position){
+
+      movePitch(0.3);
+      
+    }
 
   }
+
+  // public void setPosition(double position){
+
+  //   pitchPID.setReference(position, ControlType.kPosition);
+
+  // }
 
 
   @Override

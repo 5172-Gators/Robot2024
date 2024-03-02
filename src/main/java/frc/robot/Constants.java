@@ -105,7 +105,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.08096;
+        public static final double allowableError = 0.16;
         public static final double minPitchPosition = 0.918213; 
         public static final double maxPitchPosition = 0.969971;
 

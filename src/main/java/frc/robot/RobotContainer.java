@@ -16,6 +16,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.turret.TeleopTurret;
+import frc.robot.commands.turret.SetPitchPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
@@ -173,7 +174,7 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
+        // deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
 
         stowIntake.onTrue(new StowIntake(s_Intake));
 
@@ -188,11 +189,7 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        // testAprilTag.onTrue(new AlignToAprilTag(s_Limelight,
-        //                                         s_Turret,
-        //                                         s_Pitch, 
-        //                                         s_Swerve, 
-        //                                         Constants.LimelightPosition.AMP));
+        testAprilTag.onTrue(new SetPitchPosition(s_Pitch, 0.97));
 
 
     }

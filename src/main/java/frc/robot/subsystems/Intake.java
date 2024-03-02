@@ -77,7 +77,7 @@ public class Intake extends SubsystemBase {
       
       } else {
 
-        // sets the motor to zero + set the mode to coast
+        // sets the motor speed to zero + set the mode to coast
         jointMotor.set(0);
         jointMotor.setIdleMode(IdleMode.kCoast);
 
@@ -90,13 +90,13 @@ public class Intake extends SubsystemBase {
 
     if (getIntakePosition() > 0.8){
 
-      jointMotor.set(0.7);
+      jointMotor.set(0.8);
 
     } else if (getIntakePosition() < 0.1){
 
       jointMotor.set(0.1);
 
-    } else if (getIntakePosition() == 0){
+    } else if (getIntakePosition() <= 0.002){
 
       jointMotor.set(0);
       jointMotor.setIdleMode(IdleMode.kBrake);
