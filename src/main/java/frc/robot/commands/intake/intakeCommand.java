@@ -76,40 +76,49 @@ public class IntakeCommand extends Command {
        if the piece is too far up in the shooter, run the kicker backwards to put it in the right spot
 
        once the piece is in the right spot, stop the kicker completely
-      */
+      */shooterSensorTripCount = 0;
+  int kickerSensorTripCount = 0;
 
-      if (kickerSensorValue == true){
+      if (kickerSensorTripCount <1 && kickerSensorValue == true){
 
         s_Shooter.setKicker(1, 0.55);
   
-      } 
+      } else if (kickerSensorTripCount <1 && kickerSensorValue == false){
+       kickerSensorTripCount=1; 
+        s_Shooter.setKicker(0,0);
+      }
       
-      if (shooterSensorValue == false){
+      if (kickerSensorCount=1 && shooterSensorValue == false){
   
         s_Shooter.setKicker(-1, 0.1);
+     shooterSensorTripCount = 1;
   
-      } else if (shooterSensorValue == true && kickerSensorValue == false) {
+      } 
+    if (shooterSensorTripCount=1 &&shooterSensorValue == true ) {
   
-        s_Shooter.setKicker(0, 0);
+        s_Shooter.setKicker(1, 0.1);
 
-        shooterSensorTripCount = 2;
-  
+        
       }
 
+    if( shooterSensorTripCount = 1 && shooterSensorValue == false){
+      shooterSensorTRipCount = 2;
+      s_shooter.setkicker(0,0);
+    }
       // wait to start the other command
       
-      new WaitCommand(0.5);
+      // new WaitCommand(0.5);
 
-      // slowly moves the kicker until the beam break goes into the right position
+      // // slowly moves the kicker until the beam break goes into the right position
       
-      if (shooterSensorValue == true && shooterSensorTripCount == 2){
+      // if (shooterSensorValue == true && shooterSensorTripCount == 2){
 
-        s_Shooter.setKicker(1, 0.1);
+      //   s_Shooter.setKicker(1, 0.1);
   
-      } else {
+      // } else {
   
-        s_Shooter.setKicker(0, 0);
-      }
+      //   s_Shooter.setKicker(0, 0);
+      // }
 
   }
 
@@ -122,6 +131,12 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (shootersensorTripCount==2){
+      shooterSensorTRipCount = 0;
+      kickerSensorTripCount = 0;
+      return True;
+    }else{
+    
     return false;
   }
 }
