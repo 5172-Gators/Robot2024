@@ -5,13 +5,20 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Shooter;
 
+public class SecondIntakingStage extends Command {
+  /** Creates a new SecondIntakingStage. */
 
+  Shooter s_Shooter;
 
-public class StowIntake extends Command {
-  /** Creates a new StowIntake. */
-  public StowIntake() {
+  boolean shooterSensorValue;
+  
+  public SecondIntakingStage(Shooter s_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
+
+    this.s_Shooter = s_Shooter;
+    addRequirements(s_Shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -20,7 +27,20 @@ public class StowIntake extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    shooterSensorValue = s_Shooter.getShooterSensor();
+
+    if (shooterSensorValue == true){
+
+      s_Shooter.setKicker(1, 0.1);
+
+    } else {
+
+      s_Shooter.setKicker(0, 0);
+    }
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -29,6 +49,15 @@ public class StowIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    if (shooterSensorValue == false){
+     
+      return true;
+
+    } else {
+
+      return false;
+
+    }
   }
 }

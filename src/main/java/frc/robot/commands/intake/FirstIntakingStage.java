@@ -5,20 +5,23 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
 
-public class DeployIntake extends Command {
-  /** Creates a new DeployIntake. */
+import frc.robot.subsystems.*;
 
-  Intake s_Intake;
 
-  public DeployIntake(Intake s_Intake) {
+public class FirstIntakingStage extends Command {
+  /** Creates a new FirstIntakingStage. */
+  Shooter s_Shooter;
+
+  boolean kickerSensorValue;
+  boolean shooterSensorValue;
+
+  public FirstIntakingStage(Shooter s_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.s_Intake = s_Intake;
-    addRequirements(s_Intake);
+    this.s_Shooter = s_Shooter;
 
+    addRequirements(s_Shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -29,9 +32,22 @@ public class DeployIntake extends Command {
   @Override
   public void execute() {
 
-    // deploys the intake
-    s_Intake.deployIntake();
-    
+    kickerSensorValue = s_Shooter.getKickerSensor();
+    shooterSensorValue = s_Shooter.getShooterSensor();
+
+    if (kickerSensorValue == true){
+
+      s_Shooter.setKicker(1, 0.55);
+
+    } else if (shooterSensorValue == false){
+
+      s_Shooter.setKicker(-1, 0.1);
+
+    } else if (shooterSensorValue == true && kickerSensorValue == false) {
+
+      s_Shooter.setKicker(0, 0);
+
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -41,11 +57,9 @@ public class DeployIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
+    if (shooterSensorValue == true && kickerSensorValue == false) {
 
-    // returns true if the intake motor's position is greater than or equal to the deployed position, just in case the position overshoots
-
-    if (s_Intake.getIntakePosition() >= Constants.Intake.deployedPosition){
-      
       return true;
 
     } else {
@@ -53,6 +67,6 @@ public class DeployIntake extends Command {
       return false;
 
     }
-  
+    
   }
 }

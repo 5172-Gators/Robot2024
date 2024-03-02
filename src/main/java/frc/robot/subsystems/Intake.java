@@ -55,6 +55,12 @@ public class Intake extends SubsystemBase {
 
   }
 
+  public double getIntakePosition(){
+
+    return jointPosition.getPosition();
+
+  }
+
   public void runIntake(double speed){
 
     intakeMotor.set(speed);

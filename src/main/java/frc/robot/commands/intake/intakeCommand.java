@@ -46,33 +46,44 @@ public class IntakeCommand extends Command {
     shooterSensorValue = s_Shooter.getKickerSensor();
 
       // deploys the intake
-      s_Intake.deployIntake();
+      // s_Intake.deployIntake();
 
-      // wait to deploy
+      // // wait to deploy
+      // new WaitCommand(0.5);
+
+      // // stops the arm motor when the intake is deployed
+      // s_Intake.moveArm(0);
+
+      // // starts the intake
+      // s_Intake.runIntake(0.85);
+
+      /* 
+       if a piece hasn't already been intaked, set the kicker to intake a piece
+
+       if the piece is too far up in the shooter, run the kicker backwards to put it in the right spot
+
+       once the piece is in the right spot, stop the kicker completely
+      */
+
+      new FirstIntakingStage(s_Shooter);
+
+      // waits to start the other command
+      
       new WaitCommand(0.5);
 
-      // stops the arm motor when the intake is deployed
-      s_Intake.moveArm(0);
+      // slowly moves the kicker until the beam break goes into the right position
+      if (shooterSensorValue == true){
 
-      // starts the intake
-      s_Intake.runIntake(0.85);
+        s_Shooter.setKicker(1, 0.1);
 
-      // if a piece hasn't already been intaked, set the kicker to intake a piece
-      if (kickerSensorValue == true){
-
-        s_Shooter.setKicker(1, 0.55);
-
-      } else if (shooterSensorValue == false){
-
-        s_Shooter.setKicker(-1, 0.1);
-
-      } else if (kickerSensorValue == false && shooterSensorValue == true){
+      } else {
 
         s_Shooter.setKicker(0, 0);
-
       }
 
-    }
+
+  }
+
 
 
   // Called once the command ends or is interrupted.
