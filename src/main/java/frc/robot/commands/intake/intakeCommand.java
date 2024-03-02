@@ -4,6 +4,7 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -48,8 +49,6 @@ public class IntakeCommand extends Command {
     kickerSensorValue = s_Shooter.getKickerSensor();
     shooterSensorValue = s_Shooter.getKickerSensor();
 
-    shooterSensorTripCount = 1;
-
       // deploys the intake
       // s_Intake.deployIntake();
 
@@ -76,49 +75,51 @@ public class IntakeCommand extends Command {
        if the piece is too far up in the shooter, run the kicker backwards to put it in the right spot
 
        once the piece is in the right spot, stop the kicker completely
-      */shooterSensorTripCount = 0;
-  int kickerSensorTripCount = 0;
+      */ 
 
-      if (kickerSensorTripCount <1 && kickerSensorValue == true){
+      // if the kicker hasn't been tripped before && a piece hasn't been intaked yet, run the kicker
+
+      if (kickerSensorTripCount < 1 && kickerSensorValue == true){ // 1
 
         s_Shooter.setKicker(1, 0.55);
+        SmartDashboard.putNumber("Debug", 1);
   
-      } else if (kickerSensorTripCount <1 && kickerSensorValue == false){
-       kickerSensorTripCount=1; 
-        s_Shooter.setKicker(0,0);
+      } else if (kickerSensorTripCount < 1 && kickerSensorValue == false){ // 2
+      // if the kicker is tripped, stop the wheels + up the trip count so the stupid command runs in order
+
+        kickerSensorTripCount = 1; 
+        s_Shooter.setKicker(0, 0);
+        SmartDashboard.putNumber("Debug", 2);
+
       }
+
+      // if the kicker + shooter has been tripped, run the kicker backwards until the shooter sensor hasn't been tripped
+      // also up the trip count
       
-      if (kickerSensorCount=1 && shooterSensorValue == false){
+      if (kickerSensorTripCount == 1 && shooterSensorValue == false){ //3 
   
         s_Shooter.setKicker(-1, 0.1);
-     shooterSensorTripCount = 1;
+        shooterSensorTripCount = 1;
+        SmartDashboard.putNumber("Debug", 3);
   
       } 
-    if (shooterSensorTripCount=1 &&shooterSensorValue == true ) {
+
+      // if the shooter has been tripped before, and the shooter is currently tripped, run the kicker forward to trip the sensor again to get the note into the right position
+      if (shooterSensorTripCount == 1 && shooterSensorValue == true) { // 4
   
         s_Shooter.setKicker(1, 0.1);
-
-        
+        SmartDashboard.putNumber("Debug", 4);
+  
       }
 
-    if( shooterSensorTripCount = 1 && shooterSensorValue == false){
-      shooterSensorTRipCount = 2;
-      s_shooter.setkicker(0,0);
-    }
-      // wait to start the other command
-      
-      // new WaitCommand(0.5);
+      // if the kicker is tripped again when it has been tripped before, stop the kicker + up the trip count again
+      if (shooterSensorTripCount == 1 && shooterSensorValue == false){ //5
+        
+        shooterSensorTripCount = 2;
+        s_Shooter.setKicker(0,0);
+        SmartDashboard.putNumber("Debug", 5);
 
-      // // slowly moves the kicker until the beam break goes into the right position
-      
-      // if (shooterSensorValue == true && shooterSensorTripCount == 2){
-
-      //   s_Shooter.setKicker(1, 0.1);
-  
-      // } else {
-  
-      //   s_Shooter.setKicker(0, 0);
-      // }
+      }
 
   }
 
@@ -131,12 +132,22 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (shootersensorTripCount==2){
-      shooterSensorTRipCount = 0;
-      kickerSensorTripCount = 0;
-      return True;
-    }else{
+
+    // if the shooter has been tripped twice, end the command
+    // if (shooterSensorTripCount == 2){
+      
+    //   shooterSensorTripCount = 0;
+    //   kickerSensorTripCount = 0;
+    //   return true;
+
+    // } else {
     
+    //  return false;
+
     return false;
+
+    // }
   }
+
 }
+
