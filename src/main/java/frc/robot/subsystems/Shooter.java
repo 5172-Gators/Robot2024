@@ -110,7 +110,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("Sensor Value", getKickerSensor());
+    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
+    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
   }
 }

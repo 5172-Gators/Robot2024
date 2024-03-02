@@ -21,12 +21,9 @@ public class Pitch extends SubsystemBase {
   
   CANcoder pitchEncoder;
   CANSparkMax pitchMotor;
-
   SparkPIDController pitchPID;
-
   double currentPitch;
   
-
   public Pitch() {
 
     // define + configure pitch motor
@@ -109,7 +106,7 @@ public class Pitch extends SubsystemBase {
   public void setPosition(double position){
 
     pitchPID.setReference(position, ControlType.kPosition);
-    
+
   }
 
 

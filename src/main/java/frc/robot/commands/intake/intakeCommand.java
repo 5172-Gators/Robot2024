@@ -22,14 +22,13 @@ public class IntakeCommand extends Command {
   Pitch s_Pitch;
   Turret s_Turret;
 
-  boolean sensorValue;
+  boolean kickerSensorValue;
+  boolean shooterSensorValue;
 
   public IntakeCommand(Intake m_Intake, Shooter m_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Shooter = m_Shooter;
     this.s_Intake = m_Intake;
-    this.s_Pitch = s_Pitch;
-    this.s_Turret = s_Turret;
 
     addRequirements(m_Shooter, m_Intake);
 
@@ -43,7 +42,8 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
 
-    sensorValue = s_Shooter.getKickerSensor();
+    kickerSensorValue = s_Shooter.getKickerSensor();
+    shooterSensorValue = s_Shooter.getKickerSensor();
 
       // deploys the intake
       s_Intake.deployIntake();
@@ -58,9 +58,17 @@ public class IntakeCommand extends Command {
       s_Intake.runIntake(0.85);
 
       // if a piece hasn't already been intaked, set the kicker to intake a piece
-      if (sensorValue == true){
+      if (kickerSensorValue == true){
 
         s_Shooter.setKicker(1, 0.55);
+
+      } else if (shooterSensorValue == false){
+
+        s_Shooter.setKicker(-1, 0.1);
+
+      } else if (kickerSensorValue == false && shooterSensorValue == true){
+
+        s_Shooter.setKicker(0, 0);
 
       }
 

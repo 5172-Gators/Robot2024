@@ -38,7 +38,8 @@ public class TeleopShoot extends Command {
   @Override
   public void execute() {
 
-    boolean sensorValue = s_Shooter.getKickerSensor();
+    boolean kickerSensorValue = s_Shooter.getKickerSensor();
+    
     
     // sets the shooter speed
     s_Shooter.setShooter(1, 0.3, 0.25);
@@ -47,7 +48,7 @@ public class TeleopShoot extends Command {
     new WaitCommand(0.1);
 
     // sets the kicker speed if a note has been intaked
-    if (sensorValue == false) {
+    if (kickerSensorValue == false) {
 
       // s_Shooter.setKicker(1, 0.45);
 
