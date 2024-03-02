@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -24,12 +25,14 @@ public class Intake extends SubsystemBase {
 
   RelativeEncoder jointPosition;
 
+  CANcoder armEncoder;
+
   SparkPIDController jointPID;
 
 
   public Intake() {
 
-    // define + configure the intake motor
+    // define + configure the intake wheels motor
     intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(IdleMode.kBrake);
@@ -41,23 +44,16 @@ public class Intake extends SubsystemBase {
     jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setInverted(false);
 
-    // create instance of relative encoder
-    jointPosition = jointMotor.getEncoder();
+    // create instance of absolute encoder
 
-    // defines + configures the PID controller for the joint so set positions can be used
-    jointPID = jointMotor.getPIDController();
-
-    jointPID.setP(Constants.Intake.kP);
-    jointPID.setI(Constants.Intake.kI);
-    jointPID.setD(Constants.Intake.kD);
-    jointPID.setFF(Constants.Intake.kFF);
-    jointPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
+    
 
   }
 
   public double getIntakePosition(){
 
-    return jointPosition.getPosition();
+    return armEncoder.getPosition().getValueAsDouble();
 
   }
 
@@ -70,17 +66,41 @@ public class Intake extends SubsystemBase {
   public void moveArm(double speed){
 
     jointMotor.set(speed);
+
   }
 
   public void deployIntake(){
 
-    jointPID.setReference(Constants.Intake.deployedPosition, CANSparkMax.ControlType.kPosition);
+      if (getIntakePosition() < 0.8){
+        
+        jointMotor.set(-0.3);
+      
+      } else {
 
-  }
+        // sets the motor to zero + set the mode to coast
+        jointMotor.set(0);
+        jointMotor.setIdleMode(IdleMode.kCoast);
+
+      }
+
+    }
+
 
   public void stowIntake(){
 
-    jointPID.setReference(Constants.Intake.stowedPosition, CANSparkMax.ControlType.kPosition);
+    if (getIntakePosition() > 0.8){
+
+      jointMotor.set(0.7);
+
+    } else if (getIntakePosition() < 0.1){
+
+      jointMotor.set(0.1);
+
+    } else if (getIntakePosition() == 0){
+
+      jointMotor.set(0);
+      jointMotor.setIdleMode(IdleMode.kBrake);
+    }
 
   }
 
@@ -89,8 +109,6 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    double m_currentPosition = jointPosition.getPosition();
-
-    SmartDashboard.putNumber("Intake Arm Position", m_currentPosition);
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
   }
 }

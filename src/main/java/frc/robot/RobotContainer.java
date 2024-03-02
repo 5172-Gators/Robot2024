@@ -21,6 +21,7 @@ import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.limelight.AlignToAprilTag;
 import frc.robot.commands.shooter.TeleopShoot;
 
@@ -174,7 +175,7 @@ public class RobotContainer {
 
         deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
 
-        stowIntake.onTrue(new StopIntake(s_Shooter, s_Intake));
+        stowIntake.onTrue(new StowIntake(s_Intake));
 
         justDeploy.onTrue(new DeployIntake(s_Intake));
 
@@ -187,11 +188,11 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        testAprilTag.onTrue(new AlignToAprilTag(s_Limelight,
-                                                s_Turret,
-                                                s_Pitch, 
-                                                s_Swerve, 
-                                                Constants.LimelightPosition.AMP));
+        // testAprilTag.onTrue(new AlignToAprilTag(s_Limelight,
+        //                                         s_Turret,
+        //                                         s_Pitch, 
+        //                                         s_Swerve, 
+        //                                         Constants.LimelightPosition.AMP));
 
 
     }

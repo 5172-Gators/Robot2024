@@ -46,6 +46,9 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
 
+    kickerSensorValue = s_Shooter.getKickerSensor();
+    shooterSensorValue = s_Shooter.getShooterSensor();
+
     switch (shooterState){
       case 0:
         if (kickerSensorValue == true){ // 1
@@ -53,17 +56,24 @@ public class IntakeCommand extends Command {
         s_Shooter.setKicker(1, 0.55);
         SmartDashboard.putNumber("Debug", 1);
         shooterState = 1;
-        
+
         }
           break;
 
       case 1:
-        if (kickerSensorValue == false){ // 2
+        if (kickerSensorValue == true){ // 2
       // if the kicker is tripped, stop the wheels + up the trip count so the stupid command runs in order
 
-        s_Shooter.setKicker(0, 0);
+        s_Shooter.setKicker(1, 0.55);
         SmartDashboard.putNumber("Debug", 2);
-        shooterState = 2;
+
+        } 
+
+        if (shooterSensorValue == false){ // 3
+
+          s_Shooter.setKicker(-1, 0.1);
+          shooterState = 2;
+          SmartDashboard.putNumber("Debug", 3);
 
         }
             break;
@@ -72,20 +82,20 @@ public class IntakeCommand extends Command {
       // if the kicker + shooter has been tripped, run the kicker backwards until the shooter sensor hasn't been tripped
       // also up the trip count
       
-      if (shooterSensorValue == false){ //3 
+      if (shooterSensorValue == false){ // 4
   
         s_Shooter.setKicker(-1, 0.1);
-        SmartDashboard.putNumber("Debug", 3);
+        SmartDashboard.putNumber("Debug", 4);
         shooterState = 3;
       }
        break;
       
       case 3:      
       // if the shooter has been tripped before, and the shooter is currently tripped, run the kicker forward to trip the sensor again to get the note into the right position
-      if (shooterSensorValue == true) { // 4
+      if (shooterSensorValue == true) { // 5
   
         s_Shooter.setKicker(1, 0.1);
-        SmartDashboard.putNumber("Debug", 4);
+        SmartDashboard.putNumber("Debug", 5);
         shooterState = 4;
         
       }
@@ -94,12 +104,20 @@ public class IntakeCommand extends Command {
       
       case 4:
       // if the kicker is tripped again when it has been tripped before, stop the kicker + up the trip count again
-      if (shooterSensorValue == false){ //5
+      if (shooterSensorValue == false){ //6
         
         s_Shooter.setKicker(0,0);
-        SmartDashboard.putNumber("Debug", 5);
+        SmartDashboard.putNumber("Debug", 6);
         shooterState = 5;
       }
+        break;
+
+      // making sure that the command ends
+
+      case 5: // ending command
+
+        shooterState = 6;
+
         break;
 
     }
@@ -116,21 +134,19 @@ public class IntakeCommand extends Command {
   @Override
   public boolean isFinished() {
 
-    // if the shooter has been tripped twice, end the command
-    // if (shooterState = 5){
+    // if the command has ran through all cases, end the command
+    if (shooterState == 6){
       
-    //   shooterSensorTripCount = 0;
-    //   kickerSensorTripCount = 0;
-    //   return true;
+      shooterState = 0;
 
-    // } else {
+      return true;
+
+    } else {
     
-    //  return false;
+      return false;
 
-    return false;
+    }
 
-    // }
   }
-
 }
 

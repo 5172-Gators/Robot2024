@@ -144,10 +144,11 @@ public final class Constants {
         /* Motor IDs */
         public static final int intakeMotorID = 4;
         public static final int armID = 55;
+        public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
-        public static final double stowedPosition = 0.2; //TODO: find this position again
-        public static final double deployedPosition = -3;
+        public static final double stowedPosition = 0; 
+        public static final double deployedPosition = 0.16;
 
         /* PID */
         public static final double kP = 0.5;

@@ -42,17 +42,7 @@ public class DeployIntake extends Command {
   @Override
   public boolean isFinished() {
 
-    // returns true if the intake motor's position is greater than or equal to the deployed position, just in case the position overshoots
-
-    if (s_Intake.getIntakePosition() >= Constants.Intake.deployedPosition){
-      
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    return false;
   
   }
 }
