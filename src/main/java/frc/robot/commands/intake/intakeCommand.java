@@ -25,6 +25,9 @@ public class IntakeCommand extends Command {
   boolean kickerSensorValue;
   boolean shooterSensorValue;
 
+  int shooterSensorTripCount = 0;
+  int kickerSensorTripCount = 0;
+
   public IntakeCommand(Intake m_Intake, Shooter m_Shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Shooter = m_Shooter;
@@ -45,7 +48,7 @@ public class IntakeCommand extends Command {
     kickerSensorValue = s_Shooter.getKickerSensor();
     shooterSensorValue = s_Shooter.getKickerSensor();
 
-    int getTheStupidIntakeToWork = 1;
+    shooterSensorTripCount = 1;
 
       // deploys the intake
       // s_Intake.deployIntake();
@@ -79,7 +82,9 @@ public class IntakeCommand extends Command {
 
         s_Shooter.setKicker(1, 0.55);
   
-      } else if (shooterSensorValue == false){
+      } 
+      
+      if (shooterSensorValue == false){
   
         s_Shooter.setKicker(-1, 0.1);
   
@@ -87,7 +92,7 @@ public class IntakeCommand extends Command {
   
         s_Shooter.setKicker(0, 0);
 
-        getTheStupidIntakeToWork = 2;
+        shooterSensorTripCount = 2;
   
       }
 
@@ -97,7 +102,14 @@ public class IntakeCommand extends Command {
 
       // slowly moves the kicker until the beam break goes into the right position
       
-      new SecondIntakingStage(s_Shooter);
+      if (shooterSensorValue == true && shooterSensorTripCount == 2){
+
+        s_Shooter.setKicker(1, 0.1);
+  
+      } else {
+  
+        s_Shooter.setKicker(0, 0);
+      }
 
   }
 
