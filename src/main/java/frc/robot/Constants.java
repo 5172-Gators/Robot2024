@@ -97,6 +97,13 @@ public final class Constants {
     
     }
 
+        public static final class Colors {
+            public static final double green = 0.77;
+            
+
+
+        }
+
 
     public static final class Pitch {
 

@@ -18,6 +18,7 @@ import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.SetPitchPosition;
 import frc.robot.commands.turret.TeleopPitch;
+import frc.robot.commands.LEDTest;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
@@ -34,7 +35,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight;
 // import frc.robot.subsystems.TrapScore;
-
+import frc.robot.subsystems.LEDs;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -102,6 +103,7 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Climber s_Climber = new Climber();
     // private final TrapScore s_TrapScore = new TrapScore();
+    private final LEDs s_LEDs = new LEDs();
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -189,7 +191,7 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        testAprilTag.onTrue(new SetPitchPosition(s_Pitch, 0.97));
+        testAprilTag.onTrue(new LEDTest(s_LEDs));
 
 
     }
