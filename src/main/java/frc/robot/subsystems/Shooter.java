@@ -37,14 +37,12 @@ public class Shooter extends SubsystemBase {
     rightShooter = new CANSparkMax(Constants.Shooter.rightMotorID, MotorType.kBrushless);
     rightShooter.setIdleMode(IdleMode.kCoast);
 
-    /* define + configure kicker motor */
-    kicker = new CANSparkFlex(Constants.Shooter.kickerMotorID, MotorType.kBrushless);
-    kicker.setIdleMode(IdleMode.kBrake);
+    kicker = new CANSparkFlex(Constants.Kicker.kickerMotorID, MotorType.kBrushless);
+    kicker.setIdleMode(IdleMode.kCoast);
 
     /* Set Inverted */
     leftShooter.setInverted(true);
     rightShooter.setInverted(false);
-    kicker.setInverted(true);
 
     /* Beam Break Sensors */
     kickerSensor = new DigitalInput(9);

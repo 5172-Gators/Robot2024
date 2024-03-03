@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,8 +28,7 @@ public class Intake extends SubsystemBase {
 
   CANcoder armEncoder;
 
-  SparkPIDController jointPID;
-
+  PIDController intakeArmPID;
 
   public Intake() {
 
@@ -44,8 +44,10 @@ public class Intake extends SubsystemBase {
     jointMotor.setInverted(false);
 
     // create instance of absolute encoder
-
     armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
+
+    // PID
+    intakeArmPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
     
 
   }

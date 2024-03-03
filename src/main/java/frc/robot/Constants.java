@@ -19,6 +19,17 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
+    public static class Kicker{
+
+        /* Motor IDs */
+        public static final int kickerMotorID = 20;
+
+        /* PID */
+        
+
+
+    }
+
     public static class Limelight{
 
         // allowable error / deadband
@@ -27,7 +38,7 @@ public final class Constants {
     }
 
 
-    public enum LimelightPosition{ // TODO: FIND LIMELIGHT POSITIONS
+    public enum LimelightPosition{
 
         // speaker positions
         AGAINSTSPEAKER(0.0, 0.0, 0.0),
@@ -79,8 +90,10 @@ public final class Constants {
         public static final int rotateMotorID = 2;
         
         /* Max + Min Positions, Allowable Error */
-        public static final double minTurretPosition = -4.523804664611816;
-        public static final double maxTurretPosition = 4.285709381103516;
+
+        // public static final double minTurretPosition = -4.523804664611816;
+        // public static final double maxTurretPosition = 4.285709381103516;
+
         public static final double allowableError = 0.05;
 
         /* Positions */
@@ -118,7 +131,7 @@ public final class Constants {
         public static final double maxPitchPosition = 1.07;
 
         /* Positions */
-        public static final double P_intakingPosition = 0.9724; //TODO: find positions
+        public static final double P_intakingPosition = 0.9724; 
         public static final double P_againstSpeakerShootingPosition = 0;
         public static final double P_ampScorePosition = 0;
 

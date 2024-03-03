@@ -23,7 +23,6 @@ import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.FullIntake;
 import frc.robot.commands.intake.InitIntake;
-import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.intake.StowIntake;

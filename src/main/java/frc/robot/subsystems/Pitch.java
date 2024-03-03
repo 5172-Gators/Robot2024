@@ -59,23 +59,6 @@ public class Pitch extends SubsystemBase {
     // + joystick value moves down
     // - joystick value moves up
     
-    // if the pitch is within the max + min positions, adjust the pitch. Otherwise stop the motor
-  
-    // double currentPitch = pitchEncoder.getPosition().getValueAsDouble();
-   
-    // if (/* currentPitch > Constants.Pitch.maxPosition && */ speed > 0){
-
-    //   pitchMotor.set(speed);
-
-    // } else if (/* currentPitch < Constants.Pitch.minPosition && */ speed < 0){
-
-    //   pitchMotor.set(speed);
-
-    // } else { 
-
-    //   pitchMotor.set(0);
-    
-    // }
     if (currentPitch <= Constants.Pitch.minPitchPosition)
       speed = Math.min(speed,0); // Clipping so it's positive
     else if (currentPitch >= Constants.Pitch.maxPitchPosition)

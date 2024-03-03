@@ -39,21 +39,20 @@ public class RunIntake extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    state = 0;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     kickerSensorValue = s_Shooter.getKickerSensor();
     shooterSensorValue = s_Shooter.getShooterSensor();
+
     
     SmartDashboard.putNumber("State", state);
     // new DeployIntake(s_Intake);
     // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition);
     // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition);
-    new InitIntake(s_Intake, s_Pitch, s_Turret);
+    // new InitIntake(s_Intake, s_Pitch, s_Turret);
 
     if (state == 0) {
       s_Intake.runIntake(0.55);
