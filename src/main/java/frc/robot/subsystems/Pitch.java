@@ -31,6 +31,7 @@ public class Pitch extends SubsystemBase {
     pitchMotor = new CANSparkMax(Constants.Pitch.pitchMotorID, MotorType.kBrushed);
     pitchMotor.restoreFactoryDefaults();
     pitchMotor.setIdleMode(IdleMode.kBrake);
+    pitchMotor.setSmartCurrentLimit(5);
 
     // pitch PID
     pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
@@ -109,7 +110,10 @@ public class Pitch extends SubsystemBase {
     // This method will be called once per scheduler run
 
     currentPitch = pitchEncoder.getPosition().getValueAsDouble();
+    double currentVoltage = pitchMotor.getOutputCurrent();
 
     SmartDashboard.putNumber("Tilt Encoder Value", currentPitch);
+    SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
+
   }
 }
