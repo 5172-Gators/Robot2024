@@ -131,7 +131,7 @@ public class IntakeCommand extends Command {
 
   }
 
-
+  //green when note is in shooter
 
   // Called once the command ends or is interrupted.
   @Override
