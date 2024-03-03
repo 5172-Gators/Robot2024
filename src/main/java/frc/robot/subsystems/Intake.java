@@ -41,7 +41,6 @@ public class Intake extends SubsystemBase {
     // define + configure the motor that deploys + stows the intake
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
-    jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setInverted(false);
 
     // create instance of absolute encoder
@@ -71,15 +70,18 @@ public class Intake extends SubsystemBase {
 
   public void deployIntake(){
 
-      if (getIntakePosition() < 0.8){
+      if (getIntakePosition() < 0.6){
         
-        jointMotor.set(-0.3);
+        jointMotor.set(-0.1);
       
-      } else {
+      } else if (getIntakePosition() > 0.61){
 
         // sets the motor speed to zero + set the mode to coast
         jointMotor.set(0);
         jointMotor.setIdleMode(IdleMode.kCoast);
+
+      } else {
+
 
       }
 
@@ -88,15 +90,15 @@ public class Intake extends SubsystemBase {
 
   public void stowIntake(){
 
-    if (getIntakePosition() > 0.8){
+    if (getIntakePosition() > 0.09){
 
-      jointMotor.set(0.8);
+      jointMotor.set(0.3);
 
-    } else if (getIntakePosition() < 0.1){
+    } else if (getIntakePosition() < 0.01){
 
       jointMotor.set(0.1);
 
-    } else if (getIntakePosition() <= 0.002){
+    } else if (getIntakePosition() <= 0.004){
 
       jointMotor.set(0);
       jointMotor.setIdleMode(IdleMode.kBrake);

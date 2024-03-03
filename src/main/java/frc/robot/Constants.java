@@ -122,7 +122,7 @@ public final class Constants {
         public static final double P_ampScorePosition = 0;
 
         /* PID Constants */
-        public static final double kP = 3.2;
+        public static final double kP = 60.0;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -136,12 +136,11 @@ public final class Constants {
 
         /* Motor IDs */
         public static final int winchMotorID = 19;
-        public static final int climberMotor = 30;
 
         /* Positions */
         public static final double stowedPosition = 0;
         public static final double deployedPosition = 0;
-        public static final Double Deadband = 1.0;
+        public static final double deadband = 1.0;
     }
 
 

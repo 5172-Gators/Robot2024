@@ -32,39 +32,31 @@ public class Climber extends SubsystemBase {
     winchMotor.setIdleMode(IdleMode.kBrake);
     winchMotor.setSmartCurrentLimit(10);
     winchMotor.setOpenLoopRampRate(1);
-    
-
-    /* define + configure the climber motor */
-    climbMotor = new CANSparkFlex(Constants.Climber.climberMotor, MotorType.kBrushless);
-    climbMotor.restoreFactoryDefaults();
-    climbMotor.setIdleMode(IdleMode.kBrake);
-    climbMotor.setSmartCurrentLimit(1);
-    climbMotor.setOpenLoopRampRate(0.5);
      
-    /* create intstance of the climb + wince motors built-in encoders */
-    climbEncoder = climbMotor.getEncoder();
+    /* create intstance of the climb + winch motors built-in encoders */
+    // climbEncoder = climbMotor.getEncoder();
     winchEncoder = winchMotor.getEncoder();
   }
 
   public void joystickControl (double speed){
     // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
     
-    climbMotor.set(speed / 4);
+    // climbMotor.set(speed / 4);
 
-    //winchMotor.set(speed);
-
-  }
-
-  public double getEncoderPosition(){
-
-    SmartDashboard.putNumber("ClimbPosition2", climbEncoder.getPosition());
-    return climbEncoder.getPosition();
+    winchMotor.set(speed);
 
   }
+
+  // public double getEncoderPosition(){
+
+  //   // SmartDashboard.putNumber("ClimbPosition2", climbEncoder.getPosition());
+  //   // return climbEncoder.getPosition();
+
+  // }
 
   public void setSpeed (double speed){
 
-    climbMotor.set (speed/4);
+    // climbMotor.set (speed/4);
     winchMotor.set (speed);
 
   }
@@ -75,8 +67,8 @@ public class Climber extends SubsystemBase {
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
     SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
-    SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
-    SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
+    // SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
+    // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }
 }

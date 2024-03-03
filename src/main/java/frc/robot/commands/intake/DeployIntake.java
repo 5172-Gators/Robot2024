@@ -45,16 +45,7 @@ public class DeployIntake extends Command {
   @Override
   public boolean isFinished() {
 
-    if (s_Intake.getIntakePosition() < 0.8){
-     
-      return true;
-
-    } else {
-
-      return false;
-
-    }
-    
+    return true;
   
   }
 }
