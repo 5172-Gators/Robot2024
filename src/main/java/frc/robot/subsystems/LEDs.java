@@ -36,7 +36,7 @@ public class LEDs extends SubsystemBase {
   
   }
 
-  public void setColor (Colors color){
+  public void setColor (double color){
 
     s_spark.set(color);
     

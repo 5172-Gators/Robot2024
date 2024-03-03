@@ -20,7 +20,7 @@ import frc.robot.commands.turret.SetPitchPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.LEDTest;
 import frc.robot.commands.climber.JoystickClimberControl;
-import frc.robot.commands.intake.DeployIntake;
+// import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.intake.StowIntake;
@@ -180,7 +180,7 @@ public class RobotContainer {
 
         stowIntake.onTrue(new StowIntake(s_Intake));
 
-        justDeploy.onTrue(new DeployIntake(s_Intake));
+        // justDeploy.onTrue(new DeployIntake(s_Intake));
 
 
         /* Operator Buttons */
@@ -191,7 +191,7 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        testAprilTag.onTrue(new LEDTest(s_LEDs));
+        testAprilTag.onTrue(new LEDTest(s_LEDs, Constants.Colors.green));
 
 
     }

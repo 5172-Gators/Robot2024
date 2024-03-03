@@ -21,6 +21,7 @@ public class DeployIntake extends Command {
 
   }
 
+  // yellow
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -29,6 +30,8 @@ public class DeployIntake extends Command {
   @Override
   public void execute() {
 
+
+    
     // deploys the intake
     s_Intake.deployIntake();
     

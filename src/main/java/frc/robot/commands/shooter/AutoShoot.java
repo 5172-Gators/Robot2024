@@ -31,6 +31,7 @@ public class AutoShoot extends Command {
 
   }
 
+  //neon or bright purple when ready to shoot
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}

@@ -34,6 +34,7 @@ public class AlignToAprilTag extends Command {
 
   }
 
+  //dark blue when it can see april tag
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
