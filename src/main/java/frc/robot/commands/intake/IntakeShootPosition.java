@@ -2,26 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.turret;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Pitch;
+import frc.robot.subsystems.Intake;
 
-public class SetPitchPosition extends Command {
-  /** Creates a new SetPitchPosition. */
+public class IntakeShootPosition extends Command {
+  /** Creates a new IntakeShootPosition. */
+  Intake s_Intake;
 
-  Pitch s_Pitch;
-  double position;
-
-  public SetPitchPosition(Pitch s_Pitch, double position) {
+  public IntakeShootPosition(Intake s_Intake) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.s_Pitch = s_Pitch;
-    this.position = position;
-
-    addRequirements(s_Pitch);
-
+    this.s_Intake = s_Intake;
+    addRequirements(s_Intake);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -32,30 +28,31 @@ public class SetPitchPosition extends Command {
   @Override
   public void execute() {
 
-    s_Pitch.setPosition(position);
+    s_Intake.stowIntake();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    s_Intake.moveArm(0);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    if (Math.abs(s_Pitch.getPosition() - position) < Constants.Pitch.allowableError){
+
+    if(s_Intake.getIntakePosition() <= Constants.Intake.stowedPosition){
 
       return true;
 
     } else {
 
       return false;
-
+      
     }
-
+    
   }
-
 }
-
-

@@ -70,20 +70,16 @@ public class Intake extends SubsystemBase {
 
   public void deployIntake(){
 
-      if (getIntakePosition() < 0.6){
+      if (getIntakePosition() < 0.06){
         
-        jointMotor.set(-0.1);
+        jointMotor.set(-0.3);
       
-      } else if (getIntakePosition() > 0.61){
+      } else if (getIntakePosition() > 0.061){
 
-        // sets the motor speed to zero + set the mode to coast
+        // sets the motor speed to zero
         jointMotor.set(0);
-        jointMotor.setIdleMode(IdleMode.kCoast);
 
-      } else {
-
-
-      }
+      } 
 
     }
 
@@ -98,10 +94,10 @@ public class Intake extends SubsystemBase {
 
       jointMotor.set(0.1);
 
-    } else if (getIntakePosition() <= 0.004){
+    } else if (getIntakePosition() <= 0){
 
       jointMotor.set(0);
-      jointMotor.setIdleMode(IdleMode.kBrake);
+
     }
 
   }

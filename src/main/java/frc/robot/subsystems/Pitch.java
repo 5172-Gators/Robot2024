@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -39,6 +40,11 @@ public class Pitch extends SubsystemBase {
 
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
+
+    // pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, 1.075f);
+    // pitchMotor.setSoftLimit(SoftLimitDirection.kForward, 0.899f);
+    // pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     
   }
 
@@ -57,19 +63,26 @@ public class Pitch extends SubsystemBase {
   
     // double currentPitch = pitchEncoder.getPosition().getValueAsDouble();
    
-    if (/* currentPitch > Constants.Pitch.maxPosition && */ speed > 0){
+    // if (/* currentPitch > Constants.Pitch.maxPosition && */ speed > 0){
 
-      pitchMotor.set(speed);
+    //   pitchMotor.set(speed);
 
-    } else if (/* currentPitch < Constants.Pitch.minPosition && */ speed < 0){
+    // } else if (/* currentPitch < Constants.Pitch.minPosition && */ speed < 0){
 
-      pitchMotor.set(speed);
+    //   pitchMotor.set(speed);
 
-    } else { 
+    // } else { 
 
-      pitchMotor.set(0);
+    //   pitchMotor.set(0);
     
-    }
+    // }
+    if (currentPitch <= Constants.Pitch.minPitchPosition)
+      speed = Math.min(speed,0); // Clipping so it's positive
+    else if (currentPitch >= Constants.Pitch.maxPitchPosition)
+      speed = Math.max(speed,0); // Clipping so it's negative
+
+    pitchMotor.set(speed);
+
 
   }
 
@@ -85,22 +98,14 @@ public class Pitch extends SubsystemBase {
     
     // positive speed moves down, negative speed moves up
 
-    pitchMotor.set(-pitchPID.calculate(currentPitch, position));
-   
-    // if (currentPitch < position){
+    double speed = -pitchPID.calculate(currentPitch, position);
 
-    //   movePitch(-0.3);
-      
+    if (currentPitch <= Constants.Pitch.minPitchPosition)
+      speed = Math.min(speed,0); // Clipping so it's positive
+    else if (currentPitch >= Constants.Pitch.maxPitchPosition)
+      speed = Math.max(speed,0); // Clipping so it's negative
 
-    // } else if (currentPitch > position){
-
-    //   movePitch(0.3);
-      
-    // } else if (currentPitch == position){
-
-    //   movePitch(0);
-
-    // }
+    pitchMotor.set(speed);
 
   }
 

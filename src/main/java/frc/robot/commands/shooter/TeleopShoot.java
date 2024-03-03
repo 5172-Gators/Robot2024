@@ -26,40 +26,41 @@ public class TeleopShoot extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Shooter = s_Shooter;
 
-    addRequirements(s_Shooter);
+    // addRequirements(s_Shooter);
 
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
     boolean kickerSensorValue = s_Shooter.getKickerSensor();
-    
-    
-    // sets the shooter speed
-    s_Shooter.setShooter(1, 0.8, 0.4);
-
-    // waits for the shooter to get up to speed
-    new WaitCommand(0.1);
 
     // sets the kicker speed if a note has been intaked
-    if (kickerSensorValue == false) {
+    // if (kickerSensorValue == false) {
 
-      // s_Shooter.setKicker(1, 0.45);
+    //   s_Shooter.setKicker(1, 1.0);
+      
+    // } else {
+    //   s_Shooter.setKicker(0,0);
+    // }
 
-    }
+    // sets the shooter speed
+    s_Shooter.setShooter(1, 0.4, 0.4);
+    s_Shooter.setKicker(1,0.55);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    s_Shooter.setKicker(0,0);
+    s_Shooter.setShooter(0,0,0);
   }
 
   // Returns true when the command should end.

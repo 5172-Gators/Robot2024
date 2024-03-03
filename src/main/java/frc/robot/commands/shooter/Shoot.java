@@ -2,26 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class MoveJoint extends Command {
-  /** Creates a new Deploy. */
+public class Shoot extends Command {
 
-  Intake s_Intake;
-  DoubleSupplier speed;
-
-  public MoveJoint(Intake s_Intake, DoubleSupplier speed) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.s_Intake = s_Intake;
-    addRequirements(s_Intake);
-
-    this.speed = speed;
-
+  Shooter s_Shooter;
+  /** Creates a new Shoot. */
+  public Shoot(Shooter shooter) {
+    s_Shooter = shooter;
+    addRequirements(s_Shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -31,19 +23,15 @@ public class MoveJoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double j_speed = speed.getAsDouble();
-
-    s_Intake.moveArm(j_speed);
-
+    s_Shooter.setKicker(1, 0.55);
+    s_Shooter.setShooter(1, 0.4, 0.4);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    s_Intake.moveArm(0);
-
+    s_Shooter.setKicker(0.0, 0.0);
+    s_Shooter.setShooter(0.0, 0.0, 0.0);
   }
 
   // Returns true when the command should end.

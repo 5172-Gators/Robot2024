@@ -17,14 +17,19 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.SetPitchPosition;
+import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
-// import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.FullIntake;
+import frc.robot.commands.intake.InitIntake;
 import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.led.LEDTest;
 import frc.robot.commands.limelight.AlignToAprilTag;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.shooter.TeleopShoot;
 
 import frc.robot.subsystems.Climber;
@@ -79,6 +84,7 @@ public class RobotContainer {
     /* Operator Buttons */
     private final JoystickButton stopShooter = new JoystickButton(operatorStick, 2);
     private final JoystickButton startShooter = new JoystickButton(operatorStick, 1);
+    private final JoystickButton testSetPosition = new JoystickButton(operatorStick, 3);
 
     // private final JoystickButton trapScore = new JoystickButton(operatorStick, 6);
     // private final JoystickButton deployTrapScore = new JoystickButton(operatorStick, 7);
@@ -152,13 +158,9 @@ public class RobotContainer {
 
         );
 
-        // s_Intake.setDefaultCommand(
-        //     new MoveJoint(
-        //         s_Intake,
-        //         () -> testStick.getRawAxis(pitchAdjust)
-        //     )
-        // );
-
+        s_Intake.setDefaultCommand(
+            new StowIntake(s_Intake)
+        );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -176,18 +178,21 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        // deployIntake.onTrue(new IntakeCommand(s_Intake, s_Shooter));
+        deployIntake.whileTrue(new FullIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
 
         stowIntake.onTrue(new StowIntake(s_Intake));
 
-        // justDeploy.onTrue(new DeployIntake(s_Intake));
+        justDeploy.onTrue(new DeployIntake(s_Intake));
 
 
         /* Operator Buttons */
         
-        startShooter.onTrue(new TeleopShoot(s_Shooter));
+        startShooter.whileTrue(new Shoot(s_Shooter));
 
-        stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
+        // stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
+
+        // testSetPosition.onTrue(new SetTurretPosition(s_Turret, 0));
+        // testSetPosition.whileTrue(new FullIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
 
         /* Test Buttons */
 

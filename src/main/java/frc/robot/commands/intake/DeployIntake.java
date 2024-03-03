@@ -30,8 +30,6 @@ public class DeployIntake extends Command {
   @Override
   public void execute() {
 
-
-    
     // deploys the intake
     s_Intake.deployIntake();
     
@@ -39,13 +37,25 @@ public class DeployIntake extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    s_Intake.moveArm(0);
+    
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
 
-    return true;
+    if (s_Intake.getIntakePosition() >= Constants.Intake.deployedPosition){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
   
   }
 }

@@ -13,6 +13,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Turret extends SubsystemBase {
@@ -30,6 +31,12 @@ public class Turret extends SubsystemBase {
     rotateMotor.restoreFactoryDefaults();
     rotateMotor.setInverted(false);
     rotateMotor.setIdleMode(IdleMode.kBrake);
+
+    rotateMotor.setSoftLimit(SoftLimitDirection.kForward, 3.28f);
+    rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, -3.28f);
+    rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
 
     // create instances of the built-in encoders in the motors
     rotateEncoder = rotateMotor.getEncoder();
@@ -51,18 +58,7 @@ public class Turret extends SubsystemBase {
 
   public void rotateTurret(double speed){
 
-    if (rotateEncoder.getPosition() >= Constants.Turret.minTurretPosition && rotateEncoder.getPosition() <= Constants.Turret.maxTurretPosition){
-
-      rotateMotor.set(speed);
-
-    } else {
-
-      rotateMotor.set(0);
-      
-    }
-    
-      
-
+    rotateMotor.set(speed);
   }
 
   public double getRotatePosition() { 

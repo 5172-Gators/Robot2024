@@ -81,15 +81,15 @@ public final class Constants {
         /* Max + Min Positions, Allowable Error */
         public static final double minTurretPosition = -4.523804664611816;
         public static final double maxTurretPosition = 4.285709381103516;
-        public static final double allowableError = 0.0; //TODO: find allowable error
+        public static final double allowableError = 0.05;
 
         /* Positions */
-        public static final double R_intakingPosition = 0; //TODO: find position
+        public static final double R_intakingPosition = 0;
 
         /* PID */
-        public static final double kP = 1;
+        public static final double kP = 0.5;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 8;
         public static final double kFF = 0;
 
         public static final double maxOutput = 1;
@@ -97,12 +97,13 @@ public final class Constants {
     
     }
 
-        public static final class Colors {
-            public static final double green = 0.77;
+    public static final class Colors {
+            
+        public static final double green = 0.77;
             
 
 
-        }
+    }
 
 
     public static final class Pitch {
@@ -112,18 +113,18 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.0;
-        public static final double minPitchPosition = 0.918213; 
-        public static final double maxPitchPosition = 0.969971;
+        public static final double allowableError = 0.0005;
+        public static final double minPitchPosition = 0.899; 
+        public static final double maxPitchPosition = 1.07;
 
         /* Positions */
-        public static final double P_intakingPosition = 0; //TODO: find positions
+        public static final double P_intakingPosition = 0.9724; //TODO: find positions
         public static final double P_againstSpeakerShootingPosition = 0;
         public static final double P_ampScorePosition = 0;
 
         /* PID Constants */
-        public static final double kP = 60.0;
-        public static final double kI = 0;
+        public static final double kP = 250.0;
+        public static final double kI = 0.01;
         public static final double kD = 0;
 
         public static final double minOutput = -1;
@@ -152,8 +153,8 @@ public final class Constants {
         public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
-        public static final double stowedPosition = 0; 
-        public static final double deployedPosition = 0.16;
+        public static final double stowedPosition = -0.040283203125; 
+        public static final double deployedPosition = 0.12646484375;
 
         /* PID */
         public static final double kP = 0.5;
