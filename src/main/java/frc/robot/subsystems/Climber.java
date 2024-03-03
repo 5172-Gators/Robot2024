@@ -40,19 +40,10 @@ public class Climber extends SubsystemBase {
 
   public void joystickControl (double speed){
     // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
-    
-    // climbMotor.set(speed / 4);
 
     winchMotor.set(speed);
 
   }
-
-  // public double getEncoderPosition(){
-
-  //   // SmartDashboard.putNumber("ClimbPosition2", climbEncoder.getPosition());
-  //   // return climbEncoder.getPosition();
-
-  // }
 
   public void setSpeed (double speed){
 

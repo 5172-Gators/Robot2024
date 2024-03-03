@@ -28,7 +28,7 @@ public class SetpointClimberControl extends Command {
     this.s_Climber = s_Climber;
     this.s_Setpoint= s_Setpoint;
 
-    s_CurrentPosition= s_Climber.getEncoderPosition();
+    // s_CurrentPosition= s_Climber.getEncoderPosition();
     addRequirements(s_Climber);
 
   }
@@ -47,7 +47,7 @@ public class SetpointClimberControl extends Command {
   public void execute() {
     
     pidController.setSetpoint (s_Setpoint);
-    s_CurrentPosition = s_Climber.getEncoderPosition();
+    // s_CurrentPosition = s_Climber.getEncoderPosition();
     double speed = pidController.calculate(s_CurrentPosition);
 
     s_Climber.setSpeed(speed);
@@ -65,8 +65,8 @@ public class SetpointClimberControl extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-s_CurrentPosition = s_Climber.getEncoderPosition();
-    if (s_CurrentPosition <= s_Setpoint + Constants.Climber.Deadband && s_CurrentPosition >= s_Setpoint - Constants.Climber.Deadband) {
+// s_CurrentPosition = s_Climber.getEncoderPosition();
+    if (s_CurrentPosition <= s_Setpoint + Constants.Climber.deadband && s_CurrentPosition >= s_Setpoint - Constants.Climber.deadband) {
        s_Climber.setSpeed(0);
       return true;
 
