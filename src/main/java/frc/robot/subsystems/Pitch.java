@@ -6,14 +6,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,6 +25,7 @@ public class Pitch extends SubsystemBase {
   double currentPitch;
 
   double setpoint=Constants.Pitch.P_intakingPosition;
+  Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
   
   public Pitch() {
 
@@ -95,7 +94,8 @@ public class Pitch extends SubsystemBase {
   }
 
   public boolean isReady() {
-    if (Math.abs(this.getPosition() - this.setpoint) <= Constants.Pitch.allowableError){
+    double absError = Math.abs(this.getPosition() - this.setpoint);
+    if (debounce.calculate(absError <= Constants.Pitch.allowableError)){
 
       return true;
 

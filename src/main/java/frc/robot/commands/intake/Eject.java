@@ -33,7 +33,7 @@ public class Eject extends Command {
   public void execute() {
     s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
     s_Intake.setIntakeRPM(-Constants.Intake.intakeRPM);
-    s_Shooter.setKickerRPM(-Constants.Shooter.kicker_intakeRPM);
+    s_Shooter.setKickerOpenLoop(-1);
   }
 
   // Called once the command ends or is interrupted.

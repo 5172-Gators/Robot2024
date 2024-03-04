@@ -49,7 +49,10 @@ public class RunIntake extends Command {
 
     
     SmartDashboard.putNumber("Intake State", state);
-    new InitIntake(s_Intake, s_Pitch, s_Turret);
+    // new InitIntake(s_Intake, s_Pitch, s_Turret);
+    s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+    s_Pitch.setPosition(Constants.Pitch.P_intakingPosition);
+    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
 
     if (state == 0) {
       s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);

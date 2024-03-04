@@ -5,13 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -34,6 +34,8 @@ public class Intake extends SubsystemBase {
 
   double setpoint = Constants.Intake.stowedPosition;
 
+  Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
+
   public Intake() {
 
     // define + configure the intake wheels motor
@@ -48,7 +50,7 @@ public class Intake extends SubsystemBase {
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
     jointMotor.setInverted(false);
-    jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim, Constants.Intake.stall_rpm_thresh);
+    jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
     // create instance of absolute encoder
     armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
@@ -104,7 +106,8 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isReady() {
-    if (Math.abs(this.getIntakePosition() - this.setpoint) <= Constants.Intake.allowableError){
+    double absError = Math.abs(this.getIntakePosition() - this.setpoint);
+    if (debounce.calculate(absError <= Constants.Intake.allowableError)) {
 
       return true;
 

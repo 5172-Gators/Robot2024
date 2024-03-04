@@ -91,7 +91,7 @@ public final class Constants {
         public static final double right_maxOutput = 1;
         public static final double right_minOutput = -1;
 
-        public static final double right_allowableError = 30;
+        public static final double right_allowableError = 50;
 
         // left PID
         public static final double left_kP = 0.00046;
@@ -130,20 +130,21 @@ public final class Constants {
         
         /* Max + Min Positions, Allowable Error */
 
-        // public static final double minTurretPosition = -4.523804664611816;
-        // public static final double maxTurretPosition = 4.285709381103516;
+        public static final double minTurretPosition = -3.28;
+        public static final double maxTurretPosition = 3.28;
 
-        public static final double allowableError = 0.05;
+        public static final double allowableError = 0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
         /* Positions */
         public static final double R_intakingPosition = 0;
 
         /* PID */
-        public static final double kP = 0.5;
-        public static final double kI = 0;
-        public static final double kD = 8;
-        public static final double kFF = 0;
+        public static final double kP = 0.15; // 0.5
+        public static final double kI = 0.001;
+        public static final double kD = 0; // 8
+        public static final double kFF = 0; //0.015;
+        public static final double IZone = 0.1;
 
         public static final double maxOutput = 1;
         public static final double minOutput = -1;
@@ -218,9 +219,8 @@ public final class Constants {
         public static final double arm_kD = 0.2;
         public static final double arm_IZone = 0.05;
 
-        public static final int stall_current_lim = 40;
-        public static final int free_current_lim = 8;
-        public static final int stall_rpm_thresh = 1;
+        public static final int stall_current_lim = 30;
+        public static final int free_current_lim = 4;
         
         public static final double wheels_kP = 0.0002;
         public static final double wheels_kI = 0.000001;

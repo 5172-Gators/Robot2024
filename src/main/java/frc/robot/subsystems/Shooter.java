@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +41,9 @@ public class Shooter extends SubsystemBase {
   double leftSetpoint;
   double rightSetpoint;
   double kickerSetpoint;
+
+  Debouncer shooterDebounce = new Debouncer(0.1, DebounceType.kRising);
+  Debouncer kickerDebounce = new Debouncer(0.1, DebounceType.kRising);
   
   public Shooter() {
     
@@ -120,6 +125,10 @@ public class Shooter extends SubsystemBase {
     kickerPID.setReference(rpm, CANSparkFlex.ControlType.kVelocity);
   }
 
+  public void setKickerOpenLoop(double speed) {
+    kicker.set(speed);
+  }
+
   public void robotWash(){
     // runs the wheels at a low speed for cleaning purposes
     
@@ -153,8 +162,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean shooterIsReady() {
-    if ((Math.abs(this.getLeftShooterRPM() - this.leftSetpoint) <= Constants.Shooter.left_allowableError) 
-        && (Math.abs(this.getRightShooterRPM() - this.rightSetpoint) <= Constants.Shooter.right_allowableError)) {
+    double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
+    double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
+    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableError 
+        && absErrorRight <= Constants.Shooter.right_allowableError)) {
 
       return true;
 
@@ -166,7 +177,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean kickerIsReady() {
-    if (Math.abs(this.getKickerRPM() - this.kickerSetpoint) <= Constants.Shooter.kicker_allowableError) {
+    double absError = Math.abs(this.getKickerRPM() - this.kickerSetpoint);
+    if (kickerDebounce.calculate(absError <= Constants.Shooter.kicker_allowableError)) {
 
       return true;
 

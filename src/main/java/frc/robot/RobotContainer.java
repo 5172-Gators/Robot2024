@@ -92,6 +92,11 @@ public class RobotContainer {
     private final JoystickButton shooterSetpoint2 = new JoystickButton(operatorStick, 9);
     private final JoystickButton shooterSetpoint3 = new JoystickButton(operatorStick, 10);
 
+    private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
+    private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
+    private final JoystickButton testButton16 = new JoystickButton(operatorStick, 16);
+
+
     // private final JoystickButton trapScore = new JoystickButton(operatorStick, 6);
     // private final JoystickButton deployTrapScore = new JoystickButton(operatorStick, 7);
     // private final JoystickButton toggleClimberJoystickControl = new JoystickButton(operatorStick, 8); // will be a onTrue, then onFalse will stop climber control
@@ -143,19 +148,19 @@ public class RobotContainer {
         );
 
        s_Turret.setDefaultCommand(
-           new TeleopTurret(
-            s_Turret,
-            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
-           )
-            // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
+        //    new TeleopTurret(
+        //     s_Turret,
+        //     () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+        //    )
+            new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
        );
 
         s_Pitch.setDefaultCommand(
-           new TeleopPitch(
-            s_Pitch,
-            () -> -operatorStick.getRawAxis(pitchAdjust)
-           )
-            // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
+        //    new TeleopPitch(
+        //     s_Pitch,
+        //     () -> -operatorStick.getRawAxis(pitchAdjust)
+        //    )
+            new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
        );
 
         s_Climber.setDefaultCommand(
@@ -170,9 +175,9 @@ public class RobotContainer {
             new IntakeTravel(s_Intake)
         );
 
-        // s_Shooter.setDefaultCommand(
-        //     new StopShooter(s_Shooter)
-        // );
+        s_Shooter.setDefaultCommand(
+            new StopShooter(s_Shooter)
+        );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -190,7 +195,7 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        deployIntake.whileTrue(new FullIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
+        deployIntake.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
 
         stowIntake.onTrue(new StowIntake(s_Intake));
 
@@ -219,6 +224,10 @@ public class RobotContainer {
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Intake.setIntakeRPM(3000))).onFalse(new InstantCommand(() -> s_Intake.stopIntake()));
 
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(500))).onFalse(new InstantCommand(() -> s_Shooter.stopKicker()));
+
+        testButton14.whileTrue(new SetTurretPosition(s_Turret, 0));
+        testButton15.whileTrue(new SetTurretPosition(s_Turret, 1.64));
+        testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
 
         /* Test Buttons */
 

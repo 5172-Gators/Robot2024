@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,6 +27,7 @@ public class Turret extends SubsystemBase {
   double m_goalPosition;
 
   double setpoint = 0;
+  Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
 
   public Turret() {
 
@@ -34,8 +37,8 @@ public class Turret extends SubsystemBase {
     rotateMotor.setInverted(false);
     rotateMotor.setIdleMode(IdleMode.kBrake);
 
-    rotateMotor.setSoftLimit(SoftLimitDirection.kForward, 3.28f);
-    rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, -3.28f);
+    rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
+    rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
     rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
@@ -52,6 +55,7 @@ public class Turret extends SubsystemBase {
     m_pidController.setD(Constants.Turret.kD);
     m_pidController.setFF(Constants.Turret.kFF);
     m_pidController.setOutputRange(Constants.Turret.minOutput, Constants.Turret.maxOutput);
+    m_pidController.setIZone(Constants.Turret.IZone);
     
     
   } 
@@ -76,7 +80,8 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean isReady() {
-    if (Math.abs(this.getRotatePosition() - this.setpoint) <= Constants.Turret.allowableError){
+    double absError = Math.abs(this.getRotatePosition() - this.setpoint);
+    if (debounce.calculate(absError <= Constants.Turret.allowableError)){
 
       return true;
 
