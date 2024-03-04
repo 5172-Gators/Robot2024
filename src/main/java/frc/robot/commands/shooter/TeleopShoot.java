@@ -51,16 +51,18 @@ public class TeleopShoot extends Command {
     // }
 
     // sets the shooter speed
-    s_Shooter.setShooter(1, 0.4, 0.4);
-    s_Shooter.setKicker(1,0.55);
+    s_Shooter.setShooterRPM(0.4, 0.4);
+    s_Shooter.setKickerRPM(0.55);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Shooter.setKicker(0,0);
-    s_Shooter.setShooter(0,0,0);
+
+    s_Shooter.setKickerRPM(0);
+    s_Shooter.setShooterRPM(0,0);
+
   }
 
   // Returns true when the command should end.

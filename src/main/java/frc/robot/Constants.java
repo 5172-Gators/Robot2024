@@ -81,6 +81,45 @@ public final class Constants {
         public static final int rightMotorID = 15;
         public static final int kickerMotorID = 20;
 
+        // right PID
+        public static final double right_kP = 0.00043;
+        public static final double right_kI = 0.000001;
+        public static final double right_kD = 0.5;
+        public static final double right_kFF = 0.00023;
+        public static final double right_IZone = 200;
+
+        public static final double right_maxOutput = 1;
+        public static final double right_minOutput = -1;
+
+        public static final double right_allowableError = 30;
+
+        // left PID
+        public static final double left_kP = 0.00046;
+        public static final double left_kI = 0.000001;
+        public static final double left_kD = 0.25;
+        public static final double left_kFF = 0.00023;
+        public static final double left_IZone = 200;
+
+        public static final double left_maxOutput = 1;
+        public static final double left_minOutput = -1;
+
+        public static final double left_allowableError = 30;
+        
+        // kicker PID
+        public static final double kicker_kP = 0.0001;
+        public static final double kicker_kI = 0.000001;
+        public static final double kicker_kD = 0;
+        public static final double kicker_kFF = 0.00014;
+        public static final double kicker_IZone = 150;
+
+        public static final double kicker_maxOutput = 1;
+        public static final double kicker_minOutput = -1;
+
+        public static final double kicker_allowableError = 50;
+        public static final double kicker_intakeRPM = 2500;
+        public static final double kicker_creepRPM = 400;
+        public static final double kicker_shoot = 1500;
+
     }
 
 
@@ -95,6 +134,7 @@ public final class Constants {
         // public static final double maxTurretPosition = 4.285709381103516;
 
         public static final double allowableError = 0.05;
+        public static final double aimCoefficient = 0.03;
 
         /* Positions */
         public static final double R_intakingPosition = 0;
@@ -126,12 +166,12 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.0005;
+        public static final double allowableError = 0.001;
         public static final double minPitchPosition = 0.899; 
         public static final double maxPitchPosition = 1.07;
 
         /* Positions */
-        public static final double P_intakingPosition = 0.9724; 
+        public static final double P_intakingPosition = 0.9592; //0.9724; 
         public static final double P_againstSpeakerShootingPosition = 0;
         public static final double P_ampScorePosition = 0;
 
@@ -153,7 +193,7 @@ public final class Constants {
 
         /* Positions */
         public static final double stowedPosition = 0;
-        public static final double deployedPosition = 0;
+        public static final double deployedPosition = 1000;
         public static final double deadband = 1.0;
     }
 
@@ -167,16 +207,31 @@ public final class Constants {
 
         /* Positions */
         public static final double stowedPosition = -0.040283203125; 
+        public static final double travelPosition = -0.025;
         public static final double deployedPosition = 0.12646484375;
 
+        public static final double intakeRPM = 4000;
+
         /* PID */
-        public static final double kP = 0.5;
-        public static final double kI = 0;
-        public static final double kD = 0;
-        public static final double kFF = 0;
+        public static final double arm_kP = 2.5;
+        public static final double arm_kI = 0.00;
+        public static final double arm_kD = 0.2;
+        public static final double arm_IZone = 0.05;
+
+        public static final int stall_current_lim = 40;
+        public static final int free_current_lim = 8;
+        public static final int stall_rpm_thresh = 1;
+        
+        public static final double wheels_kP = 0.0002;
+        public static final double wheels_kI = 0.000001;
+        public static final double wheels_kD = 0.002;
+        public static final double wheels_kFF = 0.000175;
+        public static final double wheels_IZone = 100;
 
         public static final double maxOutput = 1;
         public static final double minOutput = -1;
+
+        public static final double allowableError = 0.01;
 
     }
 

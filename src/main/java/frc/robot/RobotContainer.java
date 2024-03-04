@@ -21,14 +21,18 @@ import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.FullIntake;
 import frc.robot.commands.intake.InitIntake;
+import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
-import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.intake.SetIntakeWheels;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.led.LEDTest;
 import frc.robot.commands.limelight.AlignToAprilTag;
 import frc.robot.commands.shooter.Shoot;
+import frc.robot.commands.shooter.ShootSetpoint;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.commands.shooter.TeleopShoot;
 
 import frc.robot.subsystems.Climber;
@@ -82,8 +86,11 @@ public class RobotContainer {
     
     /* Operator Buttons */
     private final JoystickButton stopShooter = new JoystickButton(operatorStick, 2);
-    private final JoystickButton startShooter = new JoystickButton(operatorStick, 1);
+    private final JoystickButton fireShooter = new JoystickButton(operatorStick, 1);
     private final JoystickButton testSetPosition = new JoystickButton(operatorStick, 3);
+    private final JoystickButton shooterSetpoint1 = new JoystickButton(operatorStick, 8);
+    private final JoystickButton shooterSetpoint2 = new JoystickButton(operatorStick, 9);
+    private final JoystickButton shooterSetpoint3 = new JoystickButton(operatorStick, 10);
 
     // private final JoystickButton trapScore = new JoystickButton(operatorStick, 6);
     // private final JoystickButton deployTrapScore = new JoystickButton(operatorStick, 7);
@@ -140,6 +147,7 @@ public class RobotContainer {
             s_Turret,
             () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
            )
+            // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
        );
 
         s_Pitch.setDefaultCommand(
@@ -147,6 +155,7 @@ public class RobotContainer {
             s_Pitch,
             () -> -operatorStick.getRawAxis(pitchAdjust)
            )
+            // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
        );
 
         s_Climber.setDefaultCommand(
@@ -158,8 +167,12 @@ public class RobotContainer {
         );
 
         s_Intake.setDefaultCommand(
-            new StowIntake(s_Intake)
+            new IntakeTravel(s_Intake)
         );
+
+        // s_Shooter.setDefaultCommand(
+        //     new StopShooter(s_Shooter)
+        // );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -181,17 +194,31 @@ public class RobotContainer {
 
         stowIntake.onTrue(new StowIntake(s_Intake));
 
-        justDeploy.onTrue(new DeployIntake(s_Intake));
+        justDeploy.whileTrue(new Eject(s_Intake,s_Shooter));
 
 
         /* Operator Buttons */
         
-        startShooter.whileTrue(new Shoot(s_Shooter));
+        // startShooter.whileTrue(new Shoot(s_Shooter));
 
-        // stopShooter.onTrue(new InstantCommand(() -> s_Shooter.stopShooter()));
+        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, 0.954834, 1.85714, fireShooter, 
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
-        // testSetPosition.onTrue(new SetTurretPosition(s_Turret, 0));
-        // testSetPosition.whileTrue(new FullIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
+        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, 1.0225, 0.0, fireShooter,
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
+
+        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, 0.94, -2.142856597, fireShooter,
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
+
+        stopShooter.onTrue(new StopShooter(s_Shooter));
+
+        // testSetPosition.whileTrue(new DeployIntake(s_Intake));
+
+        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShooter(2750, 2000))).onFalse(new InstantCommand(() -> s_Shooter.stopShooter()));
+
+        // testSetPosition.whileTrue(new InstantCommand(() -> s_Intake.setIntakeRPM(3000))).onFalse(new InstantCommand(() -> s_Intake.stopIntake()));
+
+        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(500))).onFalse(new InstantCommand(() -> s_Shooter.stopKicker()));
 
         /* Test Buttons */
 

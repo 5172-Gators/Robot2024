@@ -2,20 +2,25 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class SetKicker extends Command {
-  /** Creates a new setKicker. */
+public class Eject extends Command {
 
+  Intake s_Intake;
   Shooter s_Shooter;
 
-  public SetKicker(Shooter m_Shooter) {
+  /** Creates a new Eject. */
+  public Eject(Intake intake, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.s_Shooter = m_Shooter;
+    this.s_Intake = intake;
+    this.s_Shooter = shooter;
+    addRequirements(s_Intake, s_Shooter);
 
   }
 
@@ -26,16 +31,17 @@ public class SetKicker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    s_Shooter.setKicker(1, 0.45);
-
+    s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+    s_Intake.setIntakeRPM(-Constants.Intake.intakeRPM);
+    s_Shooter.setKickerRPM(-Constants.Shooter.kicker_intakeRPM);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    s_Shooter.setKicker(0, 0);
+    s_Intake.moveArm(0);
+    s_Intake.stopIntake();
+    s_Shooter.stopKicker();
   }
 
   // Returns true when the command should end.

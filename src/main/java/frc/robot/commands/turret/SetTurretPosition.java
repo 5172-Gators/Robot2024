@@ -43,14 +43,7 @@ public class SetTurretPosition extends Command {
   @Override
   public boolean isFinished() {
 
-    if (Math.abs(s_Turret.getRotatePosition() - position) < Constants.Turret.allowableError){
+    return s_Turret.isReady();
 
-      return true;
-
-    } else {
-
-      return false;
-
-    }
   }
 }

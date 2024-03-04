@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -24,11 +25,14 @@ public class Intake extends SubsystemBase {
   CANSparkFlex intakeMotor;
   CANSparkFlex jointMotor;
 
-  RelativeEncoder jointPosition;
-
   CANcoder armEncoder;
 
   PIDController intakeArmPID;
+
+  SparkPIDController intakeWheelsPID;
+  RelativeEncoder intakeWheelsEncoder;
+
+  double setpoint = Constants.Intake.stowedPosition;
 
   public Intake() {
 
@@ -38,17 +42,30 @@ public class Intake extends SubsystemBase {
     intakeMotor.setIdleMode(IdleMode.kBrake);
     intakeMotor.setInverted(false);
 
+    intakeWheelsEncoder = intakeMotor.getEncoder();
+
     // define + configure the motor that deploys + stows the intake
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
     jointMotor.setInverted(false);
+    jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim, Constants.Intake.stall_rpm_thresh);
 
     // create instance of absolute encoder
     armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
 
-    // PID
-    intakeArmPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
-    
+    // arm PID
+    intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
+    intakeArmPID.setIZone(Constants.Intake.arm_IZone);
+
+    // wheels PID
+    intakeWheelsPID = intakeMotor.getPIDController();
+
+    intakeWheelsPID.setP(Constants.Intake.wheels_kP);
+    intakeWheelsPID.setI(Constants.Intake.wheels_kI);
+    intakeWheelsPID.setD(Constants.Intake.wheels_kD);
+    intakeWheelsPID.setFF(Constants.Intake.wheels_kFF);
+    intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    intakeWheelsPID.setIZone(Constants.Intake.wheels_IZone);
 
   }
 
@@ -58,9 +75,9 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void runIntake(double speed){
+  public void setIntakeRPM(double speed){
 
-    intakeMotor.set(speed);
+    intakeWheelsPID.setReference(speed, CANSparkFlex.ControlType.kVelocity);
 
   }
 
@@ -70,45 +87,51 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void deployIntake(){
+  public void setIntakeArmPosition(double setpoint){
 
-      if (getIntakePosition() < 0.06){
-        
-        jointMotor.set(-0.3);
-      
-      } else if (getIntakePosition() > 0.061){
+    this.setpoint = setpoint;
+    double speed = -intakeArmPID.calculate(getIntakePosition(), setpoint);
 
-        // sets the motor speed to zero
-        jointMotor.set(0);
+    if (this.getIntakePosition() <= Constants.Intake.stowedPosition)
+      speed = Math.min(speed,0); // Clipping so it's positive
+    else if (this.getIntakePosition() >= Constants.Intake.deployedPosition)
+      speed = Math.max(speed,0); // Clipping so it's negative
 
-      } 
+    SmartDashboard.putNumber("Intake Arm speed", speed);
 
-    }
-
-
-  public void stowIntake(){
-
-    if (getIntakePosition() > 0.09){
-
-      jointMotor.set(0.3);
-
-    } else if (getIntakePosition() < 0.01){
-
-      jointMotor.set(0.1);
-
-    } else if (getIntakePosition() <= 0){
-
-      jointMotor.set(0);
-
-    }
+    jointMotor.set(speed);
 
   }
 
+  public boolean isReady() {
+    if (Math.abs(this.getIntakePosition() - this.setpoint) <= Constants.Intake.allowableError){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+  }
+
+  public void stopIntake() {
+    intakeMotor.set(0);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+
+    // SmartDashboard.putNumber("Wheel Speed", intakeWheelsEncoder.getVelocity());
+
+    // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
+
+    SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
+
+    SmartDashboard.putNumber("Intake Arm Current", jointMotor.getOutputCurrent());
+
   }
 }

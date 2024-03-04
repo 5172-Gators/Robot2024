@@ -5,6 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends Command {
@@ -23,20 +24,20 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Shooter.setKicker(1, 0.55);
-    s_Shooter.setShooter(1, 0.4, 0.4);
+    s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+    s_Shooter.setShooterRPM(2500,2500);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Shooter.setKicker(0.0, 0.0);
-    s_Shooter.setShooter(0.0, 0.0, 0.0);
+    s_Shooter.stopKicker();
+    s_Shooter.stopShooter();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return s_Shooter.shooterIsReady();
   }
 }

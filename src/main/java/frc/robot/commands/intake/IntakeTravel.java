@@ -5,21 +5,19 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
-public class StopIntake extends Command {
-  /** Creates a new StopIntake. */
-  Shooter s_Shooter;
+public class IntakeTravel extends Command {
+  
   Intake s_Intake;
-
-  public StopIntake(Shooter s_Shooter, Intake s_Intake) {
+  
+  /* Creates a new IntakeTravel. */
+  public IntakeTravel(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.s_Shooter = s_Shooter;
-    this.s_Intake = s_Intake;
+    s_Intake = intake;
 
-    addRequirements(s_Shooter, s_Intake);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -30,27 +28,22 @@ public class StopIntake extends Command {
   @Override
   public void execute() {
 
-    // stows the intake
-    // s_Intake.stowIntake();
-
-    // waits for intake to stow
-    new WaitCommand(0.5);
-
-    // stops the intake wheels
-    s_Intake.runIntake(0);
-
-    // stops the kicker
-    s_Shooter.setKicker(0,0);
+    s_Intake.setIntakeArmPosition(Constants.Intake.travelPosition);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    s_Intake.moveArm(0);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    return s_Intake.isReady();
   }
 }

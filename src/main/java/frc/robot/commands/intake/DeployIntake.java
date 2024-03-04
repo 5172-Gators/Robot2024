@@ -9,10 +9,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class DeployIntake extends Command {
-  /** Creates a new DeployIntake. */
-
+  
   Intake s_Intake;
 
+  /** Creates a new DeployIntake. */
   public DeployIntake(Intake s_Intake) {
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -31,7 +31,7 @@ public class DeployIntake extends Command {
   public void execute() {
 
     // deploys the intake
-    s_Intake.deployIntake();
+    s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
     
   }
 
@@ -47,15 +47,7 @@ public class DeployIntake extends Command {
   @Override
   public boolean isFinished() {
 
-    if (s_Intake.getIntakePosition() >= Constants.Intake.deployedPosition){
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    return s_Intake.isReady();
   
   }
 }

@@ -28,7 +28,7 @@ public class IntakeShootPosition extends Command {
   @Override
   public void execute() {
 
-    s_Intake.stowIntake();
+    s_Intake.setIntakeArmPosition(Constants.Intake.stowedPosition);
 
   }
 

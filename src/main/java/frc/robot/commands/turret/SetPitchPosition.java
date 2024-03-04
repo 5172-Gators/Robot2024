@@ -38,24 +38,17 @@ public class SetPitchPosition extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    s_Pitch.stopPitch();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     
-    if (Math.abs(s_Pitch.getPosition() - position) < Constants.Pitch.allowableError){
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    return s_Pitch.isReady();
 
   }
-
 }
 
 

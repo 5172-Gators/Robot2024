@@ -24,6 +24,8 @@ public class Turret extends SubsystemBase {
   SparkPIDController m_pidController;
   double m_goalPosition;
 
+  double setpoint = 0;
+
   public Turret() {
 
     // define + configure the rotate motor
@@ -50,8 +52,6 @@ public class Turret extends SubsystemBase {
     m_pidController.setD(Constants.Turret.kD);
     m_pidController.setFF(Constants.Turret.kFF);
     m_pidController.setOutputRange(Constants.Turret.minOutput, Constants.Turret.maxOutput);
-
-    m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
     
     
   } 
@@ -70,9 +70,21 @@ public class Turret extends SubsystemBase {
   public void setPosition(double position) {
 
     // position is in motor rotations
-
+    this.setpoint = position;
     m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
 
+  }
+
+  public boolean isReady() {
+    if (Math.abs(this.getRotatePosition() - this.setpoint) <= Constants.Turret.allowableError){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
   }
 
   @Override
@@ -82,6 +94,7 @@ public class Turret extends SubsystemBase {
     double m_currentPosition = rotateEncoder.getPosition();
     
     SmartDashboard.putNumber("Turret Rotate Positon", m_currentPosition);
+    SmartDashboard.putBoolean("Turret Ready", isReady());
 
   }
 }

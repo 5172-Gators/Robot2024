@@ -30,7 +30,7 @@ public class StowIntake extends Command {
   @Override
   public void execute() {
 
-    s_Intake.stowIntake();
+    s_Intake.setIntakeArmPosition(Constants.Intake.stowedPosition);
 
   }
 
@@ -46,15 +46,7 @@ public class StowIntake extends Command {
   @Override
   public boolean isFinished() {
 
-    if(s_Intake.getIntakePosition() <= Constants.Intake.stowedPosition){
-
-      return true;
-
-    } else {
-
-      return false;
-      
-    }
+    return s_Intake.isReady();
     
   }
 }

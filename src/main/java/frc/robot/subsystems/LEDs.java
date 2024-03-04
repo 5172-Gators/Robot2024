@@ -27,12 +27,10 @@ public class LEDs extends SubsystemBase {
 
 
   public LEDs(){
+
     s_spark = new Spark(0);
-   
-   
+  
     //spark.set(Constants.LEDs.green);
-  
-  
   
   }
 

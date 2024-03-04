@@ -30,7 +30,7 @@ public class SetIntakeWheels extends Command {
   @Override
   public void execute() {
 
-    s_Intake.runIntake(speed);
+    s_Intake.setIntakeRPM(speed);
 
   }
 
@@ -38,7 +38,7 @@ public class SetIntakeWheels extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Intake.runIntake(0);
+    s_Intake.setIntakeRPM(0);
 
   }
 

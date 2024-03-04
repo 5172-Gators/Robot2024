@@ -20,7 +20,6 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
   CANSparkMax winchMotor; // geared down
-  CANSparkFlex climbMotor; // regular speed
   private RelativeEncoder winchEncoder;
   private RelativeEncoder climbEncoder;
 
@@ -45,10 +44,18 @@ public class Climber extends SubsystemBase {
 
   }
 
+  public double getClimberPosition() {
+    return winchEncoder.getPosition();
+  }
+
   public void setSpeed (double speed){
 
-    // climbMotor.set (speed/4);
-    winchMotor.set (speed);
+    if (this.getClimberPosition() <= Constants.Climber.stowedPosition)
+      speed = Math.min(speed,0); // Clipping so it's positive
+    else if (this.getClimberPosition() >= Constants.Climber.deployedPosition)
+      speed = Math.max(speed,0); // Clipping so it's negative
+
+    winchMotor.set(speed);
 
   }
 

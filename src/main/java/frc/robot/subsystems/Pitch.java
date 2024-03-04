@@ -25,6 +25,8 @@ public class Pitch extends SubsystemBase {
   CANSparkMax pitchMotor;
   PIDController pitchPID;
   double currentPitch;
+
+  double setpoint=Constants.Pitch.P_intakingPosition;
   
   public Pitch() {
 
@@ -40,11 +42,6 @@ public class Pitch extends SubsystemBase {
 
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
-
-    // pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, 1.075f);
-    // pitchMotor.setSoftLimit(SoftLimitDirection.kForward, 0.899f);
-    // pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     
   }
 
@@ -77,7 +74,8 @@ public class Pitch extends SubsystemBase {
 
   public void setPosition(double position){
 
-    currentPitch = pitchEncoder.getPosition().getValueAsDouble();
+    this.setpoint = position;
+    currentPitch = getPosition();
     
     // positive speed moves down, negative speed moves up
 
@@ -92,16 +90,32 @@ public class Pitch extends SubsystemBase {
 
   }
 
+  public void stopPitch() {
+    pitchMotor.set(0);
+  }
+
+  public boolean isReady() {
+    if (Math.abs(this.getPosition() - this.setpoint) <= Constants.Pitch.allowableError){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    currentPitch = pitchEncoder.getPosition().getValueAsDouble();
-    double currentVoltage = pitchMotor.getOutputCurrent();
+    currentPitch = getPosition();
+    // double currentVoltage = pitchMotor.getOutputCurrent();
 
     SmartDashboard.putNumber("Tilt Encoder Value", currentPitch);
-    SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
+    // SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
+    SmartDashboard.putBoolean("Pitch Ready", isReady());
 
   }
 }
