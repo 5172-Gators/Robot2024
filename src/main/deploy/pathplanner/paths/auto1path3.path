@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.419944366279601,
-        "y": 4.122214464115091
+        "x": 4.412281901486882,
+        "y": 4.09478126648561
       },
       "isLocked": false,
       "linkedName": "auto1path2end"
     },
     {
       "anchor": {
-        "x": 4.23001793221846,
-        "y": 4.953683858865578
+        "x": 2.3106230827846286,
+        "y": 5.880697915241985
       },
       "prevControl": {
-        "x": 4.8155597595075355,
-        "y": 3.9816844255657124
+        "x": 3.2282487641898374,
+        "y": 5.249213575350229
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,18 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "shootAuto1Setpoint3",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -39,7 +50,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,

@@ -24,6 +24,7 @@ import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.JoystickClimberControl;
+import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
@@ -124,11 +125,21 @@ public class RobotContainer {
         s_Climber = new Climber();
         s_LEDs = new LEDs();
 
+        autoChooser = new SendableChooser<Command>();
+
         /* Configure PathPlanner Commands */
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
-        NamedCommands.registerCommand("shootAutoSetpoint", new ShootSetpoint(1800.0, 3000.0, 0.954834, 0, () -> true,
+        NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,Constants.Pitch.speakerSetpoint, 0.0, () -> true,
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret));
+        NamedCommands.registerCommand("shootAuto1Setpoint2", new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 0.0, () -> true,
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret));
+        NamedCommands.registerCommand("shootAuto1Setpoint3", new ShootSetpoint(1800.0, 3000.0, 0.42047, 0.9, () -> true,
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret));
+        NamedCommands.registerCommand("resetHeading", new InstantCommand(() -> s_Swerve.setHeading(s_Swerve.getHeading())));
 
+        NamedCommands.registerCommand("setIntakeDefaultPositionDeploy", new InstantCommand(() -> s_Intake.setDefaultCommand(new DeployIntake(s_Intake))));
+        NamedCommands.registerCommand("setIntakeDefaultPositionTravel", new InstantCommand(() -> s_Intake.setDefaultCommand(new IntakeTravel(s_Intake))));
+        
         // Configure default commands
         configureDefaultCommands();
 
@@ -137,8 +148,6 @@ public class RobotContainer {
 
         // Build auto routines
         buildAutoRoutines();
-
-        // autoChooser = AutoBuilder.buildAutoChooser();
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -214,13 +223,13 @@ public class RobotContainer {
         
         // startShooter.whileTrue(new Shoot(s_Shooter));
 
-        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, -0.0466113125, 1.85714, fireShooter, 
+        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
-        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, 0.0210546875, 0.0, fireShooter,
+        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
-        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, -0.0614453125, -2.142856597, fireShooter,
+        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
@@ -251,7 +260,8 @@ public class RobotContainer {
 
         autoChooser.addOption("forward4intake", new PathPlannerAuto("forward4intake"));
         autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));
-    
+        PathPlannerAuto auto1 = new PathPlannerAuto("auto1");
+        PathPlannerAuto.getPathGroupFromAutoFile("auto1").get(1).getPoint(10).position.getY();    
     }
 
     /**

@@ -105,8 +105,8 @@ public final class Constants {
         public static final double kicker_minOutput = -1;
 
         public static final double kicker_allowableError = 50;
-        public static final double kicker_intakeRPM = 2500;
-        public static final double kicker_creepRPM = 400;
+        public static final double kicker_intakeRPM = 4500;
+        public static final double kicker_creepRPM = 1500;
         public static final double kicker_shoot = 1500;
 
     }
@@ -157,13 +157,14 @@ public final class Constants {
 
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.001;
-        public static final double minPitchPosition = -0.092529296875;//0.905761;
-        public static final double maxPitchPosition = 0.0185546875;//1.02;
+        public static final double minPitchPosition = 0.404541015625; // -0.092529296875; // 0.905761;
+        public static final double maxPitchPosition = 0.515625; // 0.0185546875; // 1.02;
 
         /* Positions */
-        public static final double P_intakingPosition = -0.015869140625; //-0.0422453125;  
-        public static final double P_againstSpeakerShootingPosition = 0;
-        public static final double P_ampScorePosition = 0;
+        public static final double intakePosition = 0.454825; // 0.9592; 
+        public static final double stageSetpoint = 0.450459; // -0.0466113125
+        public static final double speakerSetpoint = 0.510625;
+        public static final double ampSetpoint = 0.435625;
 
         /* PID Constants */
         public static final double kP = 250.0;
@@ -200,7 +201,7 @@ public final class Constants {
         public static final double travelPosition = 0.030419856; // -0.025
         public static final double deployedPosition = 0.1818847;//0.12646484375;
 
-        public static final double intakeRPM = 4000;
+        public static final double intakeRPM = 5000;
 
         /* PID */
         public static final double arm_kP = 2.5;
@@ -246,9 +247,9 @@ public final class Constants {
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L3);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(25); 
-        public static final double wheelBase = Units.inchesToMeters(25); 
-        public static final double wheelCircumference = chosenModule.wheelCircumference;
+        public static final double trackWidth = Units.inchesToMeters(20); 
+        public static final double wheelBase = Units.inchesToMeters(20); 
+        public static final double wheelCircumference = Units.inchesToMeters(4.0) * Math.PI;//chosenModule.wheelCircumference;
 
         public static final double driveBaseRadius = 0.3556;
         //25 inches = 0.64 meters
@@ -258,8 +259,8 @@ public final class Constants {
          public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
             new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
+            new Translation2d(-wheelBase / 2.0, trackWidth / 2.0));
 
         /* Module Gear Ratios */
         public static final double driveGearRatio = chosenModule.driveGearRatio;
@@ -336,25 +337,25 @@ public final class Constants {
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, FRangleOffset);
         }
-        
-        /* Back Left Module - Module 2 */
-        public static final class Mod2 { 
-            public static final int driveMotorID = 23;
-            public static final int angleMotorID = 22;
-            public static final int canCoderID = 13;
-            public static final Rotation2d BLangleOffset = Rotation2d.fromDegrees(17.842);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, BLangleOffset);
-        }
 
-        /* Back Right Module - Module 3 */
-        public static final class Mod3 { 
+        /* Back Right Module - Module 2 */
+        public static final class Mod2 { 
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 21;
             public static final int canCoderID = 24;
             public static final Rotation2d BRangleOffset = Rotation2d.fromDegrees(46.143);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, BRangleOffset);
+        }
+
+        /* Back Left Module - Module 3 */
+        public static final class Mod3 { 
+            public static final int driveMotorID = 23;
+            public static final int angleMotorID = 22;
+            public static final int canCoderID = 13;
+            public static final Rotation2d BLangleOffset = Rotation2d.fromDegrees(17.842);
+            public static final SwerveModuleConstants constants = 
+                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, BLangleOffset);
         }
     }
 

@@ -44,21 +44,17 @@ public class RunIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    kickerSensorValue = s_Shooter.getKickerSensor();
-    shooterSensorValue = s_Shooter.getShooterSensor();
-
     
     SmartDashboard.putNumber("Intake State", state);
-    // new InitIntake(s_Intake, s_Pitch, s_Turret);
     s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
-    s_Pitch.setPosition(Constants.Pitch.P_intakingPosition);
+    s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
 
     if (state == 0) {
       s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
 
-      if (kickerSensorValue == false)
+      if (s_Shooter.getKickerSensor() == false)
         state = 1;
 
     }
@@ -66,19 +62,19 @@ public class RunIntake extends Command {
       s_Intake.stopIntake();
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
 
-      if (shooterSensorValue == false)
+      if (s_Shooter.getKickerSensor() == false)
         state = 2;
     }
     if (state == 2) {
       s_Shooter.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
 
-      if (shooterSensorValue == true)
+      if (s_Shooter.getShooterSensor() == true)
         state = 3;
     }
     if (state == 3) {
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_creepRPM);
 
-      if (shooterSensorValue == false)
+      if (s_Shooter.getShooterSensor() == false)
         state = 4;
     }
   }
@@ -88,12 +84,13 @@ public class RunIntake extends Command {
   public void end(boolean interrupted) {
     s_Shooter.stopKicker();
     s_Intake.stopIntake();
+    s_Pitch.stopPitch();
     state = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (state == 4);
+    return (state == 4 );
   }
 }

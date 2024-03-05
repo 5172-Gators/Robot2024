@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.23,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,25 +14,57 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAutoSetpoint"
+            "name": "shootAuto1Setpoint1"
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "auto1path1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto1path1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootAutoSetpoint"
+            "name": "shootAuto1Setpoint2"
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "auto1path2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto1path2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 8.0
+                }
+              }
+            ]
           }
         },
         {
@@ -38,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAutoSetpoint"
+            "name": "shootAuto1Setpoint2"
           }
         }
       ]

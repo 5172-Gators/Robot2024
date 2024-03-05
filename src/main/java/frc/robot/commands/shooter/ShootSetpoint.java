@@ -72,7 +72,7 @@ public class ShootSetpoint extends Command {
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
     s_Shooter.stopKicker();
-    s_Pitch.setPosition(Constants.Pitch.P_intakingPosition);
+    s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

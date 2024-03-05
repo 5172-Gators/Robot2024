@@ -24,7 +24,7 @@ public class Pitch extends SubsystemBase {
   PIDController pitchPID;
   double currentPitch;
 
-  double setpoint=Constants.Pitch.P_intakingPosition;
+  double setpoint=Constants.Pitch.intakePosition;
   Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
   
   public Pitch() {
@@ -67,7 +67,7 @@ public class Pitch extends SubsystemBase {
 
   public double getPosition(){
 
-    return pitchEncoder.getPosition().getValueAsDouble();
+    return pitchEncoder.getAbsolutePosition().getValueAsDouble();
 
   }
 

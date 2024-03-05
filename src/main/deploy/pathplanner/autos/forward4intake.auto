@@ -1,14 +1,57 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.23,
+      "y": 5.56
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "forward4"
+            "name": "setIntakeDefaultPositionDeploy"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAuto1Setpoint1"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "forward4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAuto1Setpoint2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setIntakeDefaultPositionTravel"
           }
         }
       ]

@@ -16,7 +16,6 @@ public class IntakeTravel extends Command {
   public IntakeTravel(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     s_Intake = intake;
-
     addRequirements(intake);
   }
 

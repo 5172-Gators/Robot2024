@@ -29,7 +29,7 @@ public class InitIntake extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DeployIntake(s_Intake),
-      new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition),
+      new SetPitchPosition(s_Pitch, Constants.Pitch.intakePosition),
       new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
     );
   }

@@ -44,6 +44,8 @@ public class Shooter extends SubsystemBase {
 
   Debouncer shooterDebounce = new Debouncer(0.1, DebounceType.kRising);
   Debouncer kickerDebounce = new Debouncer(0.1, DebounceType.kRising);
+  Debouncer kickerBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
+  Debouncer shooterBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
   
   public Shooter() {
     
@@ -96,7 +98,7 @@ public class Shooter extends SubsystemBase {
     kickerPID.setD(Constants.Shooter.kicker_kD);
     kickerPID.setFF(Constants.Shooter.kicker_kFF);
     kickerPID.setOutputRange(Constants.Shooter.kicker_minOutput, Constants.Shooter.kicker_maxOutput);
-    kickerPID.setIZone(Constants.Shooter.kicker_IZone);
+    // kickerPID.setIZone(Constants.Shooter.kicker_IZone);
 
   }
 
@@ -150,14 +152,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean getKickerSensor(){
-
     return kickerSensor.get();
+    // return kickerBeamBreakDebouncer.calculate(kickerSensor.get());
 
   }
 
   public boolean getShooterSensor(){
-
     return shooterSensor.get();
+    // return shooterBeamBreakDebouncer.calculate(shooterSensor.get());
 
   }
 

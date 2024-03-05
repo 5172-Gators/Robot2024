@@ -15,10 +15,8 @@ public class DeployIntake extends Command {
   /** Creates a new DeployIntake. */
   public DeployIntake(Intake s_Intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-
     this.s_Intake = s_Intake;
     addRequirements(s_Intake);
-
   }
 
   // yellow
