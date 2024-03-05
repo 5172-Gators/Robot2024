@@ -126,9 +126,9 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
-    // SmartDashboard.putNumber("Wheel Speed", intakeWheelsEncoder.getVelocity());
+    SmartDashboard.putNumber("Intake RPM", intakeWheelsEncoder.getVelocity());
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 

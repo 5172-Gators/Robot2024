@@ -54,7 +54,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.resetPose(exampleTrajectory.getInitialPose())),
             swerveControllerCommand
         );
     }

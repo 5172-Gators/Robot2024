@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAutoSetpoint"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "auto1path1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAutoSetpoint"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "auto1path2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "auto1path3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAutoSetpoint"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

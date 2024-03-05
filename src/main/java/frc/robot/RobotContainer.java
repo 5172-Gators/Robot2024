@@ -7,43 +7,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-// import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import frc.robot.commands.swerve.TeleopSwerve;
-import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.turret.SetPitchPosition;
 import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
+import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.JoystickClimberControl;
-import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
-import frc.robot.commands.intake.FullIntake;
-import frc.robot.commands.intake.InitIntake;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
-import frc.robot.commands.intake.SetIntakeWheels;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.led.LEDTest;
-import frc.robot.commands.limelight.AlignToAprilTag;
-import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.StopShooter;
-import frc.robot.commands.shooter.TeleopShoot;
 
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Pitch;
-import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Limelight;
-// import frc.robot.subsystems.TrapScore;
-import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.*;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -53,7 +43,7 @@ import frc.robot.subsystems.LEDs;
 public class RobotContainer {
     
     /* Sendable Chooser */
-    private SendableChooser<Command> chooser = new SendableChooser<>();
+    private SendableChooser<Command> autoChooser;
     
     /* Controllers */
     private final Joystick driveStick = new Joystick(0);
@@ -112,29 +102,49 @@ public class RobotContainer {
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final Shooter s_Shooter = new Shooter();
-    private final Turret s_Turret = new Turret();
-    private final Pitch s_Pitch = new Pitch();
-    private final Limelight s_Limelight = new Limelight();
-    private final Intake s_Intake = new Intake();
-    private final Climber s_Climber = new Climber();
-    // private final TrapScore s_TrapScore = new TrapScore();
-    private final LEDs s_LEDs = new LEDs();
+    private final Swerve s_Swerve;
+    private final Shooter s_Shooter;
+    private final Turret s_Turret;
+    private final Pitch s_Pitch;
+    private final Limelight s_Limelight;
+    private final Intake s_Intake;
+    private final Climber s_Climber;
+    private final LEDs s_LEDs;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         
-        // chooser = AutoBuilder.buildAutoChooser();
+        s_Swerve = new Swerve();
+        s_Shooter = new Shooter();
+        s_Turret = new Turret();
+        s_Pitch = new Pitch();
+        s_Limelight = new Limelight();
+        s_Intake = new Intake();
+        s_Climber = new Climber();
+        s_LEDs = new LEDs();
 
-        // // Define Autos + Configure Sendable Chooser
-        // chooser.addOption("Deploy Test Auto", new PathPlannerAuto("deployTestAuto"));
-        // chooser.addOption("Test Auto", new PathPlannerAuto("testAuto"));
-        // chooser.addOption("Nothing", null);
-        // SmartDashboard.putData("AutoChooser", chooser);
-        // SmartDashboard.putNumber("SpeedLimit", 1);
-       
+        /* Configure PathPlanner Commands */
+        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter));
+        NamedCommands.registerCommand("shootAutoSetpoint", new ShootSetpoint(1800.0, 3000.0, 0.954834, 0, () -> true,
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret));
+
+        // Configure default commands
+        configureDefaultCommands();
+
+        // Configure the button bindings
+        configureButtonBindings();
+
+        // Build auto routines
+        buildAutoRoutines();
+
+        // autoChooser = AutoBuilder.buildAutoChooser();
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+
+    private void configureDefaultCommands(){
+
         /* Set Default Commands */
 
         s_Swerve.setDefaultCommand(
@@ -148,19 +158,19 @@ public class RobotContainer {
         );
 
        s_Turret.setDefaultCommand(
-        //    new TeleopTurret(
-        //     s_Turret,
-        //     () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
-        //    )
-            new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
+           new TeleopTurret(
+            s_Turret,
+            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+           )
+            // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
        );
 
         s_Pitch.setDefaultCommand(
-        //    new TeleopPitch(
-        //     s_Pitch,
-        //     () -> -operatorStick.getRawAxis(pitchAdjust)
-        //    )
-            new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
+           new TeleopPitch(
+            s_Pitch,
+            () -> -operatorStick.getRawAxis(pitchAdjust)
+           )
+            // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
        );
 
         s_Climber.setDefaultCommand(
@@ -179,8 +189,6 @@ public class RobotContainer {
             new StopShooter(s_Shooter)
         );
 
-        // Configure the button bindings
-        configureButtonBindings();
     }
 
     /**
@@ -206,13 +214,13 @@ public class RobotContainer {
         
         // startShooter.whileTrue(new Shoot(s_Shooter));
 
-        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, 0.954834, 1.85714, fireShooter, 
+        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, -0.0466113125, 1.85714, fireShooter, 
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
-        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, 1.0225, 0.0, fireShooter,
+        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, 0.0210546875, 0.0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
-        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, 0.94, -2.142856597, fireShooter,
+        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, -0.0614453125, -2.142856597, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
@@ -236,6 +244,16 @@ public class RobotContainer {
 
     }
 
+    private void buildAutoRoutines(){
+
+    //   AutoBuilder.buildAuto("forward4intake");
+    //   AutoBuilder.buildAuto("auto1");
+
+        autoChooser.addOption("forward4intake", new PathPlannerAuto("forward4intake"));
+        autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));
+    
+    }
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -243,6 +261,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new PathPlannerAuto("exampleAuto");
+         
+        return autoChooser.getSelected();
     }
 }

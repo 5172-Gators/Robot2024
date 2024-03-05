@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
     rightShooterPID = rightShooter.getPIDController();
 
     /* configure kicker motor */
-    kicker = new CANSparkFlex(Constants.Kicker.kickerMotorID, MotorType.kBrushless);
+    kicker = new CANSparkFlex(Constants.Shooter.kickerMotorID, MotorType.kBrushless);
     kicker.setIdleMode(IdleMode.kCoast);
     kickerEncoder = kicker.getEncoder();
     kickerPID = kicker.getPIDController();
@@ -197,9 +197,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
     SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
-    SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());
-    // SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
+    // SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
+    // SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());
+    SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
 
   }

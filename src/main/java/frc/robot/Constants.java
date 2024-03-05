@@ -19,17 +19,6 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
-    public static class Kicker{
-
-        /* Motor IDs */
-        public static final int kickerMotorID = 20;
-
-        /* PID */
-        
-
-
-    }
-
     public static class Limelight{
 
         // allowable error / deadband
@@ -168,11 +157,11 @@ public final class Constants {
 
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.001;
-        public static final double minPitchPosition = 0.899; 
-        public static final double maxPitchPosition = 1.07;
+        public static final double minPitchPosition = -0.092529296875;//0.905761;
+        public static final double maxPitchPosition = 0.0185546875;//1.02;
 
         /* Positions */
-        public static final double P_intakingPosition = 0.9592; //0.9724; 
+        public static final double P_intakingPosition = -0.015869140625; //-0.0422453125;  
         public static final double P_againstSpeakerShootingPosition = 0;
         public static final double P_ampScorePosition = 0;
 
@@ -207,9 +196,9 @@ public final class Constants {
         public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
-        public static final double stowedPosition = -0.040283203125; 
-        public static final double travelPosition = -0.025;
-        public static final double deployedPosition = 0.12646484375;
+        public static final double stowedPosition = 0.0151366531;//-0.040283203125; 
+        public static final double travelPosition = 0.030419856; // -0.025
+        public static final double deployedPosition = 0.1818847;//0.12646484375;
 
         public static final double intakeRPM = 4000;
 
@@ -219,7 +208,7 @@ public final class Constants {
         public static final double arm_kD = 0.2;
         public static final double arm_IZone = 0.05;
 
-        public static final int stall_current_lim = 30;
+        public static final int stall_current_lim = 40;
         public static final int free_current_lim = 4;
         
         public static final double wheels_kP = 0.0002;
@@ -260,6 +249,8 @@ public final class Constants {
         public static final double trackWidth = Units.inchesToMeters(25); 
         public static final double wheelBase = Units.inchesToMeters(25); 
         public static final double wheelCircumference = chosenModule.wheelCircumference;
+
+        public static final double driveBaseRadius = 0.3556;
         //25 inches = 0.64 meters
         //speed is 5.484 m/s
         /* Swerve Kinematics 
@@ -317,7 +308,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; 
+        public static final double maxSpeed = 5.27304; 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; 
 
