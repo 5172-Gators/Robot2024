@@ -25,14 +25,12 @@ import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
-import frc.robot.commands.climber.JoystickClimberControl;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.led.LEDDefaultCommand;
-import frc.robot.commands.led.LEDTest;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.StopShooter;
 
@@ -170,13 +168,13 @@ public class RobotContainer {
             )
         );
 
-       s_Turret.setDefaultCommand(
-           new TeleopTurret(
-            s_Turret,
-            () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
-           )
+        s_Turret.setDefaultCommand(
+            new TeleopTurret(
+                s_Turret,
+                () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+            )
             // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
-       );
+        );
 
         s_Pitch.setDefaultCommand(
            new TeleopPitch(
@@ -184,14 +182,6 @@ public class RobotContainer {
             () -> -operatorStick.getRawAxis(pitchAdjust)
            )
             // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
-       );
-
-        s_Climber.setDefaultCommand(
-            new JoystickClimberControl(
-             s_Climber,
-             () -> testStick.getRawAxis(pitchAdjust) // y-axis           
-            )
-
         );
 
         s_Intake.setDefaultCommand(
@@ -252,6 +242,9 @@ public class RobotContainer {
 
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
+
+        /* Test Buttons */
+
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(1500)));
 
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShooter(2750, 2000))).onFalse(new InstantCommand(() -> s_Shooter.stopShooter()));
@@ -263,10 +256,6 @@ public class RobotContainer {
         // testButton14.whileTrue(new SetTurretPosition(s_Turret, 0));
         // testButton15.whileTrue(new SetTurretPosition(s_Turret, 1.64));
         // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
-
-        /* Test Buttons */
-
-        testAprilTag.onTrue(new LEDTest(s_LEDs, Constants.Colors.green));
 
 
     }
