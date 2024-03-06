@@ -106,7 +106,7 @@ public final class Constants {
 
         public static final double kicker_allowableError = 50;
         public static final double kicker_intakeRPM = 4500;
-        public static final double kicker_creepRPM = 1500;
+        public static final double kicker_creepRPM = 750;
         public static final double kicker_shoot = 1500;
 
     }

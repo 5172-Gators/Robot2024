@@ -234,7 +234,7 @@ public class RobotContainer {
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
-        // testSetPosition.whileTrue(new DeployIntake(s_Intake));
+        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(1500)));
 
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShooter(2750, 2000))).onFalse(new InstantCommand(() -> s_Shooter.stopShooter()));
 

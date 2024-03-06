@@ -54,28 +54,21 @@ public class RunIntake extends Command {
       s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
 
-      if (s_Shooter.getKickerSensor() == false)
+      if (s_Shooter.getShooterSensor() == false)
         state = 1;
-
     }
     if (state == 1) {
       s_Intake.stopIntake();
-      s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
-
-      if (s_Shooter.getKickerSensor() == false)
-        state = 2;
-    }
-    if (state == 2) {
       s_Shooter.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
 
       if (s_Shooter.getShooterSensor() == true)
-        state = 3;
+        state = 2;
     }
-    if (state == 3) {
+    if (state == 2) {
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_creepRPM);
 
       if (s_Shooter.getShooterSensor() == false)
-        state = 4;
+        state = 3;
     }
   }
 
@@ -91,6 +84,6 @@ public class RunIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (state == 4 );
+    return (state == 3);
   }
 }

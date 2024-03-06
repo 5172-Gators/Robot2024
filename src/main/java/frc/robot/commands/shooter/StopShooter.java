@@ -20,6 +20,7 @@ public class StopShooter extends Command {
   @Override
   public void initialize() {
     s_Shooter.setShooterRPM(0, 0);
+    s_Shooter.stopKicker();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,6 +34,7 @@ public class StopShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.stopShooter();
+    s_Shooter.stopKicker();
   }
 
   // Returns true when the command should end.
