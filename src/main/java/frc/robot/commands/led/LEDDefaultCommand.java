@@ -2,23 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.led;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Shooter;
 
-public class StowIntake extends Command {
-  
-  Intake s_Intake;
-  
-  /** Creates a new StowIntake. */
-  public StowIntake(Intake s_Intake) {
+public class LEDDefaultCommand extends Command {
+
+  LEDs s_LED;
+  Shooter s_Shooter;
+ 
+
+  /** Creates a new LEDTimedCommand. */
+  public LEDDefaultCommand(LEDs LED, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
+ 
+    this.s_LED = LED;
+    this.s_Shooter = shooter;
 
-    this.s_Intake = s_Intake;
-    addRequirements(s_Intake);
-    
+    addRequirements(s_LED);
+
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +34,17 @@ public class StowIntake extends Command {
   @Override
   public void execute() {
 
-    s_Intake.setIntakeArmPosition(Constants.Intake.stowedPosition);
+
+    // s_LED.setColor(0.67);
+    if (!s_Shooter.getKickerSensor()){
+
+      s_LED.setColor(0.63);
+
+    } else {
+
+      s_LED.setColor(0.99);
+
+    }
 
   }
 
@@ -37,15 +52,13 @@ public class StowIntake extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Intake.moveArm(0);
-
+    s_LED.setColor(0.99);
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return s_Intake.isReady();
-    
+    return false;
   }
 }

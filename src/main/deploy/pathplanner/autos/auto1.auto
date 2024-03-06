@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.23,
-      "y": 5.55
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,77 +8,25 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAuto1Setpoint1"
+            "name": "shootAutoSetpoint"
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "auto1path1"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeAuto"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.5
-                }
-              }
-            ]
+            "pathName": "auto1path1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootAuto1Setpoint2"
+            "name": "shootAutoSetpoint"
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "auto1path2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeAuto"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 6.0
-                }
-              }
-            ]
+            "pathName": "auto1path2"
           }
         },
         {
@@ -96,7 +38,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAuto1Setpoint2"
+            "name": "shootAutoSetpoint"
           }
         }
       ]

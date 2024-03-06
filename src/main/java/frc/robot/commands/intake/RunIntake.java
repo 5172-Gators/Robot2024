@@ -6,8 +6,11 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.commands.led.LEDTimedCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -18,6 +21,7 @@ public class RunIntake extends Command {
   Pitch s_Pitch;
   Turret s_Turret;
   Shooter s_Shooter;
+  LEDs s_LEDs;
 
   boolean kickerSensorValue;
   boolean shooterSensorValue;
@@ -25,13 +29,15 @@ public class RunIntake extends Command {
   int state;
 
   /** Creates a new RunIntake. */
-  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter) {
+  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter, LEDs leds) {
     // Use addRequirements() here to declare subsystem dependencies.
-    s_Intake = intake;
-    s_Pitch = pitch;
-    s_Turret = turret;
-    s_Shooter = shooter;
-    addRequirements(s_Intake, s_Pitch, s_Turret, s_Shooter);
+    this.s_Intake = intake;
+    this.s_Pitch = pitch;
+    this.s_Turret = turret;
+    this.s_Shooter = shooter;
+    this.s_LEDs = leds;
+    
+    addRequirements(s_Intake, s_Pitch, s_Turret, s_Shooter, s_LEDs);
   }
 
   // Called when the command is initially scheduled.
@@ -49,6 +55,7 @@ public class RunIntake extends Command {
     s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    s_LEDs.setColor(-0.09);
 
     if (state == 0) {
       s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);
@@ -78,6 +85,11 @@ public class RunIntake extends Command {
     s_Shooter.stopKicker();
     s_Intake.stopIntake();
     s_Pitch.stopPitch();
+    if(state == 3){
+      Commands.sequence(new LEDTimedCommand(0.15, 0.5, s_LEDs));
+    } else {
+      s_LEDs.setColor(0.99);
+    }
     state = 0;
   }
 

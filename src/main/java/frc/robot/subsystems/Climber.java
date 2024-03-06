@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 //import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 //import com.revrobotics.RelativeEncoder;
 //import com.revrobotics.SparkPIDController;
@@ -21,7 +23,7 @@ public class Climber extends SubsystemBase {
 
   CANSparkMax winchMotor; // geared down
   private RelativeEncoder winchEncoder;
-  private RelativeEncoder climbEncoder;
+  private DigitalInput magLimSwitch;
 
   public Climber() {
 
@@ -31,15 +33,22 @@ public class Climber extends SubsystemBase {
     winchMotor.setIdleMode(IdleMode.kBrake);
     winchMotor.setSmartCurrentLimit(10);
     winchMotor.setOpenLoopRampRate(1);
+    winchMotor.setInverted(true);
+    winchMotor.setSoftLimit(SoftLimitDirection.kForward, 930);
+    winchMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
      
     /* create intstance of the climb + winch motors built-in encoders */
     // climbEncoder = climbMotor.getEncoder();
     winchEncoder = winchMotor.getEncoder();
+
+    magLimSwitch = new DigitalInput(0);
   }
 
-  public void joystickControl (double speed){
-    // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
+  public void manualClimberControl (double speed){
 
+    // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
     winchMotor.set(speed);
 
   }
@@ -48,15 +57,26 @@ public class Climber extends SubsystemBase {
     return winchEncoder.getPosition();
   }
 
-  public void setSpeed (double speed){
+  public void setClimberPosition(double position) {
+    winchEncoder.setPosition(position);
+  }
 
-    if (this.getClimberPosition() <= Constants.Climber.stowedPosition)
-      speed = Math.min(speed,0); // Clipping so it's positive
-    else if (this.getClimberPosition() >= Constants.Climber.deployedPosition)
-      speed = Math.max(speed,0); // Clipping so it's negative
-
+  public void setSpeed(double speed){
     winchMotor.set(speed);
+  }
 
+  public boolean getLimSwitch() {
+    return !magLimSwitch.get();
+  }
+
+  public void disableSoftLimits() {
+    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+  }
+
+  public void enableSoftLimits() {
+    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
   }
 
   @Override
@@ -65,6 +85,7 @@ public class Climber extends SubsystemBase {
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
     SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
+    SmartDashboard.putBoolean("Climb Lim Switch", getLimSwitch());
     // SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 

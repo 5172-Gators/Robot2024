@@ -36,7 +36,7 @@ public class JoystickClimberControl extends Command {
 
     double joystickPosition = jPosition.getAsDouble();
 
-    s_Climber.joystickControl(joystickPosition);
+    s_Climber.manualClimberControl(joystickPosition);
 
   }
 
@@ -44,7 +44,7 @@ public class JoystickClimberControl extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Climber.joystickControl(0);
+    s_Climber.manualClimberControl(0);
     
   }
 

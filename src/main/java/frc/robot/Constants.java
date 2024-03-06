@@ -105,7 +105,7 @@ public final class Constants {
         public static final double kicker_minOutput = -1;
 
         public static final double kicker_allowableError = 50;
-        public static final double kicker_intakeRPM = 4500;
+        public static final double kicker_intakeRPM = 4000;
         public static final double kicker_creepRPM = 750;
         public static final double kicker_shoot = 1500;
 
@@ -142,8 +142,15 @@ public final class Constants {
 
     public static final class Colors {
             
-        public static final double green = 0.77;
-            
+        public static final double green = 0.77; //intaking
+        public static final double strobeRed = (-0.11); 
+        public static final double rainbow = (-0.99); 
+        public static final double red = (0.61); //outtaking
+        public static final double darkGreen = (0.75);
+        public static final double lime = (0.73);   
+        public static final double aqua = (0.81);   
+        public static final double blue = (0.87); // ready to shoot
+        public static final double strobeBlue = (-0.09); // looking for target
 
 
     }
@@ -165,6 +172,7 @@ public final class Constants {
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 0.435625;
+        public static final double climbPosition = 0.513;
 
         /* PID Constants */
         public static final double kP = 250.0;
