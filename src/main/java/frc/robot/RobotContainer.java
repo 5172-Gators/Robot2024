@@ -9,18 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
+
 
 import frc.robot.commands.swerve.TeleopSwerve;
-import frc.robot.commands.turret.SetPitchPosition;
-import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
@@ -31,10 +25,15 @@ import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.led.LEDDefaultCommand;
+import frc.robot.commands.shooter.AmpScore;
+import frc.robot.commands.shooter.AutoAim;
+import frc.robot.commands.shooter.AutoAimShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpoint;
+import frc.robot.commands.shooter.ShootSetpointCalibration;
 import frc.robot.commands.shooter.StopShooter;
 
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Limelight.CamMode;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -62,13 +61,12 @@ public class RobotContainer {
     /* Driver Buttons */
 
     // Drive Stick
-    private final JoystickButton deployIntake = new JoystickButton(driveStick, 1);
-    private final JoystickButton stowIntake = new JoystickButton(driveStick, 4);
-    private final JoystickButton justDeploy = new JoystickButton(driveStick, 2);
-    private final JoystickButton robotCentric = new JoystickButton(driveStick, 12);
+    private final JoystickButton intakeIn = new JoystickButton(driveStick, 1);
+    private final JoystickButton deployIntake = new JoystickButton(driveStick, 4);
+    private final JoystickButton outtake = new JoystickButton(driveStick, 2);
     
-   
     // Rotate Stick
+    private final JoystickButton robotCentric = new JoystickButton(rotateStick, 1);
     private final JoystickButton zeroGyroButton = new JoystickButton(rotateStick, 2);
     
 
@@ -77,42 +75,34 @@ public class RobotContainer {
     private static final int turretRotate = Joystick.AxisType.kX.value;
     
     /* Operator Buttons */
-    private final JoystickButton stopShooter = new JoystickButton(operatorStick, 2);
     private final JoystickButton fireShooter = new JoystickButton(operatorStick, 1);
-    private final JoystickButton testSetPosition = new JoystickButton(operatorStick, 3);
-    private final JoystickButton shooterSetpoint1 = new JoystickButton(operatorStick, 8);
-    private final JoystickButton shooterSetpoint2 = new JoystickButton(operatorStick, 9);
-    private final JoystickButton shooterSetpoint3 = new JoystickButton(operatorStick, 10);
-    private final JoystickButton shooterSetpoint4 = new JoystickButton(operatorStick, 4); // poop out through shooter
-    private final JoystickButton ampSetpoint = new JoystickButton(operatorStick, 7);
-    private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
-    private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
-    private final JoystickButton testButton16 = new JoystickButton(operatorStick, 16);
+    private final JoystickButton stopShooter = new JoystickButton(operatorStick, 2);
+    private final JoystickButton autoAim = new JoystickButton(operatorStick, 3);
+    private final JoystickButton shooterSetpointStage = new JoystickButton(operatorStick, 8);
+    private final JoystickButton shooterSetpointSpeaker = new JoystickButton(operatorStick, 9);
+    private final JoystickButton shooterSetpointAmp = new JoystickButton(operatorStick, 10);
+    private final JoystickButton shooterEject = new JoystickButton(operatorStick, 4); // poop
+    private final JoystickButton ampScoringSetpoint = new JoystickButton(operatorStick, 7);
+    // private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
+    // private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
+    private final JoystickButton shooterCalibrationMode = new JoystickButton(operatorStick, 14);
     private final JoystickButton climbModeButton = new JoystickButton(operatorStick, 5);
-
-    // private final JoystickButton trapScore = new JoystickButton(operatorStick, 6);
-    // private final JoystickButton deployTrapScore = new JoystickButton(operatorStick, 7);
-    // private final JoystickButton toggleClimberJoystickControl = new JoystickButton(operatorStick, 8); // will be a onTrue, then onFalse will stop climber control
-    
-
-    // private final JoystickButton alignLimelight = new JoystickButton(operatorStick, 4);
-
-    // private final JoystickButton testSetPosition = new JoystickButton(testStick, 1);
-    private final JoystickButton testAprilTag = new JoystickButton(testStick, 1);
 
     /* Test Buttons */
     
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
     /* Subsystems */
-    private final Swerve s_Swerve;
-    private final Shooter s_Shooter;
-    private final Turret s_Turret;
-    private final Pitch s_Pitch;
-    private final Limelight s_Limelight;
-    private final Intake s_Intake;
-    private final Climber s_Climber;
-    private final LEDs s_LEDs;
+    public final Swerve s_Swerve;
+    public final Shooter s_Shooter;
+    public final Turret s_Turret;
+    public final Pitch s_Pitch;
+    public final Limelight s_VisionLimelight;
+    public final Intake s_Intake;
+    public final Climber s_Climber;
+    public final LEDs s_LEDs;
+
+    public final ShootingTables shootingTables;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -122,10 +112,12 @@ public class RobotContainer {
         s_Shooter = new Shooter();
         s_Turret = new Turret();
         s_Pitch = new Pitch();
-        s_Limelight = new Limelight();
+        s_VisionLimelight = new Limelight(CamMode.Vision);
         s_Intake = new Intake();
         s_Climber = new Climber();
         s_LEDs = new LEDs();
+        
+        shootingTables = new ShootingTables();
 
         autoChooser = new SendableChooser<Command>();
 
@@ -137,6 +129,8 @@ public class RobotContainer {
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
         NamedCommands.registerCommand("shootAuto1Setpoint3", new ShootSetpoint(1800.0, 3000.0, 0.42047, 0.9, () -> true,
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+        NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, shootingTables,
+                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
         NamedCommands.registerCommand("resetHeading", new InstantCommand(() -> s_Swerve.setHeading(s_Swerve.getHeading())));
 
         NamedCommands.registerCommand("setIntakeDefaultPositionDeploy", new InstantCommand(() -> s_Intake.setDefaultCommand(new DeployIntake(s_Intake))));
@@ -210,31 +204,31 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        deployIntake.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_LEDs));
+        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_LEDs));
 
-        stowIntake.onTrue(new StowIntake(s_Intake));
+        deployIntake.onTrue(new DeployIntake(s_Intake));
 
-        justDeploy.whileTrue(new Eject(s_Intake,s_Shooter));
+        outtake.whileTrue(new Eject(s_Intake,s_Shooter));
 
 
         /* Operator Buttons */
-        
-        // startShooter.whileTrue(new Shoot(s_Shooter));
+        autoAim.onTrue(new AutoAim(fireShooter, shootingTables,
+                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
 
-        shooterSetpoint1.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
+        shooterSetpointStage.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
  
-        shooterSetpoint2.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
+        shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
-        shooterSetpoint3.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
+        shooterSetpointAmp.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
-        shooterSetpoint4.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
+        shooterEject.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
                         
-        ampSetpoint.onTrue(new ShootSetpoint(550.0, 550.0, 0.505, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
+        ampScoringSetpoint.onTrue(new AmpScore(900.0, 900.0, 0.500488, fireShooter, () -> operatorStick.getY(), 
+                                        s_Shooter, s_Pitch, s_Turret, s_LEDs, false));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
@@ -251,23 +245,22 @@ public class RobotContainer {
 
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Intake.setIntakeRPM(3000))).onFalse(new InstantCommand(() -> s_Intake.stopIntake()));
 
-        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(500))).onFalse(new InstantCommand(() -> s_Shooter.stopKicker()));
+        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKicker1RPM(500))).onFalse(new InstantCommand(() -> s_Shooter.stopKicker()));
 
-        // testButton14.whileTrue(new SetTurretPosition(s_Turret, 0));
-        // testButton15.whileTrue(new SetTurretPosition(s_Turret, 1.64));
+        // testButton14.onTrue(new AutoAimShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
+        //                             () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
+        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1800.0, 3000.0, Constants.Pitch.ampSetpoint, 0, fireShooter,
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
         // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
 
 
     }
 
-    private void buildAutoRoutines(){
-
-    //   AutoBuilder.buildAuto("forward4intake");
-    //   AutoBuilder.buildAuto("auto1");
+    private void buildAutoRoutines() {
 
         autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
-        autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));
-        PathPlannerAuto auto1 = new PathPlannerAuto("auto1");    
+        autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));  
+
     }
 
     /**

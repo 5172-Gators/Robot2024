@@ -71,6 +71,15 @@ public class Pitch extends SubsystemBase {
 
   }
 
+  public double encoderUnitsToDegrees(double pos) {
+    return (pos+Constants.Pitch.horizontalOffset) * 360;
+  }
+
+  public double getPitchDegrees() {
+    double pos = this.getPosition();
+    return encoderUnitsToDegrees(pos);
+  }
+
   public void setPosition(double position){
 
     this.setpoint = position;
@@ -113,7 +122,8 @@ public class Pitch extends SubsystemBase {
     currentPitch = getPosition();
     // double currentVoltage = pitchMotor.getOutputCurrent();
 
-    SmartDashboard.putNumber("Tilt Encoder Value", currentPitch);
+    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
     // SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 

@@ -140,6 +140,10 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
+    public double getAngularVelocity() {
+        return gyro.getAngularVelocityXWorld().getValueAsDouble() / 2048.0;
+    }
+
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
@@ -161,9 +165,11 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
-        SmartDashboard.putNumber("gyro", getGyroYaw().getDegrees());
-        SmartDashboard.putNumber("RobotPose X", getPose().getX());
-        SmartDashboard.putNumber("RobotPose Y", getPose().getY());
+        // SmartDashboard.putNumber("Angular Velocity", getAngularVelocity());
+
+        // SmartDashboard.putNumber("gyro", getGyroYaw().getDegrees());
+        // SmartDashboard.putNumber("RobotPose X", getPose().getX());
+        // SmartDashboard.putNumber("RobotPose Y", getPose().getY());
 
         for(SwerveModule mod : mSwerveMods){
             // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

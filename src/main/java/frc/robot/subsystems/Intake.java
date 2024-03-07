@@ -99,8 +99,6 @@ public class Intake extends SubsystemBase {
     else if (this.getIntakePosition() >= Constants.Intake.deployedPosition)
       speed = Math.max(speed,0); // Clipping so it's negative
 
-    SmartDashboard.putNumber("Intake Arm speed", speed);
-
     jointMotor.set(speed);
 
   }
@@ -126,15 +124,15 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
-    SmartDashboard.putNumber("Intake RPM", intakeWheelsEncoder.getVelocity());
+    // SmartDashboard.putNumber("Intake RPM", intakeWheelsEncoder.getVelocity());
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 
-    SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
+    // SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
 
-    SmartDashboard.putNumber("Intake Arm Current", jointMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("Intake Arm Current", jointMotor.getOutputCurrent());
 
   }
 }

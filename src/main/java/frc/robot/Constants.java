@@ -22,44 +22,14 @@ public final class Constants {
     public static class Limelight{
 
         // allowable error / deadband
-        public static final double allowableError = 0.0;
+        public static final double allowableError = 0.1;
 
-    }
-
-
-    public enum LimelightPosition{
-
-        // speaker positions
-        AGAINSTSPEAKER(0.0, 0.0, 0.0),
-        SPEAKER(0.0, 0.0, 0.0),
-        AMP(8.69, 8.46, 0.787); // just a test position
-
-        private double TXposition;
-        private double TYposition;
-        private double TAposition;
-        public int currentTag;
-
-        private LimelightPosition(double tX, double tY, double tA){
-
-            this.TXposition = tX;
-            this.TYposition = tY;
-            this.TAposition = tA;
-
-        }
-
-        public double getTX() {
-            return TXposition;
-        }
-
-        public double getTY() {
-
-            return TYposition;
-        }
-
-        public double getTA(){
-
-            return TAposition;
-        }    
+        // Physical Constants for calculating distance to target
+        public static final double speakerAprilTagCenterHeight = 57.125; // inches
+        public static final double limelightRadius = 10.5; //10.0625; // inches
+        public static final double camToShooterFrameAngle = 12.1; // degrees
+        public static final double camToPivotAngle = 31.9;//31.9;//32.6; // degrees
+        public static final double floorToPivot = 13.875; // inches
     }
 
 
@@ -105,8 +75,8 @@ public final class Constants {
         public static final double kicker_minOutput = -1;
 
         public static final double kicker_allowableError = 50;
-        public static final double kicker_intakeRPM = 4000;
-        public static final double kicker_creepRPM = 750;
+        public static final double kicker_intakeRPM = 3500;
+        public static final double kicker_creepRPM = 500;
         public static final double kicker_shoot = 1500;
 
     }
@@ -119,11 +89,13 @@ public final class Constants {
         
         /* Max + Min Positions, Allowable Error */
 
-        public static final double minTurretPosition = -3.28;
-        public static final double maxTurretPosition = 3.28;
+        public static final double minTurretPosition = -3.1;
+        public static final double maxTurretPosition = 3.1;
 
         public static final double allowableError = 0.05; // 0.05
         public static final double aimCoefficient = 0.03;
+
+        public static final double autoAimAllowableError = 3; 
 
         /* Positions */
         public static final double R_intakingPosition = 0;
@@ -166,6 +138,7 @@ public final class Constants {
         public static final double allowableError = 0.001;
         public static final double minPitchPosition = 0.404541015625; // -0.092529296875; // 0.905761;
         public static final double maxPitchPosition = 0.515625; // 0.0185546875; // 1.02;
+        public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
         public static final double intakePosition = 0.454825; // 0.9592; 
