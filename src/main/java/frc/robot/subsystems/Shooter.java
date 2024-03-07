@@ -102,11 +102,21 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void setShooterRPM(double rightSpeed, double leftSpeed) {
-    leftSetpoint = leftSpeed;
-    rightSetpoint = rightSpeed;
-    rightShooterPID.setReference(rightSpeed, CANSparkFlex.ControlType.kVelocity);
-    leftShooterPID.setReference(leftSpeed, CANSparkFlex.ControlType.kVelocity);
+  public void setShooterSpeed(double rightSpeed, double leftSpeed) {
+    leftShooter.set(leftSpeed);
+    rightShooter.set(rightSpeed);
+  }
+
+  public void setShooterVoltage(double rightVoltage, double leftVoltage) {
+    leftShooterPID.setReference(leftVoltage, CANSparkFlex.ControlType.kVoltage);
+    rightShooterPID.setReference(rightVoltage, CANSparkFlex.ControlType.kVoltage);
+  }
+
+  public void setShooterRPM(double rightRPM, double leftRPM) {
+    leftSetpoint = leftRPM;
+    rightSetpoint = rightRPM;
+    rightShooterPID.setReference(rightRPM, CANSparkFlex.ControlType.kVelocity);
+    leftShooterPID.setReference(leftRPM, CANSparkFlex.ControlType.kVelocity);
     
   }
 
@@ -129,6 +139,10 @@ public class Shooter extends SubsystemBase {
 
   public void setKickerOpenLoop(double speed) {
     kicker.set(speed);
+  }
+
+  public void setKickerVoltage(double voltage) {
+    kickerPID.setReference(voltage, CANSparkFlex.ControlType.kVoltage);
   }
 
   public void robotWash(){
@@ -196,13 +210,15 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
-    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
+    // SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
+    // SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
     // SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
     // SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
+    // SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
+    SmartDashboard.putNumber("Percent Left", leftShooter.getAppliedOutput());
+    SmartDashboard.putNumber("Percent Right", rightShooter.getAppliedOutput());
 
   }
 }

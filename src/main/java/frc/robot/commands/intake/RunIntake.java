@@ -44,15 +44,18 @@ public class RunIntake extends Command {
   @Override
   public void initialize() {
     state = 0;
-    s_Shooter.stopShooter();
+    s_Shooter.setShooterRPM(0,0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     
-    SmartDashboard.putNumber("Intake State", state);
-    s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+    // SmartDashboard.putNumber("Intake State", state);
+    if (s_Shooter.shooterIsReady())
+      s_Shooter.stopShooter();
+    if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor())
+      s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     s_LEDs.setColor(-0.09);

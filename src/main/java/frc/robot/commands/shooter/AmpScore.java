@@ -15,8 +15,8 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-public class ShootSetpoint extends Command {
-
+public class AmpScore extends Command {
+  
   Shooter s_Shooter;
   Pitch s_Pitch;
   Turret s_Turret;
@@ -29,22 +29,22 @@ public class ShootSetpoint extends Command {
   BooleanSupplier fire;
   DoubleSupplier yaw_aim;
   DoubleSupplier pitch_aim;
-  
-  /** Creates a new ShootSetpoint. */
-  public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led) {
+  Boolean calibrationMode;
+
+  /** Creates a new ampScore. */
+  public AmpScore(double leftRPM, double rightRPM, double pitch, BooleanSupplier fire, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led, Boolean calibrationMode) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
-    this.yaw = yaw;
     this.fire = fire;
-    this.yaw_aim = yaw_aim;
     this.pitch_aim = pitch_aim;
 
-    s_Shooter = m_shooter;
-    s_Pitch = m_pitch;
-    s_Turret = m_turret;
-    s_LEDs = m_led;
+    this.s_Shooter = m_shooter;
+    this.s_Pitch = m_pitch;
+    this.s_Turret = m_turret;
+    this.s_LEDs = m_led;
+    
+    this.calibrationMode = calibrationMode;
     
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
   }
@@ -57,19 +57,22 @@ public class ShootSetpoint extends Command {
   @Override
   public void execute() {
 
-    // SmartDashboard.putNumber("yaw sp", this.yaw);
-    // SmartDashboard.putNumber("pitch sp", this.pitch);
-    this.yaw += this.yaw_aim.getAsDouble()*Constants.Turret.aimCoefficient;
-    // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
+    if (this.calibrationMode) {
+      this.pitch += this.pitch_aim.getAsDouble()*0.0001;
+      this.leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
+      this.rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
+    }
+    
 
-    s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
     s_Pitch.setPosition(this.pitch);
-    s_Turret.setPosition(this.yaw);
+    s_Turret.setPosition(0);
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
+    if (s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
       s_LEDs.setColor(0.91);
-      if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+      if (this.fire.getAsBoolean()) {
+        s_Shooter.setShooterVoltage(8.5, 12.0);
+        s_Shooter.setKickerVoltage(8.5);
+      }
     } else {
       s_LEDs.setColor(-0.11);
     }
