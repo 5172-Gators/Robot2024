@@ -249,7 +249,7 @@ public class RobotContainer {
 
         // testButton14.onTrue(new AutoAimShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
         //                             () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
-        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1800.0, 3000.0, Constants.Pitch.ampSetpoint, 0, fireShooter,
+        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1700.0, 1700.0, Constants.Pitch.ampSetpoint, 0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
         // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
 

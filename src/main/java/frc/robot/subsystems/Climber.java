@@ -34,8 +34,8 @@ public class Climber extends SubsystemBase {
     winchMotor.setSmartCurrentLimit(10);
     winchMotor.setOpenLoopRampRate(1);
     winchMotor.setInverted(true);
-    winchMotor.setSoftLimit(SoftLimitDirection.kForward, 930);
-    winchMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    winchMotor.setSoftLimit(SoftLimitDirection.kForward, 790);// find new limit because of motor change
+    winchMotor.setSoftLimit(SoftLimitDirection.kReverse, 45);
     winchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
      
@@ -84,7 +84,7 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
-    // SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
+    SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
     // SmartDashboard.putBoolean("Climb Lim Switch", getLimSwitch());
     // SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());

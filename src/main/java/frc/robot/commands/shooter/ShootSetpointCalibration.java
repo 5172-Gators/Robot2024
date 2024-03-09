@@ -61,8 +61,8 @@ public class ShootSetpointCalibration extends Command {
   public void execute() {
     this.yaw += this.yawAim.getAsDouble()*Constants.Turret.aimCoefficient;
     this.pitch += this.pitchAim.getAsDouble()*0.0001;
-    leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
-    rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
+    // leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
+    // rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
     s_Pitch.setPosition(this.pitch);

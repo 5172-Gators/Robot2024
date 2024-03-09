@@ -137,11 +137,11 @@ public final class Constants {
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.001;
         public static final double minPitchPosition = 0.404541015625; // -0.092529296875; // 0.905761;
-        public static final double maxPitchPosition = 0.515625; // 0.0185546875; // 1.02;
+        public static final double maxPitchPosition = 0.526; // 0.0185546875; // 1.02;
         public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
-        public static final double intakePosition = 0.454825; // 0.9592; 
+        public static final double intakePosition =  0.49;// 0.454825; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 0.435625;

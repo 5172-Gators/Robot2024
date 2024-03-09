@@ -17,10 +17,10 @@ public final class ShootingTables {
 
 
         // Pitch angle LUT (floor distance estimate, pitch angle)
-        m_pitchLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(0.5153));
-        m_pitchLUT.put(new InterpolatingDouble(69.5), new InterpolatingDouble(0.468));
-        m_pitchLUT.put(new InterpolatingDouble(90.0), new InterpolatingDouble(0.4484));
-        m_pitchLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(0.4331));
+        m_pitchLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(0.5205)); //.5102
+        m_pitchLUT.put(new InterpolatingDouble(69.5), new InterpolatingDouble(0.4714)); //.468
+        m_pitchLUT.put(new InterpolatingDouble(90.0), new InterpolatingDouble(0.4526)); //.4484
+        m_pitchLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(0.4426)); //.4331
 
         // Pitch angle LUT (floor distance estimate, left flywheel RPM)
         m_RPMLeftLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(1700.0));
