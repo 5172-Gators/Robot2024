@@ -59,22 +59,22 @@ public class ShootSetpointCalibration extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.yaw += this.yawAim.getAsDouble()*Constants.Turret.aimCoefficient;
-    this.pitch += this.pitchAim.getAsDouble()*0.0001;
+   // this.yaw += this.yawAim.getAsDouble()*Constants.Turret.aimCoefficient;
+   // this.pitch += this.pitchAim.getAsDouble()*0.0001;
     leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
     rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
-    s_Pitch.setPosition(this.pitch);
+  //  s_Pitch.setPosition(this.pitch);
     s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
-      s_LEDs.setColor(0.91);
+    // if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
+    //   s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
         s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
-    } else {
+    // } else {
       s_LEDs.setColor(-0.11);
-    }
+    // }
   }
 
   // Called once the command ends or is interrupted.

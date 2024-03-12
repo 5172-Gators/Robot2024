@@ -44,10 +44,10 @@ public class Turret extends SubsystemBase {
     rotateMotor.setInverted(false);
     rotateMotor.setIdleMode(IdleMode.kBrake);
 
-    rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
-    rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
-    rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
+    // rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
+    // rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
     // create instances of the built-in encoders in the motors
