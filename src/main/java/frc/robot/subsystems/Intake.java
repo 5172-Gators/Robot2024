@@ -43,6 +43,7 @@ public class Intake extends SubsystemBase {
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(IdleMode.kBrake);
     intakeMotor.setInverted(false);
+    intakeMotor.setSmartCurrentLimit(35, 4);
 
     intakeWheelsEncoder = intakeMotor.getEncoder();
 
@@ -123,6 +124,8 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("Intake Current", intakeMotor.getOutputCurrent());
 
     // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 

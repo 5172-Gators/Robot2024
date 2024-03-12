@@ -64,22 +64,23 @@ public class RunIntake extends Command {
       s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
 
-      if (s_Shooter.getShooterSensor() == false)
+      if (s_Shooter.getShooterSensor() == false) // shooter sensor
         state = 1;
     }
     if (state == 1) {
       s_Intake.stopIntake();
       s_Shooter.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
 
-      if (s_Shooter.getShooterSensor() == true)
+      if (s_Shooter.getShooterSensor() == false)
         state = 2;
     }
     if (state == 2) {
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_creepRPM);
 
+      
       if (s_Shooter.getShooterSensor() == false)
-        state = 3;
-    }
+      state = 3;
+     }
   }
 
   // Called once the command ends or is interrupted.
