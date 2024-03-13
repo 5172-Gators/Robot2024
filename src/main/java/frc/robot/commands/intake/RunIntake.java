@@ -71,7 +71,7 @@ public class RunIntake extends Command {
       s_Intake.stopIntake();
       s_Shooter.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
 
-      if (s_Shooter.getShooterSensor() == false)
+      if (s_Shooter.getShooterSensor() == true)
         state = 2;
     }
     if (state == 2) {

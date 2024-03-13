@@ -141,7 +141,7 @@ public final class Constants {
         public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
-        public static final double intakePosition = 0.454825; // 0.9592; 
+        public static final double intakePosition = 0.49; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 0.435625;
