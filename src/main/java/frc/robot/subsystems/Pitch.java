@@ -122,8 +122,8 @@ public class Pitch extends SubsystemBase {
     currentPitch = getPosition();
     // double currentVoltage = pitchMotor.getOutputCurrent();
 
-    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
-    // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
+    SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
     // SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 
