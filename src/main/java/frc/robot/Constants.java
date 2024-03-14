@@ -83,7 +83,7 @@ public final class Constants {
 
 
     public static final class Turret {
-       
+
         /* Motor IDs */
         public static final int rotateMotorID = 2;
         
@@ -99,7 +99,7 @@ public final class Constants {
 
         /* Positions */
         public static final double R_intakingPosition = 0;
-        public static final double ampTurretSetpoint = -11.642915;
+
         /* PID */
         public static final double kP = 0.15; // 0.5
         public static final double kI = 0.001;
@@ -144,11 +144,9 @@ public final class Constants {
         public static final double intakePosition = 0.49; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
-        public static final double ampSetpoint = 49.4823;
+        public static final double ampSetpoint = 0.435625;
         public static final double climbPosition = 0.513;
- //49.4823 amp/facing intake
-        //rpm 850 850
-        //turret rotate -11.642915
+
         /* PID Constants */
         public static final double kP = 250.0;
         public static final double kI = 0.01;
