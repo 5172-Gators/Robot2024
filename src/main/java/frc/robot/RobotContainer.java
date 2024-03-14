@@ -221,7 +221,7 @@ public class RobotContainer {
         shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
-        shooterSetpointAmp.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
+        shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
         shooterEject.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,

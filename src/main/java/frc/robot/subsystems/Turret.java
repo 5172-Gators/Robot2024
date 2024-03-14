@@ -143,7 +143,7 @@ public class Turret extends SubsystemBase {
 
     double m_currentPosition = rotateEncoder.getPosition();
     
-    // SmartDashboard.putNumber("Turret Rotate Positon", m_currentPosition);
+    SmartDashboard.putNumber("Turret Rotate Positon", m_currentPosition);
     SmartDashboard.putBoolean("Turret Ready", isReady());
 
   }
