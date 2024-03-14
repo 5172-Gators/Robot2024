@@ -25,11 +25,11 @@ public final class Constants {
         public static final double allowableError = 0.1;
 
         // Physical Constants for calculating distance to target
-        public static final double speakerAprilTagCenterHeight = 57.125; // inches
-        public static final double limelightRadius = 10.5; //10.0625; // inches
-        public static final double camToShooterFrameAngle = 12.1; // degrees
-        public static final double camToPivotAngle = 31.9;//31.9;//32.6; // degrees
-        public static final double floorToPivot = 13.875; // inches
+        public static final double speakerAprilTagCenterHeight = 57.125; // inches 57.125
+        public static final double limelightRadius = 10.5; //10.0625; // inches 10.5
+        public static final double camToShooterFrameAngle = 12.1; // degrees    12.1
+        public static final double camToPivotAngle = 31.9;//31.9;//32.6; // degrees 31.9
+        public static final double floorToPivot = 13.875; // inches     13.875
     }
 
 

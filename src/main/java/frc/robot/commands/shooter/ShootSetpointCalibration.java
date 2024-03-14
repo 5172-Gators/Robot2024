@@ -66,7 +66,8 @@ public class ShootSetpointCalibration extends Command {
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
   //  s_Pitch.setPosition(this.pitch);
-    s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
+    
+  //s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
     // if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
     //   s_LEDs.setColor(0.91);
