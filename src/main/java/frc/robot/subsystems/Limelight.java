@@ -41,7 +41,7 @@ public class Limelight extends SubsystemBase {
   public enum CamMode { Vision, Drive };
 
   public Limelight(CamMode camMode) {
-    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-vision"); //limelight-vision to change back to turret camera
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-vision");
 
     m_Tid = m_limelightTable.getIntegerTopic("tid").subscribe(-1);
     
