@@ -36,17 +36,23 @@ public final class Constants {
     public static final class Shooter{
 
         /* Motor IDs */
-        public static final int leftMotorID = 14;
-        public static final int rightMotorID = 15;
+        public static final int leftMotorID = 41;
+        public static final int rightMotorID = 17;
         public static final int kickerMotorID = 20;
 
         // right PID
-        public static final double right_kP = 0.00043;
+        public static final double right_kP = 0.00020;
         public static final double right_kI = 0.000001;
-        public static final double right_kD = 0.5;
+        public static final double right_kD = 0;
         public static final double right_kFF = 0.00023;
         public static final double right_IZone = 200;
 
+             // right PID
+        // public static final double right_kP = 0.00043;
+        // public static final double right_kI = 0.000001;
+        // public static final double right_kD = 0.5;
+        // public static final double right_kFF = 0.00023;
+        // public static final double right_IZone = 200;
         public static final double right_maxOutput = 1;
         public static final double right_minOutput = -1;
 
@@ -55,9 +61,15 @@ public final class Constants {
         // left PID
         public static final double left_kP = 0.00046;
         public static final double left_kI = 0.000001;
-        public static final double left_kD = 0.25;
+        public static final double left_kD = 0;
         public static final double left_kFF = 0.00023;
         public static final double left_IZone = 200;
+
+        //  public static final double left_kP = 0.00046;
+        // public static final double left_kI = 0.000001;
+        // public static final double left_kD = 0.25;
+        // public static final double left_kFF = 0.00023;
+        // public static final double left_IZone = 200;
 
         public static final double left_maxOutput = 1;
         public static final double left_minOutput = -1;
@@ -95,11 +107,12 @@ public final class Constants {
         public static final double allowableError = 0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
-        public static final double autoAimAllowableError = 3; 
+        public static final double autoAimAllowableError = 6; 
 
         /* Positions */
         public static final double R_intakingPosition = 0;
-
+        public static final double turretAmpPosition = -11.047677; //counter
+        public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
         /* PID */
         public static final double kP = 0.15; // 0.5
         public static final double kI = 0.001;
@@ -131,13 +144,13 @@ public final class Constants {
     public static final class Pitch {
 
         /* Motor + Encoder IDs */
-        public static final int pitchMotorID = 11;
+        public static final int pitchMotorID = 31;
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.001;
-        public static final double minPitchPosition = 0.404541015625; // -0.092529296875; // 0.905761;
-        public static final double maxPitchPosition = 0.515625; // 0.0185546875; // 1.02;
+        public static final double minPitchPosition = 0.947; // -0.092529296875; // 0.905761;
+        public static final double maxPitchPosition = 0.034; // 0.0185546875; // 1.02;
         public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
@@ -146,9 +159,10 @@ public final class Constants {
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 0.435625;
         public static final double climbPosition = 0.513;
-
+        public static final double setpointAmp = 0.49823;
+        
         /* PID Constants */
-        public static final double kP = 250.0;
+        public static final double kP = 0.0001;
         public static final double kI = 0.01;
         public static final double kD = 0;
 
@@ -161,7 +175,9 @@ public final class Constants {
     public static final class Climber {
 
         /* Motor IDs */
-        public static final int winchMotorID = 19;
+        public static final int winchMotorID = 42;
+        
+        public static final int winchMotor2ID = 43;
 
         /* Positions */
         public static final double stowedPosition = 0;
@@ -173,16 +189,17 @@ public final class Constants {
     public static final class Intake {
 
         /* Motor IDs */
-        public static final int intakeMotorID = 4;
+        public static final int intakeMotorID = 4;  //4
+        public static final int intakeMotor2ID = 44;
         public static final int armID = 55;
         public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
-        public static final double stowedPosition = 0.0151366531;//-0.040283203125; 
-        public static final double travelPosition = 0.030419856; // -0.025
-        public static final double deployedPosition = 0.1818847;//0.12646484375;
+        public static final double stowedPosition = -0.1088;//-0.040283203125; 
+        public static final double travelPosition = -0.156; // -0.025
+        public static final double deployedPosition = -0.288;//0.12646484375;
 
-        public static final double intakeRPM = 5000;
+        public static final double intakeRPM = 4000; //5000
 
         /* PID */
         public static final double arm_kP = 2.5;
@@ -222,7 +239,7 @@ public final class Constants {
 
 
     public static final class Swerve {
-        public static final int pigeonID = 16;
+        public static final int pigeonID = 0;
 
         public static final COTSTalonFXSwerveConstants chosenModule =
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L3);

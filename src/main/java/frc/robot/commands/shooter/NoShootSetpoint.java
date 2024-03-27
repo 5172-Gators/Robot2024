@@ -10,13 +10,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-public class ShootSetpoint extends Command {
+public class NoShootSetpoint extends Command {
 
   Shooter s_Shooter;
   Pitch s_Pitch;
@@ -32,17 +33,16 @@ public class ShootSetpoint extends Command {
   DoubleSupplier pitch_aim;
   
   /** Creates a new ShootSetpoint. */
-  public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led) {
+  public NoShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, 
+          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim,  Pitch m_pitch, Turret m_turret, LEDs m_led) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
     this.yaw = yaw;
-    this.fire = fire;
+
     this.yaw_aim = yaw_aim;
     this.pitch_aim = pitch_aim;
 
-    s_Shooter = m_shooter;
     s_Pitch = m_pitch;
     s_Turret = m_turret;
     s_LEDs = m_led;
@@ -50,7 +50,9 @@ public class ShootSetpoint extends Command {
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
   }
 
-  // Called when the command is initially scheduled.
+
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
@@ -63,24 +65,16 @@ public class ShootSetpoint extends Command {
     this.yaw += this.yaw_aim.getAsDouble()*Constants.Turret.aimCoefficient;
     // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
 
-    s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
     s_Pitch.setPosition(this.pitch);
     s_Turret.setPosition(this.yaw);
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
-      s_LEDs.setColor(0.91);
-      if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
-    } else {
-      s_LEDs.setColor(-0.11);
-    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+ 
     s_LEDs.setColor(0.99);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);

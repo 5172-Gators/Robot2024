@@ -23,8 +23,8 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
 
   /* Initialize Motors */
-  CANSparkMax leftShooter;
-  CANSparkMax rightShooter;
+  CANSparkFlex leftShooter;
+  CANSparkFlex rightShooter;
   CANSparkFlex kicker;
 
   RelativeEncoder rightShooterEncoder;
@@ -50,13 +50,13 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     
     /* define + configure left shooter motor */
-    leftShooter = new CANSparkMax(Constants.Shooter.leftMotorID, MotorType.kBrushless);
+    leftShooter = new CANSparkFlex(Constants.Shooter.leftMotorID, MotorType.kBrushless);
     leftShooter.setIdleMode(IdleMode.kCoast);
     leftShooterEncoder = leftShooter.getEncoder();
     leftShooterPID = leftShooter.getPIDController();
 
     /* define + configure right shooter motor */
-    rightShooter = new CANSparkMax(Constants.Shooter.rightMotorID, MotorType.kBrushless);
+    rightShooter = new CANSparkFlex(Constants.Shooter.rightMotorID, MotorType.kBrushless);
     rightShooter.setIdleMode(IdleMode.kCoast);
     rightShooterEncoder = rightShooter.getEncoder();
     rightShooterPID = rightShooter.getPIDController();
@@ -68,12 +68,12 @@ public class Shooter extends SubsystemBase {
     kickerPID = kicker.getPIDController();
 
     /* Set Inverted */
-    leftShooter.setInverted(true);
-    rightShooter.setInverted(false);
+    leftShooter.setInverted(false);
+    rightShooter.setInverted(true);
     kicker.setInverted(true);
 
     /* Beam Break Sensors */
-    kickerSensor = new DigitalInput(9);
+    kickerSensor = new DigitalInput(0);
     shooterSensor = new DigitalInput(1);
 
     /* Right Side PID */
@@ -210,8 +210,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
-    // SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
+    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
+    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
     // SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
     // SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());

@@ -23,14 +23,21 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
   CANSparkFlex intakeMotor;
+  
+  CANSparkFlex intakeMotor2;
   CANSparkFlex jointMotor;
 
   CANcoder armEncoder;
 
   PIDController intakeArmPID;
+  
 
   SparkPIDController intakeWheelsPID;
+  
+  SparkPIDController intakeWheelsPID2;
   RelativeEncoder intakeWheelsEncoder;
+  
+  RelativeEncoder intakeWheelsEncoder2;
 
   double setpoint = Constants.Intake.stowedPosition;
 
@@ -42,10 +49,18 @@ public class Intake extends SubsystemBase {
     intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(IdleMode.kBrake);
-    intakeMotor.setInverted(false);
-    intakeMotor.setSmartCurrentLimit(35, 4);
+    intakeMotor.setInverted(true);
+    intakeMotor.setSmartCurrentLimit(39, 0);
 
     intakeWheelsEncoder = intakeMotor.getEncoder();
+
+    intakeMotor2 = new CANSparkFlex(Constants.Intake.intakeMotor2ID, MotorType.kBrushless);
+    intakeMotor2.restoreFactoryDefaults();
+    intakeMotor2.setIdleMode(IdleMode.kBrake);
+    intakeMotor2.setInverted(true);
+    intakeMotor2.setSmartCurrentLimit(39, 0);
+
+    intakeWheelsEncoder2 = intakeMotor2.getEncoder();
 
     // define + configure the motor that deploys + stows the intake
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
@@ -70,6 +85,15 @@ public class Intake extends SubsystemBase {
     intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
     intakeWheelsPID.setIZone(Constants.Intake.wheels_IZone);
 
+        intakeWheelsPID2 = intakeMotor2.getPIDController();
+
+    intakeWheelsPID2.setP(Constants.Intake.wheels_kP);
+    intakeWheelsPID2.setI(Constants.Intake.wheels_kI);
+    intakeWheelsPID2.setD(Constants.Intake.wheels_kD);
+    intakeWheelsPID2.setFF(Constants.Intake.wheels_kFF);
+    intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
+
   }
 
   public double getIntakePosition(){
@@ -81,6 +105,8 @@ public class Intake extends SubsystemBase {
   public void setIntakeRPM(double speed){
 
     intakeWheelsPID.setReference(speed, CANSparkFlex.ControlType.kVelocity);
+    
+    intakeWheelsPID2.setReference(speed, CANSparkFlex.ControlType.kVelocity);
 
   }
 
@@ -119,6 +145,8 @@ public class Intake extends SubsystemBase {
 
   public void stopIntake() {
     intakeMotor.set(0);
+    
+    intakeMotor2.set(0);
   }
 
   @Override
@@ -127,13 +155,13 @@ public class Intake extends SubsystemBase {
 
     SmartDashboard.putNumber("Intake Current", intakeMotor.getOutputCurrent());
 
-    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+     SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
     // SmartDashboard.putNumber("Intake RPM", intakeWheelsEncoder.getVelocity());
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 
-    // SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
+     SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
 
     // SmartDashboard.putNumber("Intake Arm Current", jointMotor.getOutputCurrent());
 

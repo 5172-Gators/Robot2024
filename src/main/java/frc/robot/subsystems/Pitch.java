@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -20,7 +21,7 @@ public class Pitch extends SubsystemBase {
   /** Creates a new TurretPitch. */
   
   CANcoder pitchEncoder;
-  CANSparkMax pitchMotor;
+  CANSparkFlex pitchMotor;
   PIDController pitchPID;
   double currentPitch;
 
@@ -30,10 +31,10 @@ public class Pitch extends SubsystemBase {
   public Pitch() {
 
     // define + configure pitch motor
-    pitchMotor = new CANSparkMax(Constants.Pitch.pitchMotorID, MotorType.kBrushed);
+    pitchMotor = new CANSparkFlex(Constants.Pitch.pitchMotorID, MotorType.kBrushless);
     pitchMotor.restoreFactoryDefaults();
     pitchMotor.setIdleMode(IdleMode.kBrake);
-    pitchMotor.setSmartCurrentLimit(5);
+    pitchMotor.setSmartCurrentLimit(30);
 
     // pitch PID
     pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
@@ -120,11 +121,11 @@ public class Pitch extends SubsystemBase {
     // This method will be called once per scheduler run
 
     currentPitch = getPosition();
-    // double currentVoltage = pitchMotor.getOutputCurrent();
+    double currentVoltage = pitchMotor.getOutputCurrent();
 
-    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
-    // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
-    // SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
+    SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
+    SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 
   }

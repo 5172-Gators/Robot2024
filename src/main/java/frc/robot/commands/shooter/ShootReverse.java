@@ -16,7 +16,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-public class ShootSetpoint extends Command {
+public class ShootReverse extends Command {
 
   Shooter s_Shooter;
   Pitch s_Pitch;
@@ -32,7 +32,7 @@ public class ShootSetpoint extends Command {
   DoubleSupplier pitch_aim;
   
   /** Creates a new ShootSetpoint. */
-  public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
+  public ShootReverse(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
           DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
@@ -60,17 +60,16 @@ public class ShootSetpoint extends Command {
 
     // SmartDashboard.putNumber("yaw sp", this.yaw);
     // SmartDashboard.putNumber("pitch sp", this.pitch);
-    this.yaw += this.yaw_aim.getAsDouble()*Constants.Turret.aimCoefficient;
+    
     // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
 
-    s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
-    s_Pitch.setPosition(this.pitch);
-    s_Turret.setPosition(this.yaw);
+    s_Shooter.setShooterRPM(-100, -100);
+    
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
+    if (s_Shooter.shooterIsReady()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Shooter.setKickerRPM(-500);
     } else {
       s_LEDs.setColor(-0.11);
     }
@@ -82,8 +81,7 @@ public class ShootSetpoint extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Shooter.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    
   }
 
   // Returns true when the command should end.

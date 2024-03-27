@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.56,
-        "y": 4.12
+        "x": 2.789585037087334,
+        "y": 4.087081954477746
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9932481519741916,
-        "y": 1.9674205396912936
+        "x": 1.0563812283116707,
+        "y": 1.862023010779259
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "auto2Path1End"
     },
     {
       "anchor": {
@@ -60,7 +60,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "auto2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -43,7 +43,7 @@ public class Climber extends SubsystemBase {
     // climbEncoder = climbMotor.getEncoder();
     winchEncoder = winchMotor.getEncoder();
 
-    magLimSwitch = new DigitalInput(0);
+    magLimSwitch = new DigitalInput(9);
   }
 
   public void manualClimberControl (double speed){

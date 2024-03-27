@@ -28,6 +28,8 @@ import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.shooter.AmpScore;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoAimShootSetpoint;
+import frc.robot.commands.shooter.NoShootSetpoint;
+import frc.robot.commands.shooter.ShootReverse;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpointCalibration;
 import frc.robot.commands.shooter.StopShooter;
@@ -68,7 +70,7 @@ public class RobotContainer {
     // Rotate Stick
     private final JoystickButton robotCentric = new JoystickButton(rotateStick, 1);
     private final JoystickButton zeroGyroButton = new JoystickButton(rotateStick, 2);
-    
+    private final JoystickButton shooterReverse = new JoystickButton(rotateStick, 3);
 
     /* Operator Controls */
     private static final int pitchAdjust = Joystick.AxisType.kY.value;
@@ -80,15 +82,17 @@ public class RobotContainer {
     private final JoystickButton autoAim = new JoystickButton(operatorStick, 3);
     private final JoystickButton shooterSetpointStage = new JoystickButton(operatorStick, 8);
     private final JoystickButton shooterSetpointSpeaker = new JoystickButton(operatorStick, 9);
-    private final JoystickButton shooterSetpointAmp = new JoystickButton(operatorStick, 10);
+    private final JoystickButton ampShootSetpoint = new JoystickButton(operatorStick, 10);
     private final JoystickButton shooterEject = new JoystickButton(operatorStick, 4); // poop
     private final JoystickButton ampScoringSetpoint = new JoystickButton(operatorStick, 7);
     // private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
     // private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
     private final JoystickButton shooterCalibrationMode = new JoystickButton(operatorStick, 14);
     private final JoystickButton climbModeButton = new JoystickButton(operatorStick, 5);
-
-    /* Test Buttons */
+   // private final JoystickButton shooterReverse = new JoystickButton(operatorStick, 15);
+    //reverses shooter incase note gets past kicker wheels, currently assinged to thumb left (3) on rotate stick
+   
+   /* Test Buttons */
     
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
@@ -131,12 +135,22 @@ public class RobotContainer {
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
         NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, shootingTables,
                         () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
+      
+        NamedCommands.registerCommand("Eject", new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, () -> true,
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+        // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
+     //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
+       
+        // (double leftRPM, double rightRPM, double pitch, double yaw, 
+        //   DoubleSupplier yaw_aim, DoubleSupplier pitch_aim,  Pitch m_pitch, Turret m_turret, LEDs m_led) {
+       
         NamedCommands.registerCommand("resetHeading", new InstantCommand(() -> s_Swerve.setHeading(s_Swerve.getHeading())));
 
         NamedCommands.registerCommand("setIntakeDefaultPositionDeploy", new InstantCommand(() -> s_Intake.setDefaultCommand(new DeployIntake(s_Intake))));
         NamedCommands.registerCommand("setIntakeDefaultPositionTravel", new InstantCommand(() -> s_Intake.setDefaultCommand(new IntakeTravel(s_Intake))));
         
-        // Configure default commands
+         
+         // Configure default commands
         configureDefaultCommands();
 
         // Configure the button bindings
@@ -216,12 +230,18 @@ public class RobotContainer {
                         () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
 
         shooterSetpointStage.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
- 
-        shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
-        shooterSetpointAmp.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
+        shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
+                                      () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
+
+        //shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
+        //                             s_Shooter, s_Pitch, s_Turret, s_LEDs));
+        //USE THIS #10
+         ampShootSetpoint.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.setpointAmp, -11.047677, fireShooter, 
+                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
+
+        shooterReverse.onTrue(new ShootSetpoint(-500.0, -500.0, Constants.Pitch.intakePosition, 0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
         shooterEject.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
@@ -263,7 +283,7 @@ public class RobotContainer {
         autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
-
+        autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
    
     }
 

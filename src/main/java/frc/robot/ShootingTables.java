@@ -17,22 +17,25 @@ public final class ShootingTables {
 
 
         // Pitch angle LUT (floor distance estimate, pitch angle)
-        m_pitchLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(0.5153));
+        m_pitchLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(0.52));
         m_pitchLUT.put(new InterpolatingDouble(69.5), new InterpolatingDouble(0.468));
         m_pitchLUT.put(new InterpolatingDouble(90.0), new InterpolatingDouble(0.4484));
         m_pitchLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(0.4331));
-
+       // m_pitchLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(0.4331));
+       
         // Pitch angle LUT (floor distance estimate, left flywheel RPM)
         m_RPMLeftLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(1700.0));
         m_RPMLeftLUT.put(new InterpolatingDouble(69.5), new InterpolatingDouble(1800.0));
         m_RPMLeftLUT.put(new InterpolatingDouble(90.0), new InterpolatingDouble(1800.0));
         m_RPMLeftLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(1800.0));
-
+        //m_RPMLeftLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(1800.0));
+        
         // Pitch angle LUT (floor distance estimate, right flywheel RPM)
         m_RPMRightLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(1700.0));
         m_RPMRightLUT.put(new InterpolatingDouble(69.5), new InterpolatingDouble(2500.0));
         m_RPMRightLUT.put(new InterpolatingDouble(90.0), new InterpolatingDouble(2500.0));
         m_RPMRightLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(3000.0));
+       // m_RPMRightLUT.put(new InterpolatingDouble(107.46), new InterpolatingDouble(3000.0));
 
     }
 
@@ -52,6 +55,7 @@ public final class ShootingTables {
         // SmartDashboard.putNumber("requestedPitch", this.getPitch(dist));
         // SmartDashboard.putNumber("requestedLeftRPM", this.getLeftRPM(dist));
         // SmartDashboard.putNumber("requestedRightRPM", this.getRightRPM(dist));
+        
         return new AimingParameters(this.getPitch(dist), this.getLeftRPM(dist), this.getRightRPM(dist));
     }
     

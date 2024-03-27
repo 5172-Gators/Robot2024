@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.824717546724679,
-        "y": 3.115082521177881
+        "x": 2.0635131712488803,
+        "y": 3.4781184540971077
       },
       "prevControl": {
-        "x": 4.007512037848611,
-        "y": 2.3304564726105195
+        "x": 3.246307662372812,
+        "y": 2.6934924055297462
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "auto2Path3End"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "auto2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

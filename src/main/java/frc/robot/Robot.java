@@ -51,11 +51,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     
-    // double pitch_m = m_robotContainer.s_Pitch.getPitchDegrees();
+    double pitch_m = m_robotContainer.s_Pitch.getPitchDegrees();
     // SmartDashboard.putNumber("LimelightHeightFromFloor", m_robotContainer.s_VisionLimelight.getLimelightHeightFromFloor(pitch_m));
     // SmartDashboard.putNumber("camPitch", m_robotContainer.s_VisionLimelight.getCameraPitch(pitch_m));
     // SmartDashboard.putNumber("LimelightHorzDistFromPivot", m_robotContainer.s_VisionLimelight.getLimelightHorizontalDistanceFromPivot(pitch_m));
-    // SmartDashboard.putNumber("distanceToTarget", m_robotContainer.s_VisionLimelight.getDist(pitch_m, m_robotContainer.s_VisionLimelight.currentTarget()));
+    SmartDashboard.putNumber("distanceToTarget", m_robotContainer.s_VisionLimelight.getDist(pitch_m, m_robotContainer.s_VisionLimelight.currentTarget()));
 
     CommandScheduler.getInstance().run();
   }
