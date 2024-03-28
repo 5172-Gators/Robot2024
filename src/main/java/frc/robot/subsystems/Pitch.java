@@ -5,8 +5,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -22,10 +25,12 @@ public class Pitch extends SubsystemBase {
   
   CANcoder pitchEncoder;
   CANSparkFlex pitchMotor;
+  SparkPIDController relativePID;
+  RelativeEncoder relativePitchEncoder;
   PIDController pitchPID;
   double currentPitch;
 
-  double setpoint=Constants.Pitch.intakePosition;
+  double setpoint = Constants.Pitch.intakePosition;
   Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
   
   public Pitch() {
@@ -38,11 +43,25 @@ public class Pitch extends SubsystemBase {
 
     // pitch PID
     pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
-  
 
+    relativePID = pitchMotor.getPIDController();
+    relativePID.setP(Constants.Pitch.kP);
+    relativePID.setI(Constants.Pitch.kI);
+    relativePID.setD(Constants.Pitch.kD);
+    relativePID.setFF(Constants.Pitch.kFF);
+  
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
+
+    // configure relative encoder
+    relativePitchEncoder = pitchMotor.getEncoder();
     
+  }
+
+  public double getRelativePitchPosition(){
+
+    return relativePitchEncoder.getPosition();
+
   }
 
   public void movePitch(double speed){
@@ -84,18 +103,22 @@ public class Pitch extends SubsystemBase {
   public void setPosition(double position){
 
     this.setpoint = position;
-    currentPitch = getPosition();
+    currentPitch = getRelativePitchPosition(); //getPosition();
+
+    relativePID.setReference(position, CANSparkBase.ControlType.kPosition);
     
     // positive speed moves down, negative speed moves up
 
-    double speed = -pitchPID.calculate(currentPitch, position);
+    
+    // uses the absolute encoder for PID controller
+    // double speed = -pitchPID.calculate(currentPitch, position);
 
-    if (currentPitch <= Constants.Pitch.minPitchPosition)
-      speed = Math.min(speed,0); // Clipping so it's positive
-    else if (currentPitch >= Constants.Pitch.maxPitchPosition)
-      speed = Math.max(speed,0); // Clipping so it's negative
+    // if (currentPitch <= Constants.Pitch.minPitchPosition)
+    //   speed = Math.min(speed,0); // Clipping so it's positive
+    // else if (currentPitch >= Constants.Pitch.maxPitchPosition)
+    //   speed = Math.max(speed,0); // Clipping so it's negative
 
-    pitchMotor.set(speed);
+    // pitchMotor.set(speed);
 
   }
 
@@ -121,8 +144,10 @@ public class Pitch extends SubsystemBase {
     // This method will be called once per scheduler run
 
     currentPitch = getPosition();
+    double relativePitchPosition = getRelativePitchPosition();
     double currentVoltage = pitchMotor.getOutputCurrent();
 
+    SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
     SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
     SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
     SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);

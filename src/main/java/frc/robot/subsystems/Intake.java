@@ -33,10 +33,9 @@ public class Intake extends SubsystemBase {
   
 
   SparkPIDController intakeWheelsPID;
-  
   SparkPIDController intakeWheelsPID2;
+
   RelativeEncoder intakeWheelsEncoder;
-  
   RelativeEncoder intakeWheelsEncoder2;
 
   double setpoint = Constants.Intake.stowedPosition;
@@ -73,7 +72,7 @@ public class Intake extends SubsystemBase {
 
     // arm PID
     intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
-    intakeArmPID.setIZone(Constants.Intake.arm_IZone);
+    // intakeArmPID.setIZone(Constants.Intake.arm_IZone);
 
     // wheels PID
     intakeWheelsPID = intakeMotor.getPIDController();
@@ -83,16 +82,16 @@ public class Intake extends SubsystemBase {
     intakeWheelsPID.setD(Constants.Intake.wheels_kD);
     intakeWheelsPID.setFF(Constants.Intake.wheels_kFF);
     intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
-    intakeWheelsPID.setIZone(Constants.Intake.wheels_IZone);
+    // intakeWheelsPID.setIZone(Constants.Intake.wheels_IZone);
 
-        intakeWheelsPID2 = intakeMotor2.getPIDController();
+    intakeWheelsPID2 = intakeMotor2.getPIDController();
 
     intakeWheelsPID2.setP(Constants.Intake.wheels_kP);
     intakeWheelsPID2.setI(Constants.Intake.wheels_kI);
     intakeWheelsPID2.setD(Constants.Intake.wheels_kD);
     intakeWheelsPID2.setFF(Constants.Intake.wheels_kFF);
     intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
-    intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
+    // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
   }
 

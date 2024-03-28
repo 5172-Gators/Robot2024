@@ -238,7 +238,7 @@ public class RobotContainer {
         //shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
         //                             s_Shooter, s_Pitch, s_Turret, s_LEDs));
         //USE THIS #10
-         ampShootSetpoint.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.setpointAmp, -11.047677, fireShooter, 
+        ampShootSetpoint.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.setpointAmp, -11.047677, fireShooter, 
                                        () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
 
         shooterReverse.onTrue(new ShootSetpoint(-500.0, -500.0, Constants.Pitch.intakePosition, 0, fireShooter,
