@@ -61,7 +61,7 @@ public final class Constants {
         // left PID
         public static final double left_kP = 0.00046;
         public static final double left_kI = 0.000001;
-        public static final double left_kD = 0;
+        public static final double left_kD = 0.001;
         public static final double left_kFF = 0.00023;
         public static final double left_IZone = 200;
 
@@ -113,6 +113,7 @@ public final class Constants {
         public static final double R_intakingPosition = 0;
         public static final double turretAmpPosition = -11.047677; //counter
         public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
+        
         /* PID */
         public static final double kP = 0.15; // 0.5
         public static final double kI = 0.001;
@@ -137,7 +138,6 @@ public final class Constants {
         public static final double blue = (0.87); // ready to shoot
         public static final double strobeBlue = (-0.09); // looking for target
 
-
     }
 
 
@@ -148,13 +148,13 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0;
+        public static final double allowableError = 0.002;
         public static final double minPitchPosition = 0; // encoder units = 0.01
         public static final double maxPitchPosition = 1; // encoder units = 0.67
         public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
-        public static final double intakePosition = -1.0;//-1.67;//-1.0;//0.05; // 0.9592; 
+        public static final double intakePosition = 0.96;//-1.67;//-1.0;//0.05; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 0.435625;
@@ -162,10 +162,11 @@ public final class Constants {
         public static final double setpointAmp = 0.49823;
         
         /* PID Constants */
-        public static final double kP = 0.2;
-        public static final double kI = 0.0;
-        public static final double kD = 0;
-        public static final double kFF = 0;
+        public static final double kP = 37;
+        public static final double kI = 0;
+        public static final double kD = 0.08;
+        public static final double kFF = 0.1;
+        public static final double IZone = 0;
 
         public static final double minOutput = -1;
         public static final double maxOutput = 1;
@@ -191,22 +192,24 @@ public final class Constants {
 
         /* Motor IDs */
         public static final int intakeMotorID = 4;  //4
-        public static final int intakeMotor2ID = 44;
+        public static final int intakeMotor2ID = 44; // TODO: change the name of these two motors to be less vague
         public static final int armID = 55;
         public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
-        public static final double stowedPosition = -0.1088;//-0.040283203125; 
-        public static final double travelPosition = -0.156; // -0.025
+
+        // new travel = -0.1188
+        public static final double stowedPosition = -0.1098;
+        public static final double travelPosition = -0.1098;//-0.156; // -0.025
         public static final double deployedPosition = -0.288;//0.12646484375;
 
         public static final double intakeRPM = 5000;
 
         /* PID */
-        public static final double arm_kP = 0.1;
-        public static final double arm_kI = 0.00;
+        public static final double arm_kP = 1.4;
+        public static final double arm_kI = 0.0000003;
         public static final double arm_kD = 0;
-        // public static final double arm_IZone = 0.05;
+        public static final double arm_IZone = 0.001;
 
         public static final int stall_current_lim = 40;
         public static final int free_current_lim = 4;
@@ -220,7 +223,7 @@ public final class Constants {
         public static final double maxOutput = 1;
         public static final double minOutput = -1;
 
-        public static final double allowableError = 0.01;
+        public static final double allowableError = 0.02;
 
     }
 

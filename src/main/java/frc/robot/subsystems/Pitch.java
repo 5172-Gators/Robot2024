@@ -25,8 +25,10 @@ public class Pitch extends SubsystemBase {
   
   CANcoder pitchEncoder;
   CANSparkFlex pitchMotor;
+
   SparkPIDController relativePID;
   RelativeEncoder relativePitchEncoder;
+
   PIDController pitchPID;
   double currentPitch;
 
@@ -40,6 +42,7 @@ public class Pitch extends SubsystemBase {
     pitchMotor.restoreFactoryDefaults();
     pitchMotor.setIdleMode(IdleMode.kBrake);
     pitchMotor.setSmartCurrentLimit(30);
+    pitchMotor.setInverted(true);
 
     // pitch PID
     pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
@@ -49,6 +52,7 @@ public class Pitch extends SubsystemBase {
     relativePID.setI(Constants.Pitch.kI);
     relativePID.setD(Constants.Pitch.kD);
     relativePID.setFF(Constants.Pitch.kFF);
+    relativePID.setIZone(Constants.Pitch.IZone);
   
     // define + configure CANcoder
     pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
@@ -87,7 +91,8 @@ public class Pitch extends SubsystemBase {
 
   public double getPosition(){
 
-    return pitchEncoder.getAbsolutePosition().getValueAsDouble();
+    return relativePitchEncoder.getPosition();
+    // return pitchEncoder.getAbsolutePosition().getValueAsDouble();
 
   }
 
@@ -102,11 +107,13 @@ public class Pitch extends SubsystemBase {
 
   public void setPosition(double position){
 
+    // had to change to relative encoder so we could use feedforward
     this.setpoint = position;
     currentPitch = getRelativePitchPosition(); //getPosition();
 
     relativePID.setReference(position, CANSparkBase.ControlType.kPosition);
     
+
     // positive speed moves down, negative speed moves up
 
     
