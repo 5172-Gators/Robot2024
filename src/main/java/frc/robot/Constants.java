@@ -149,12 +149,17 @@ public final class Constants {
         public static final double climbPosition = 0.513;
         public static final double setpointAmp = 0.49823;
         
-        /* PID Constants */
-        public static final double kP = 37;
-        public static final double kI = 0;
-        public static final double kD = 0.08;
-        public static final double kFF = 0.1;
-        public static final double IZone = 0;
+        /* Relative Encoder PID Constants */
+        public static final double rel_kP = 37;
+        public static final double rel_kI = 0;
+        public static final double rel_kD = 0.08;
+        public static final double rel_kFF = 0.1;
+        public static final double rel_IZone = 0;
+
+        /* Absolute Encoder PID Constants */
+        public static final double abs_kP = 0.1;
+        public static final double abs_kI = 0.0;
+        public static final double abs_kD = 0.0;
 
         public static final double minOutput = -1;
         public static final double maxOutput = 1;

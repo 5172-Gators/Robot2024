@@ -5,9 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -24,7 +25,7 @@ import frc.robot.Constants;
 public class Pitch extends SubsystemBase {
   /** Creates a new TurretPitch. */
   
-  CANcoder pitchEncoder;
+  CANcoder absolutePitchEncoder;
   CANSparkFlex pitchMotor;
 
   SparkPIDController relativePID;
@@ -45,20 +46,21 @@ public class Pitch extends SubsystemBase {
     pitchMotor.setSmartCurrentLimit(30);
     pitchMotor.setInverted(true);
 
-    // pitch PID
-    pitchPID = new PIDController(Constants.Pitch.kP, Constants.Pitch.kI, Constants.Pitch.kD);
+    // absolute encoder pitch PID
+    pitchPID = new PIDController(Constants.Pitch.abs_kP, Constants.Pitch.abs_kI, Constants.Pitch.abs_kD);
 
+    // relative encoder pitch PID
     relativePID = pitchMotor.getPIDController();
-    relativePID.setP(Constants.Pitch.kP);
-    relativePID.setI(Constants.Pitch.kI);
-    relativePID.setD(Constants.Pitch.kD);
-    relativePID.setFF(Constants.Pitch.kFF);
-    relativePID.setIZone(Constants.Pitch.IZone);
+    relativePID.setP(Constants.Pitch.rel_kP);
+    relativePID.setI(Constants.Pitch.rel_kI);
+    relativePID.setD(Constants.Pitch.rel_kD);
+    relativePID.setFF(Constants.Pitch.rel_kFF);
+    relativePID.setIZone(Constants.Pitch.rel_IZone);
   
     // define + configure CANcoder
-    //pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
+    absolutePitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
 
-    // configure relative encoder
+    // define relative encoder
     relativePitchEncoder = pitchMotor.getEncoder();
 
     // soft limits
@@ -67,12 +69,6 @@ public class Pitch extends SubsystemBase {
 
     // pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Pitch.minPitchPosition);
     // pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
-
-  }
-
-  public double getRelativePitchPosition(){
-
-    return relativePitchEncoder.getPosition();
 
   }
 
@@ -97,22 +93,29 @@ public class Pitch extends SubsystemBase {
 
   }
 
-  public double getPosition(){
+  public double getRelativePitchPosition(){
 
     return relativePitchEncoder.getPosition();
-    // return pitchEncoder.getAbsolutePosition().getValueAsDouble();
+
+  }
+
+  public double getAbsolutePitchPosition(){
+
+    return absolutePitchEncoder.getAbsolutePosition().getValueAsDouble();
 
   }
 
   public double encoderUnitsToDegrees(double pos) {
-    //pos= relativePitchEncoder.getPosition();
-    //return (pos + Constants.Pitch.horizontalOffset) * 360;
-    //SmartDashboard.putNumber("pitchdegrees", pos);
-    return ((pos + Constants.Pitch.horizontalOffset) / 23.33) * 360;
+    
+    // pos = -1 * this.getAbsolutePitchPosition();
+    // SmartDashboard.putNumber("pitchdegrees", pos);
+    return (pos - Constants.Pitch.horizontalOffset) * 360;
+    
+    // return ((pos + Constants.Pitch.horizontalOffset) / 22.25) * 360;
   }
 
   public double getPitchDegrees() {
-    double pos = this.currentPitch;//this.getPosition();
+    double pos = this.currentPitch / 23.3;//this.getRelativePitchPosition();
     return encoderUnitsToDegrees(pos);
   }
 
@@ -145,7 +148,7 @@ public class Pitch extends SubsystemBase {
   }
 
   public boolean isReady() {
-    double absError = Math.abs(this.getPosition() - this.setpoint);
+    double absError = Math.abs(this.getRelativePitchPosition() - this.setpoint);
     if (debounce.calculate(absError <= Constants.Pitch.allowableError)){
 
       return true;
@@ -161,13 +164,16 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    currentPitch = getPosition();
+    currentPitch = getRelativePitchPosition();
     double relativePitchPosition = getRelativePitchPosition();
     double currentVoltage = pitchMotor.getOutputCurrent();
+    double absolutePosition = getAbsolutePitchPosition();
+
 
     SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
     SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
     SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
+    SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
     SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 

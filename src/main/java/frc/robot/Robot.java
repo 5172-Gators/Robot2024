@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     
     double pitch_m = m_robotContainer.s_Pitch.getPitchDegrees();
-    // SmartDashboard.putNumber("LimelightHeightFromFloor", m_robotContainer.s_VisionLimelight.getLimelightHeightFromFloor(pitch_m));
+    SmartDashboard.putNumber("LimelightHeightFromFloor", m_robotContainer.s_VisionLimelight.getLimelightHeightFromFloor(pitch_m));
     // SmartDashboard.putNumber("camPitch", m_robotContainer.s_VisionLimelight.getCameraPitch(pitch_m));
     // SmartDashboard.putNumber("LimelightHorzDistFromPivot", m_robotContainer.s_VisionLimelight.getLimelightHorizontalDistanceFromPivot(pitch_m));
     SmartDashboard.putNumber("distanceToTarget", m_robotContainer.s_VisionLimelight.getDist(pitch_m, m_robotContainer.s_VisionLimelight.currentTarget()));

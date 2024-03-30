@@ -88,7 +88,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getLimelightHorizontalDistanceFromPivot(double pitch_m) {
-    return Constants.Limelight.limelightRadius*Math.cos(Math.toRadians(pitch_m+Constants.Limelight.camToPivotAngle));
+    return Constants.Limelight.limelightRadius * Math.cos(Math.toRadians(pitch_m + Constants.Limelight.camToPivotAngle));
   }
 
   public double getCameraPitch(double pitch_m) {
@@ -112,7 +112,7 @@ public class Limelight extends SubsystemBase {
     if ((alliance.get() == DriverStation.Alliance.Blue && tagID == 7) 
             || (alliance.get() == DriverStation.Alliance.Red && tagID == 4)) {
       q1 = Math.abs(cam_pitch + y);
-      h1 = Constants.Limelight.speakerAprilTagCenterHeight-getLimelightHeightFromFloor(pitch_m);
+      h1 = Constants.Limelight.speakerAprilTagCenterHeight - getLimelightHeightFromFloor(pitch_m);
       d1 = h1/Math.tan(Math.toRadians(q1));
 
       d2 = getLimelightHorizontalDistanceFromPivot(pitch_m);
@@ -166,13 +166,13 @@ public class Limelight extends SubsystemBase {
     last_id = (int) m_Tid.get();
 
     if (s_camMode == CamMode.Vision) {
+      
       // SmartDashboard.putNumber("tx", x);
       // SmartDashboard.putNumber("ty", y);
       // SmartDashboard.putNumber("ta", a);
       // SmartDashboard.putNumber("tvert", vert);
       // SmartDashboard.putBoolean("tv", target_valid);
       // SmartDashboard.putNumber("tid", last_id);
-      
       SmartDashboard.getNumber("Current Target", currentTarget());
     }
 
