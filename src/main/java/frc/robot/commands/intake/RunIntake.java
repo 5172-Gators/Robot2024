@@ -53,47 +53,65 @@ public class RunIntake extends Command {
     
     // SmartDashboard.putNumber("Intake State", state);
     if (s_Shooter.shooterIsReady())
+
       s_Shooter.stopShooter();
+
     if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor())
+
       s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-    s_LEDs.setColor(-0.09);
+      s_Pitch.setPosition(Constants.Pitch.intakePosition);
+      s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+      s_LEDs.setColor(-0.09);
 
     if (state == 0) {
-      s_Intake.setIntakeRPM(Constants.Intake.intakeRPM);
+
+      s_Intake.setIntakeSpeed(1);
+      // s_Intake.setIntakeRPM(Constants.Intake.intakeRPM); 
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
 
       if (s_Shooter.getShooterSensor() == false) // shooter sensor
         state = 1;
     }
+
     if (state == 1) {
+
       s_Intake.stopIntake();
       s_Shooter.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
 
       if (s_Shooter.getShooterSensor() == true)
         state = 2;
+
     }
+
     if (state == 2) {
+
       s_Shooter.setKickerRPM(Constants.Shooter.kicker_creepRPM);
 
-      
       if (s_Shooter.getShooterSensor() == false)
       state = 3;
-     }
+
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
     s_Shooter.stopKicker();
     s_Intake.stopIntake();
     s_Pitch.stopPitch();
+
     if(state == 3){
+
       Commands.sequence(new LEDTimedCommand(0.15, 0.5, s_LEDs));
+
     } else {
+
       s_LEDs.setColor(0.99);
+
     }
+
     state = 0;
   }
 

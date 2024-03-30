@@ -23,17 +23,19 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
   CANSparkFlex intakeMotor;
-  
   CANSparkFlex intakeMotor2;
+  
   CANSparkFlex jointMotor;
 
   CANcoder armEncoder;
+  RelativeEncoder relativeArmEncoder;
 
   PIDController intakeArmPID;
   
-
   SparkPIDController intakeWheelsPID;
   SparkPIDController intakeWheelsPID2;
+
+  SparkPIDController relativeArmPID;
 
   RelativeEncoder intakeWheelsEncoder;
   RelativeEncoder intakeWheelsEncoder2;
@@ -44,7 +46,8 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-    // define + configure the intake wheels motor
+    // intake wheels motors
+    // motor one controls the two big rollers
     intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(IdleMode.kBrake);
@@ -53,6 +56,7 @@ public class Intake extends SubsystemBase {
 
     intakeWheelsEncoder = intakeMotor.getEncoder();
 
+    // motor 2 controls the tiny roller
     intakeMotor2 = new CANSparkFlex(Constants.Intake.intakeMotor2ID, MotorType.kBrushless);
     intakeMotor2.restoreFactoryDefaults();
     intakeMotor2.setIdleMode(IdleMode.kBrake);
@@ -61,47 +65,71 @@ public class Intake extends SubsystemBase {
 
     intakeWheelsEncoder2 = intakeMotor2.getEncoder();
 
-    // define + configure the motor that deploys + stows the intake
+    // motor that deploys + stows the intake
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
-    jointMotor.setInverted(false);
+    jointMotor.setInverted(true);
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
-    // create instance of absolute encoder
+    // absolute encoder
     armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
 
-    // arm PID
-    intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
-    // intakeArmPID.setIZone(Constants.Intake.arm_IZone);
+    // relative encoder
+    relativeArmEncoder = jointMotor.getEncoder();
 
+    // arm PID using absolute encoder
+    intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
+
+    // arm PID using relative encoder
+    relativeArmPID = jointMotor.getPIDController();
+    relativeArmPID.setP(Constants.Intake.arm_kP);
+    relativeArmPID.setI(Constants.Intake.arm_kI);
+    relativeArmPID.setD(Constants.Intake.arm_kD);
+    relativeArmPID.setFF(Constants.Intake.arm_kFF);
+    relativeArmPID.setIZone(Constants.Intake.arm_IZone);
+    
     // wheels PID
     intakeWheelsPID = intakeMotor.getPIDController();
 
-    intakeWheelsPID.setP(Constants.Intake.wheels_kP);
-    intakeWheelsPID.setI(Constants.Intake.wheels_kI);
-    intakeWheelsPID.setD(Constants.Intake.wheels_kD);
-    intakeWheelsPID.setFF(Constants.Intake.wheels_kFF);
+    intakeWheelsPID.setP(Constants.Intake.firstWheels_kP);
+    intakeWheelsPID.setI(Constants.Intake.firstWheels_kI);
+    intakeWheelsPID.setD(Constants.Intake.firstWheels_kD);
+    intakeWheelsPID.setFF(Constants.Intake.firstWheels_kFF);
     intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
-    // intakeWheelsPID.setIZone(Constants.Intake.wheels_IZone);
+    intakeWheelsPID.setIZone(Constants.Intake.firstWheels_IZone);
 
     intakeWheelsPID2 = intakeMotor2.getPIDController();
 
-    intakeWheelsPID2.setP(Constants.Intake.wheels_kP);
-    intakeWheelsPID2.setI(Constants.Intake.wheels_kI);
-    intakeWheelsPID2.setD(Constants.Intake.wheels_kD);
-    intakeWheelsPID2.setFF(Constants.Intake.wheels_kFF);
+    intakeWheelsPID2.setP(Constants.Intake.secondWheels_kP);
+    intakeWheelsPID2.setI(Constants.Intake.secondWheels_kI);
+    intakeWheelsPID2.setD(Constants.Intake.secondWheels_kD);
+    intakeWheelsPID2.setFF(Constants.Intake.secondWheels_kFF);
     intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
     // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
   }
 
   public double getIntakePosition(){
+    // switched to relative encoder
 
-    return armEncoder.getPosition().getValueAsDouble();
+    return relativeArmEncoder.getPosition();
+
+    // return armEncoder.getPosition().getValueAsDouble();
+
+  }
+
+  public void setIntakeSpeed(double speed){
+    // open loop
+
+    intakeMotor.set(speed);
+
+    intakeMotor2.set(speed);
 
   }
 
   public void setIntakeRPM(double speed){
+    // PID control, super inconsistant 
+    // don't use until its tuned properly
 
     intakeWheelsPID.setReference(speed, CANSparkFlex.ControlType.kVelocity);
     
@@ -116,16 +144,22 @@ public class Intake extends SubsystemBase {
   }
 
   public void setIntakeArmPosition(double setpoint){
+    // relative PID control
 
     this.setpoint = setpoint;
-    double speed = -intakeArmPID.calculate(getIntakePosition(), setpoint);
 
-    if (this.getIntakePosition() <= Constants.Intake.stowedPosition)
-      speed = Math.min(speed,0); // Clipping so it's positive
-    else if (this.getIntakePosition() >= Constants.Intake.deployedPosition)
-      speed = Math.max(speed,0); // Clipping so it's negative
+    relativeArmPID.setReference(setpoint, CANSparkFlex.ControlType.kPosition);
+    
+    // absolute encoder PID control
+    // this.setpoint = setpoint;
+    // double speed = -intakeArmPID.calculate(getIntakePosition(), setpoint);
 
-    jointMotor.set(speed);
+    // if (this.getIntakePosition() <= Constants.Intake.stowedPosition)
+    //   speed = Math.min(speed,0); // Clipping so it's positive
+    // else if (this.getIntakePosition() >= Constants.Intake.deployedPosition)
+    //   speed = Math.max(speed,0); // Clipping so it's negative
+
+    // jointMotor.set(speed);
 
   }
 
@@ -152,11 +186,13 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Intake Current", intakeMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-     SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
-    // SmartDashboard.putNumber("Intake RPM", intakeWheelsEncoder.getVelocity());
+    // SmartDashboard.putNumber("Intake Motor 1 RPM", intakeWheelsEncoder.getVelocity());
+
+    // SmartDashboard.putNumber("Intake Motor 2 RPM", intakeWheelsEncoder2.getVelocity());
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 

@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -55,11 +56,18 @@ public class Pitch extends SubsystemBase {
     relativePID.setIZone(Constants.Pitch.IZone);
   
     // define + configure CANcoder
-    pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
+    //pitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
 
     // configure relative encoder
     relativePitchEncoder = pitchMotor.getEncoder();
-    
+
+    // soft limits
+    // pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
+    // pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Pitch.minPitchPosition);
+    // pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
+
   }
 
   public double getRelativePitchPosition(){
@@ -80,9 +88,9 @@ public class Pitch extends SubsystemBase {
     // - joystick value moves up
     
     if (currentPitch <= Constants.Pitch.minPitchPosition)
-      speed = Math.min(speed,0); // Clipping so it's positive
+      speed = Math.max(speed,0); // Clipping so it's positive
     else if (currentPitch >= Constants.Pitch.maxPitchPosition)
-      speed = Math.max(speed,0); // Clipping so it's negative
+      speed = Math.min(speed,0); // Clipping so it's negative
 
     pitchMotor.set(speed);
 
@@ -97,17 +105,20 @@ public class Pitch extends SubsystemBase {
   }
 
   public double encoderUnitsToDegrees(double pos) {
-    return (pos+Constants.Pitch.horizontalOffset) * 360;
+    //pos= relativePitchEncoder.getPosition();
+    //return (pos + Constants.Pitch.horizontalOffset) * 360;
+    //SmartDashboard.putNumber("pitchdegrees", pos);
+    return ((pos + Constants.Pitch.horizontalOffset) / 23.33) * 360;
   }
 
   public double getPitchDegrees() {
-    double pos = this.getPosition();
+    double pos = this.currentPitch;//this.getPosition();
     return encoderUnitsToDegrees(pos);
   }
 
   public void setPosition(double position){
 
-    // had to change to relative encoder so we could use feedforward
+    // changed to relative encoder with the new motor
     this.setpoint = position;
     currentPitch = getRelativePitchPosition(); //getPosition();
 

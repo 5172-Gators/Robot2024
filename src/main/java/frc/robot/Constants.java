@@ -27,9 +27,9 @@ public final class Constants {
         // Physical Constants for calculating distance to target
         public static final double speakerAprilTagCenterHeight = 57.125; // inches
         public static final double limelightRadius = 10.5; //10.0625; // inches
-        public static final double camToShooterFrameAngle = 12.1; // degrees
-        public static final double camToPivotAngle = 31.9;//31.9;//32.6; // degrees
-        public static final double floorToPivot = 13.875; // inches
+        public static final double camToShooterFrameAngle = 15;//12.1; // degrees
+        public static final double camToPivotAngle = 34.08;//31.9; // degrees
+        public static final double floorToPivot = 12.82;//13.875; // inches
     }
 
 
@@ -44,15 +44,9 @@ public final class Constants {
         public static final double right_kP = 0.00020;
         public static final double right_kI = 0.000001;
         public static final double right_kD = 0;
-        public static final double right_kFF = 0.00023;
+        public static final double right_kFF = 0.00018;
         public static final double right_IZone = 200;
 
-             // right PID
-        // public static final double right_kP = 0.00043;
-        // public static final double right_kI = 0.000001;
-        // public static final double right_kD = 0.5;
-        // public static final double right_kFF = 0.00023;
-        // public static final double right_IZone = 200;
         public static final double right_maxOutput = 1;
         public static final double right_minOutput = -1;
 
@@ -61,15 +55,9 @@ public final class Constants {
         // left PID
         public static final double left_kP = 0.00046;
         public static final double left_kI = 0.000001;
-        public static final double left_kD = 0.001;
-        public static final double left_kFF = 0.00023;
+        public static final double left_kD = 0.0015;
+        public static final double left_kFF = 0.00015;
         public static final double left_IZone = 200;
-
-        //  public static final double left_kP = 0.00046;
-        // public static final double left_kI = 0.000001;
-        // public static final double left_kD = 0.25;
-        // public static final double left_kFF = 0.00023;
-        // public static final double left_IZone = 200;
 
         public static final double left_maxOutput = 1;
         public static final double left_minOutput = -1;
@@ -148,10 +136,10 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.002;
-        public static final double minPitchPosition = 0; // encoder units = 0.01
-        public static final double maxPitchPosition = 1; // encoder units = 0.67
-        public static final double horizontalOffset = -0.36084; // Used for calculating angle of pitch mechanism
+        public static final double allowableError = 0.01;//0.002;
+        public static final float minPitchPosition = 0.381f; // encoder units = 0.01
+        public static final float maxPitchPosition = 1.6f; // encoder units = 0.67
+        public static final double horizontalOffset = -0.1325;//-0.36084; // Used for calculating angle of pitch mechanism
 
         /* Positions */
         public static final double intakePosition = 0.96;//-1.67;//-1.0;//0.05; // 0.9592; 
@@ -191,34 +179,40 @@ public final class Constants {
     public static final class Intake {
 
         /* Motor IDs */
-        public static final int intakeMotorID = 4;  //4
-        public static final int intakeMotor2ID = 44; // TODO: change the name of these two motors to be less vague
+        public static final int intakeMotorID = 44;  
+        public static final int intakeMotor2ID = 4; 
         public static final int armID = 55;
         public static final int armAbsoluteEncoder = 60;
 
         /* Positions */
 
-        // new travel = -0.1188
         public static final double stowedPosition = -0.1098;
-        public static final double travelPosition = -0.1098;//-0.156; // -0.025
+        public static final double travelPosition = 7.04;//-0.1188;//-0.156; // -0.025
         public static final double deployedPosition = -0.288;//0.12646484375;
 
-        public static final double intakeRPM = 5000;
+        public static final double intakeRPM = 3000; // 5000
 
         /* PID */
-        public static final double arm_kP = 1.4;
-        public static final double arm_kI = 0.0000003;
+        public static final double arm_kP = 0.1; // 1.4
+        public static final double arm_kI = 0; //0.0000003;
         public static final double arm_kD = 0;
-        public static final double arm_IZone = 0.001;
+        public static final double arm_kFF = 0.005;
+        public static final double arm_IZone = 0;//0.001;
 
         public static final int stall_current_lim = 40;
         public static final int free_current_lim = 4;
         
-        public static final double wheels_kP = 0.0004;
-        public static final double wheels_kI = 0;
-        public static final double wheels_kD = 0;
-        public static final double wheels_kFF = 0;
-        public static final double wheels_IZone = 100;
+        public static final double firstWheels_kP = 0.0004;//0.00085; 
+        public static final double firstWheels_kI = 0.0;
+        public static final double firstWheels_kD = 0.0;
+        public static final double firstWheels_kFF = 0.0004;
+        public static final double firstWheels_IZone = 100;
+
+        public static final double secondWheels_kP = 0.00065;
+        public static final double secondWheels_kI = 0;
+        public static final double secondWheels_kD = 0.015;
+        public static final double secondWheels_kFF = 0;
+        public static final double secondWheels_IZone = 100;
 
         public static final double maxOutput = 1;
         public static final double minOutput = -1;

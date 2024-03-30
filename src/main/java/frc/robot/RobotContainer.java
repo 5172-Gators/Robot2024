@@ -136,7 +136,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, shootingTables,
                         () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
       
-        NamedCommands.registerCommand("Eject", new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, () -> true,
+        NamedCommands.registerCommand("Eject", new ShootSetpoint(1500.0, 1800.0, Constants.Pitch.intakePosition, 0, () -> true,
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
@@ -269,7 +269,7 @@ public class RobotContainer {
 
         // testButton14.onTrue(new AutoAimShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
         //                             () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
-        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1800.0, 3000.0, Constants.Pitch.ampSetpoint, 0, fireShooter,
+        shooterCalibrationMode.whileTrue(new ShootSetpointCalibration(1700.0, 1700.0, .64, 0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
         // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
 

@@ -19,7 +19,8 @@ public class StopShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Shooter.setShooterRPM(0, 0);
+    s_Shooter.stopShooter();
+    //s_Shooter.setShooterRPM(0, 0);
     s_Shooter.stopKicker();
   }
 
