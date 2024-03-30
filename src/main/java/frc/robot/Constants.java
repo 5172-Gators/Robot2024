@@ -99,7 +99,7 @@ public final class Constants {
 
         /* Positions */
         public static final double R_intakingPosition = 0;
-        public static final double turretAmpPosition = -11.047677; //counter
+        public static final double turretAmpPosition = -13.147677; //counter
         public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
         
         /* PID */
@@ -139,21 +139,21 @@ public final class Constants {
         public static final double allowableError = 0.01;//0.002;
         public static final float minPitchPosition = 0.381f; // encoder units = 0.01
         public static final float maxPitchPosition = 1.6f; // encoder units = 0.67
-        public static final double horizontalOffset = -0.1325;//-0.36084; // Used for calculating angle of pitch mechanism
+        public static final double horizontalOffset = -0.36084;//-0.78;//0.1325; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
         public static final double intakePosition = 0.96;//-1.67;//-1.0;//0.05; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
-        public static final double ampSetpoint = 0.435625;
+        public static final double ampSetpoint = 1.7;
         public static final double climbPosition = 0.513;
         public static final double setpointAmp = 0.49823;
         
         /* Relative Encoder PID Constants */
-        public static final double rel_kP = 37;
-        public static final double rel_kI = 0;
-        public static final double rel_kD = 0.08;
-        public static final double rel_kFF = 0.1;
+        public static final double rel_kP = 0.16;
+        public static final double rel_kI = 0.000;
+        public static final double rel_kD = 0; //0.08;
+        public static final double rel_kFF = 0.02;
         public static final double rel_IZone = 0;
 
         /* Absolute Encoder PID Constants */

@@ -109,19 +109,19 @@ public class Pitch extends SubsystemBase {
     
     // pos = -1 * this.getAbsolutePitchPosition();
     // SmartDashboard.putNumber("pitchdegrees", pos);
-    return (pos - Constants.Pitch.horizontalOffset) * 360;
+    return (pos + Constants.Pitch.horizontalOffset) * 360;
     
     // return ((pos + Constants.Pitch.horizontalOffset) / 22.25) * 360;
   }
 
   public double getPitchDegrees() {
-    double pos = this.currentPitch / 23.3;//this.getRelativePitchPosition();
+    double pos = this.currentPitch / 23.33;//this.getRelativePitchPosition(); 23.33
     return encoderUnitsToDegrees(pos);
   }
 
   public void setPosition(double position){
 
-    // changed to relative encoder with the new motor
+    // changed to use the relative encoder for set positions
     this.setpoint = position;
     currentPitch = getRelativePitchPosition(); //getPosition();
 
