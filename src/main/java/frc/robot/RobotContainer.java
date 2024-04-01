@@ -94,6 +94,9 @@ public class RobotContainer {
     //reverses shooter incase note gets past kicker wheels, currently assinged to thumb left (3) on rotate stick
    
    /* Test Buttons */
+
+    private final JoystickButton fireLobShot = new JoystickButton(testStick, 1);
+    private final JoystickButton lobShot = new JoystickButton(testStick, 2);
     
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
@@ -265,6 +268,9 @@ public class RobotContainer {
 
 
         /* Test Buttons */
+
+        lobShot.onTrue(new ShootSetpoint(5000, 5000, Constants.Pitch.lobSetPoint, 2.04, fireLobShot, () -> operatorStick.getY(), () -> operatorStick.getX(),
+                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(1500)));
 

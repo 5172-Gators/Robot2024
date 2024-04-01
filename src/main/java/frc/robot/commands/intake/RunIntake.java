@@ -54,7 +54,7 @@ public class RunIntake extends Command {
   @Override
   public void execute() {
     
-    // SmartDashboard.putNumber("Intake State", state);
+    SmartDashboard.putNumber("Intake State", state);
     if (s_Shooter.shooterIsReady())
 
       s_Shooter.stopShooter();

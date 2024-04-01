@@ -37,7 +37,7 @@ public class StopShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.stopShooter();
-    s_Kicker.stopKicker();
+    // s_Kicker.stopKicker();
   }
 
   // Returns true when the command should end.
