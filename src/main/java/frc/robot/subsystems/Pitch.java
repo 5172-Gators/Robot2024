@@ -149,6 +149,7 @@ public class Pitch extends SubsystemBase {
 
   public boolean isReady() {
     double absError = Math.abs(this.getRelativePitchPosition() - this.setpoint);
+    
     if (debounce.calculate(absError <= Constants.Pitch.allowableError)){
 
       return true;

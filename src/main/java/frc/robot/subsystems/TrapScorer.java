@@ -28,6 +28,8 @@ public class TrapScorer extends SubsystemBase {
   SparkPIDController elevatorPIDController;
   SparkPIDController wheelsPIDController;
 
+  double desiredPosition;
+
   public TrapScorer() {
 
     // elevator motor
@@ -47,10 +49,11 @@ public class TrapScorer extends SubsystemBase {
     elevatorPIDController.setFF(Constants.TrapScorer.elevator_kFF);
 
     // elevator soft limits
-    elevatorMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.TrapScorer.maxElevatorPosition);
-    elevatorMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.TrapScorer.minElevatorPosition);
     // elevatorMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     // elevatorMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    elevatorMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.TrapScorer.maxElevatorPosition);
+    elevatorMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.TrapScorer.minElevatorPosition);
+    
      
 
     // scoring wheels motor
@@ -72,13 +75,21 @@ public class TrapScorer extends SubsystemBase {
 
   public void setElevatorPosition(double setpoint){
 
+    double desiredPosition = setpoint;
+
     elevatorPIDController.setReference(setpoint, ControlType.kPosition);
 
   }
 
-  public void setScoringWheelsRPM(double setpoint){
+  public void setScoringWheelsRPM(double rpm){
 
-    wheelsPIDController.setReference(setpoint, ControlType.kVelocity);
+    wheelsPIDController.setReference(rpm, ControlType.kVelocity);
+
+  }
+
+  public void stopScoringWheels(){
+
+    wheelsMotor.set(0);
 
   }
 
@@ -92,6 +103,20 @@ public class TrapScorer extends SubsystemBase {
 
     return wheelsRelativeEncoder.getVelocity();
 
+  }
+
+  public boolean elevatorisAtPosition() {
+    double absError = Math.abs(this.getElevatorPosition() - this.desiredPosition);
+
+    if (absError <= Constants.Pitch.allowableError){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
   }
   
 

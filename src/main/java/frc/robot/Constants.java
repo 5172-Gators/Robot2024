@@ -19,25 +19,6 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
-    // public static class Kicker {
-      
-    //     // kicker PID
-    //     public static final double kicker_kP = 0.0001;
-    //     public static final double kicker_kI = 0.000001;
-    //     public static final double kicker_kD = 0;
-    //     public static final double kicker_kFF = 0.00014;
-    //     public static final double kicker_IZone = 150;
-
-    //     public static final double kicker_maxOutput = 1;
-    //     public static final double kicker_minOutput = -1;
-
-    //     public static final double kicker_allowableError = 50;
-    //     public static final double kicker_intakeRPM = 3500;
-    //     public static final double kicker_creepRPM = 500;
-    //     public static final double kicker_shoot = 1500;
-
-    // }
-
     public static class Limelight{
 
         // allowable error / deadband
@@ -161,12 +142,13 @@ public final class Constants {
         public static final double horizontalOffset = -0.36084;//-0.78;//0.1325; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
-        public static final double intakePosition = 0.96;//-1.67;//-1.0;//0.05; // 0.9592; 
+        public static final double intakePosition = 0.86;//-1.67;//-1.0;//0.05; // 0.9592; 
         public static final double stageSetpoint = 0.450459; // -0.0466113125
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 1.7;
         public static final double climbPosition = 0.513;
         public static final double setpointAmp = 0.49823;
+        public static final double loadingPosition = 0; //TODO: find this position
         
         /* Relative Encoder PID Constants */
         public static final double rel_kP = 0.16;
@@ -219,9 +201,9 @@ public final class Constants {
 
         /* Positions */
 
-        public static final double stowedPosition = -0.1098;
-        public static final double travelPosition = 7.04;//-0.1188;//-0.156; // -0.025
-        public static final double deployedPosition = -0.288;//0.12646484375;
+        public static final double stowedPosition = 0;
+        public static final double travelPosition = -0.792;//-0.1188;//-0.156; // -0.025
+        public static final double deployedPosition = -8.29;//0.12646484375;
 
         public static final double intakeRPM = 3000; // 5000
 
@@ -274,11 +256,19 @@ public final class Constants {
         public static final double wheels_kFF = 0;
 
         /* Soft Limits */
-        public static final float minElevatorPosition = 0;
-        public static final float maxElevatorPosition = 0;
+        public static final float minElevatorPosition = 0f;
+        public static final float maxElevatorPosition = 0f;
 
         /* Positions */
+        public static final double allowableError = 0; //TODO: Find these positions, RPMs + allowable error
+        public static final double stowedPosition = 0;
+        public static final double loadingPosition = 0;
+        public static final double ampScorePosition = 0;
+        public static final double trapScorePosition = 0;
 
+        /* Scoring Wheels RPMs */
+        public static final double loadingRPM = 0;
+        public static final double scoringRPM = 0;
     }
 
 
