@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
@@ -21,6 +22,7 @@ public class AmpScore extends Command {
   Pitch s_Pitch;
   Turret s_Turret;
   LEDs s_LEDs;
+  Kicker s_Kicker;
 
   double leftRPM;
   double rightRPM;
@@ -32,7 +34,7 @@ public class AmpScore extends Command {
   Boolean calibrationMode;
 
   /** Creates a new ampScore. */
-  public AmpScore(double leftRPM, double rightRPM, double pitch, BooleanSupplier fire, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led, Boolean calibrationMode) {
+  public AmpScore(double leftRPM, double rightRPM, double pitch, BooleanSupplier fire, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Boolean calibrationMode) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -42,6 +44,7 @@ public class AmpScore extends Command {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
     this.s_Turret = m_turret;
+    this.s_Kicker = m_kicker;
     this.s_LEDs = m_led;
     
     this.calibrationMode = calibrationMode;
@@ -71,7 +74,7 @@ public class AmpScore extends Command {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean()) {
         s_Shooter.setShooterVoltage(8.5, 12.0);
-        s_Shooter.setKickerVoltage(8.5);
+        s_Kicker.setKickerVoltage(8.5);
       }
     } else {
       s_LEDs.setColor(-0.11);
@@ -82,7 +85,7 @@ public class AmpScore extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);

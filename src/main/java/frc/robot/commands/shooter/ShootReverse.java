@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
@@ -22,6 +23,7 @@ public class ShootReverse extends Command {
   Pitch s_Pitch;
   Turret s_Turret;
   LEDs s_LEDs;
+  Kicker s_Kicker;
 
   double leftRPM;
   double rightRPM;
@@ -33,7 +35,7 @@ public class ShootReverse extends Command {
   
   /** Creates a new ShootSetpoint. */
   public ShootReverse(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led) {
+          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -46,6 +48,7 @@ public class ShootReverse extends Command {
     s_Pitch = m_pitch;
     s_Turret = m_turret;
     s_LEDs = m_led;
+    s_Kicker = m_kicker;
     
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
   }
@@ -69,7 +72,7 @@ public class ShootReverse extends Command {
     if (s_Shooter.shooterIsReady()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(-500);
+        s_Kicker.setKickerRPM(-500);
     } else {
       s_LEDs.setColor(-0.11);
     }
@@ -79,7 +82,7 @@ public class ShootReverse extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
     
   }

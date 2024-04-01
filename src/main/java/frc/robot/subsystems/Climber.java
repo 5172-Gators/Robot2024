@@ -21,62 +21,85 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
-  CANSparkMax winchMotor; // geared down
-  private RelativeEncoder winchEncoder;
+  CANSparkFlex winchMotor1; 
+  CANSparkFlex winchMotor2; 
+  RelativeEncoder winchEncoder1;
+  RelativeEncoder winchEncoder2;
+  
   private DigitalInput magLimSwitch;
 
   public Climber() {
 
-    /* define + configure the winch motor for the climber */
-    winchMotor = new CANSparkMax(Constants.Climber.winchMotorID, MotorType.kBrushless);
-    winchMotor.restoreFactoryDefaults();
-    winchMotor.setIdleMode(IdleMode.kBrake);
-    winchMotor.setSmartCurrentLimit(10);
-    winchMotor.setOpenLoopRampRate(1);
-    winchMotor.setInverted(true);
-    winchMotor.setSoftLimit(SoftLimitDirection.kForward, 930);
-    winchMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    /* define + configure the winch motors for the climber */
+    winchMotor1 = new CANSparkFlex(Constants.Climber.winchMotorID, MotorType.kBrushless);
+    winchMotor1.restoreFactoryDefaults();
+    winchMotor1.setIdleMode(IdleMode.kBrake);
+    winchMotor1.setSmartCurrentLimit(38);
+    winchMotor1.setOpenLoopRampRate(1);
+    winchMotor1.setInverted(false);
+
+    winchMotor2 = new CANSparkFlex(Constants.Climber.winchMotor2ID, MotorType.kBrushless);
+    winchMotor2.restoreFactoryDefaults();
+    winchMotor2.setIdleMode(IdleMode.kBrake);
+    winchMotor2.setInverted(true);
+
+    //soft limits
+    winchMotor1.setSoftLimit(SoftLimitDirection.kForward, Constants.Climber.maxSoftLimit);
+    winchMotor1.setSoftLimit(SoftLimitDirection.kReverse, Constants.Climber.minSoftLimit);
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kForward, true);
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+    winchMotor2.setSoftLimit(SoftLimitDirection.kForward, Constants.Climber.maxSoftLimit);
+    winchMotor2.setSoftLimit(SoftLimitDirection.kReverse, Constants.Climber.minSoftLimit);
+    winchMotor2.enableSoftLimit(SoftLimitDirection.kForward, true);
+    winchMotor2.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    
+
+    // winchMotor2.follow(winchMotor1);
      
     /* create intstance of the climb + winch motors built-in encoders */
-    // climbEncoder = climbMotor.getEncoder();
-    winchEncoder = winchMotor.getEncoder();
-
+    winchEncoder1 = winchMotor1.getEncoder();
+    winchEncoder2 = winchMotor2.getEncoder();
+    
     magLimSwitch = new DigitalInput(9);
   }
 
   public void manualClimberControl (double speed){
+    // allows the climber motors to be controlled using a joystick
 
-    // allows the climber motors to be controlled using a joystick. runs the motors at different speeds because one is geared down
-    winchMotor.set(speed);
-
+      winchMotor1.set(speed);
+      winchMotor2.set(speed);
+    
   }
 
   public double getClimberPosition() {
-    return winchEncoder.getPosition();
+
+    return winchEncoder1.getPosition();
+
   }
 
   public void setClimberPosition(double position) {
-    winchEncoder.setPosition(position);
-  }
 
-  public void setSpeed(double speed){
-    winchMotor.set(speed);
+    winchEncoder1.setPosition(position);
+
   }
 
   public boolean getLimSwitch() {
+
     return !magLimSwitch.get();
+
   }
 
   public void disableSoftLimits() {
-    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
-    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kForward, false);
+
   }
 
   public void enableSoftLimits() {
-    winchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    winchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kForward, true);
+
   }
 
   @Override
@@ -84,9 +107,9 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
-    // SmartDashboard.putNumber("WinchPosition", winchEncoder.getPosition());
+    SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
     // SmartDashboard.putBoolean("Climb Lim Switch", getLimSwitch());
-    // SmartDashboard.putNumber("ClimbPosition", climbEncoder.getPosition());
+    SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }

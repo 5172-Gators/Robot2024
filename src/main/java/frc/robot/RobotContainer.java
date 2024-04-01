@@ -19,6 +19,7 @@ import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
+import frc.robot.commands.climber.ManualClimbControl;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
@@ -104,6 +105,7 @@ public class RobotContainer {
     public final Limelight s_VisionLimelight;
     public final Intake s_Intake;
     public final Climber s_Climber;
+    public final Kicker s_Kicker;
     public final LEDs s_LEDs;
 
     public final ShootingTables shootingTables;
@@ -120,24 +122,29 @@ public class RobotContainer {
         s_Intake = new Intake();
         s_Climber = new Climber();
         s_LEDs = new LEDs();
+        s_Kicker = new Kicker();
         
         shootingTables = new ShootingTables();
 
         autoChooser = new SendableChooser<Command>();
 
         /* Configure PathPlanner Commands */
-        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_LEDs));
+        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
+
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,Constants.Pitch.speakerSetpoint, 0.0, () -> true,
-                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+
         NamedCommands.registerCommand("shootAuto1Setpoint2", new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 0.0, () -> true,
-                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+
         NamedCommands.registerCommand("shootAuto1Setpoint3", new ShootSetpoint(1800.0, 3000.0, 0.42047, 0.9, () -> true,
-                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                    
         NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, shootingTables,
-                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
+                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
       
         NamedCommands.registerCommand("Eject", new ShootSetpoint(1500.0, 1800.0, Constants.Pitch.intakePosition, 0, () -> true,
-                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
        
@@ -218,41 +225,41 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_LEDs));
+        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
 
         deployIntake.onTrue(new DeployIntake(s_Intake));
 
-        outtake.whileTrue(new Eject(s_Intake,s_Shooter));
+        outtake.whileTrue(new Eject(s_Intake, s_Kicker));
 
 
         /* Operator Buttons */
         autoAim.onTrue(new AutoAim(fireShooter, shootingTables,
-                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
+                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
 
         shooterSetpointStage.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
-                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
-                                      () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                      () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         //shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
         //                             s_Shooter, s_Pitch, s_Turret, s_LEDs));
         //USE THIS #10
         ampShootSetpoint.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.setpointAmp, -11.047677, fireShooter, 
-                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         shooterReverse.onTrue(new ShootSetpoint(-500.0, -500.0, Constants.Pitch.intakePosition, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         shooterEject.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs));
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
                         
         ampScoringSetpoint.onTrue(new AmpScore(900.0, 900.0, 0.500488, fireShooter, () -> operatorStick.getY(), 
-                                        s_Shooter, s_Pitch, s_Turret, s_LEDs, false));
+                                        s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, false));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
-        climbModeButton.whileTrue(new ClimbModeRoutine(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
+        climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret)); // Climb Mode Routine
 
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
@@ -270,7 +277,7 @@ public class RobotContainer {
         // testButton14.onTrue(new AutoAimShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
         //                             () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
         shooterCalibrationMode.whileTrue(new ShootSetpointCalibration(1700.0, 1700.0, .64, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
         // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
 
 

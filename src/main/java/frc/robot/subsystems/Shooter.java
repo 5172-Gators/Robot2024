@@ -25,18 +25,15 @@ public class Shooter extends SubsystemBase {
   /* Initialize Motors */
   CANSparkFlex leftShooter;
   CANSparkFlex rightShooter;
-  CANSparkFlex kicker;
 
   RelativeEncoder rightShooterEncoder;
   RelativeEncoder leftShooterEncoder;
-  RelativeEncoder kickerEncoder;
 
   DigitalInput kickerSensor;
   DigitalInput shooterSensor;
 
   SparkPIDController rightShooterPID;
   SparkPIDController leftShooterPID;
-  SparkPIDController kickerPID;
 
   double leftSetpoint;
   double rightSetpoint;
@@ -61,16 +58,9 @@ public class Shooter extends SubsystemBase {
     rightShooterEncoder = rightShooter.getEncoder();
     rightShooterPID = rightShooter.getPIDController();
 
-    /* configure kicker motor */
-    kicker = new CANSparkFlex(Constants.Shooter.kickerMotorID, MotorType.kBrushless);
-    kicker.setIdleMode(IdleMode.kCoast);
-    kickerEncoder = kicker.getEncoder();
-    kickerPID = kicker.getPIDController();
-
     /* Set Inverted */
     leftShooter.setInverted(false);
     rightShooter.setInverted(true);
-    kicker.setInverted(true);
 
     /* Beam Break Sensors */
     kickerSensor = new DigitalInput(0);
@@ -91,14 +81,6 @@ public class Shooter extends SubsystemBase {
     leftShooterPID.setFF(Constants.Shooter.left_kFF);
     leftShooterPID.setIZone(Constants.Shooter.left_IZone);
     leftShooterPID.setOutputRange(Constants.Shooter.left_minOutput, Constants.Shooter.left_maxOutput);
-
-    /* Kicker PID */
-    kickerPID.setP(Constants.Shooter.kicker_kP);
-    kickerPID.setI(Constants.Shooter.kicker_kI);
-    kickerPID.setD(Constants.Shooter.kicker_kD);
-    kickerPID.setFF(Constants.Shooter.kicker_kFF);
-    kickerPID.setOutputRange(Constants.Shooter.kicker_minOutput, Constants.Shooter.kicker_maxOutput);
-    // kickerPID.setIZone(Constants.Shooter.kicker_IZone);
 
   }
 
@@ -128,23 +110,6 @@ public class Shooter extends SubsystemBase {
     return leftShooterEncoder.getVelocity();
   }
 
-  public double getKickerRPM() {
-    return kickerEncoder.getVelocity();
-  }
-
-  public void setKickerRPM(double rpm){
-    this.kickerSetpoint = rpm;
-    kickerPID.setReference(rpm, CANSparkFlex.ControlType.kVelocity);
-  }
-
-  public void setKickerOpenLoop(double speed) {
-    kicker.set(speed);
-  }
-
-  public void setKickerVoltage(double voltage) {
-    kickerPID.setReference(voltage, CANSparkFlex.ControlType.kVoltage);
-  }
-
   public void robotWash(){
     // runs the wheels at a low speed for cleaning purposes
     
@@ -159,10 +124,6 @@ public class Shooter extends SubsystemBase {
     leftShooter.set(0);
     rightShooter.set(0);
 
-  }
-
-  public void stopKicker() {
-    kicker.set(0);
   }
 
   public boolean getKickerSensor(){
@@ -192,20 +153,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public boolean kickerIsReady() {
-    double absError = Math.abs(this.getKickerRPM() - this.kickerSetpoint);
-    if (kickerDebounce.calculate(absError <= Constants.Shooter.kicker_allowableError)) {
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
-  }
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -215,7 +162,6 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
     // SmartDashboard.putNumber("Percent Left", leftShooter.getAppliedOutput());
     // SmartDashboard.putNumber("Percent Right", rightShooter.getAppliedOutput());

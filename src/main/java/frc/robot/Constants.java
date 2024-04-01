@@ -19,6 +19,25 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
+    // public static class Kicker {
+      
+    //     // kicker PID
+    //     public static final double kicker_kP = 0.0001;
+    //     public static final double kicker_kI = 0.000001;
+    //     public static final double kicker_kD = 0;
+    //     public static final double kicker_kFF = 0.00014;
+    //     public static final double kicker_IZone = 150;
+
+    //     public static final double kicker_maxOutput = 1;
+    //     public static final double kicker_minOutput = -1;
+
+    //     public static final double kicker_allowableError = 50;
+    //     public static final double kicker_intakeRPM = 3500;
+    //     public static final double kicker_creepRPM = 500;
+    //     public static final double kicker_shoot = 1500;
+
+    // }
+
     public static class Limelight{
 
         // allowable error / deadband
@@ -170,14 +189,23 @@ public final class Constants {
     public static final class Climber {
 
         /* Motor IDs */
-        public static final int winchMotorID = 42;
-        
-        public static final int winchMotor2ID = 43;
+        public static final int winchMotorID = 42; // right
+        public static final int winchMotor2ID = 43; // left
+
+        /* Deadband */
+        public static final double deadband = 1.0;
+
+        /* Soft Limits */
+        public static final float minSoftLimit = 0f;
+        public static final float maxSoftLimit = 191.0f;
 
         /* Positions */
         public static final double stowedPosition = 0;
-        public static final double deployedPosition = 1000;
-        public static final double deadband = 1.0;
+        public static final double ampScorePosition = 190.33;
+        public static final double climbPosition = 147.41;
+        public static final double maxPosition = 191.0;
+        
+
     }
 
 
@@ -229,14 +257,27 @@ public final class Constants {
 
     public static final class TrapScorer {
 
-        // commented out so it isn't accidentally called
-
         /* Motor IDs */
-        // public static final int armMotorID = 30; // 55
+        public static final int elevatorMotorID = 0;
+        public static final int wheelsMotorID = 0;
+
+        // elevator PID
+        public static final double elevator_kP = 0.01;
+        public static final double elevator_kI = 0;
+        public static final double elevator_kD = 0;
+        public static final double elevator_kFF = 0;
+
+        // scoring wheels PID
+        public static final double wheels_kP = 0.01;
+        public static final double wheels_kI = 0;
+        public static final double wheels_kD = 0;
+        public static final double wheels_kFF = 0;
+
+        /* Soft Limits */
+        public static final float minElevatorPosition = 0;
+        public static final float maxElevatorPosition = 0;
 
         /* Positions */
-        public static final double tScorerDeployed = 0;
-        public static final double tScorerStowed = 0;
 
     }
 

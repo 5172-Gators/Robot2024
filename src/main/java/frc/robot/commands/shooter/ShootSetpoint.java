@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
@@ -21,6 +22,7 @@ public class ShootSetpoint extends Command {
   Shooter s_Shooter;
   Pitch s_Pitch;
   Turret s_Turret;
+  Kicker s_Kicker;
   LEDs s_LEDs;
 
   double leftRPM;
@@ -33,7 +35,7 @@ public class ShootSetpoint extends Command {
   
   /** Creates a new ShootSetpoint. */
   public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led) {
+          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -45,9 +47,10 @@ public class ShootSetpoint extends Command {
     s_Shooter = m_shooter;
     s_Pitch = m_pitch;
     s_Turret = m_turret;
+    s_Kicker = m_kicker;
     s_LEDs = m_led;
     
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
+    addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs);
   }
 
   // Called when the command is initially scheduled.
@@ -70,7 +73,7 @@ public class ShootSetpoint extends Command {
     if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Kicker.setKickerRPM(Constants.Shooter.kicker_shoot);
     } else {
       s_LEDs.setColor(-0.11);
     }
@@ -80,7 +83,7 @@ public class ShootSetpoint extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);

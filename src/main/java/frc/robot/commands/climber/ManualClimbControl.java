@@ -39,14 +39,18 @@ public class ManualClimbControl extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    // s_Pitch.setPosition(Constants.Pitch.climbPosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     s_Climber.manualClimberControl(this.control.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    s_Climber.manualClimberControl(0);
+    
+  }
 
   // Returns true when the command should end.
   @Override

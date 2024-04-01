@@ -7,20 +7,20 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Kicker;
 
 public class Eject extends Command {
 
   Intake s_Intake;
-  Shooter s_Shooter;
+  Kicker s_Kicker;
 
   /** Creates a new Eject. */
-  public Eject(Intake intake, Shooter shooter) {
+  public Eject(Intake intake, Kicker kicker) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.s_Intake = intake;
-    this.s_Shooter = shooter;
-    addRequirements(s_Intake, s_Shooter);
+    this.s_Kicker = kicker;
+    addRequirements(s_Intake, s_Kicker);
 
   }
 
@@ -33,7 +33,7 @@ public class Eject extends Command {
   public void execute() {
     s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
     s_Intake.setIntakeRPM(-Constants.Intake.intakeRPM);
-    s_Shooter.setKickerRPM(-Constants.Shooter.kicker_intakeRPM);
+    s_Kicker.setKickerRPM(-Constants.Shooter.kicker_intakeRPM);
   }
 
   // Called once the command ends or is interrupted.
@@ -41,7 +41,7 @@ public class Eject extends Command {
   public void end(boolean interrupted) {
     s_Intake.moveArm(0);
     s_Intake.stopIntake();
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
   }
 
   // Returns true when the command should end.
