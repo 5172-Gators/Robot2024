@@ -197,8 +197,8 @@ public class Swerve extends SubsystemBase {
 
     public void updateOdometry(Rotation2d turretToRobot) {
         // Update using swerve odometry
-        // swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
-        swervePoseEstimator.update(getGyroYaw(), getModulePositions());
+        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+        // swervePoseEstimator.update(getGyroYaw(), getModulePositions());
 
         // Update using vision selected vision measurements
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-vision");
