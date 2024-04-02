@@ -35,10 +35,10 @@ public class Swerve extends SubsystemBase {
 
 
         mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
+            new SwerveModule(0, Constants.Swerve.Mod0.constants, Constants.Swerve.Mod0.driveKS, Constants.Swerve.Mod0.driveKV, Constants.Swerve.Mod0.driveKA),
+            new SwerveModule(1, Constants.Swerve.Mod1.constants, Constants.Swerve.Mod1.driveKS, Constants.Swerve.Mod1.driveKV, Constants.Swerve.Mod1.driveKA),
+            new SwerveModule(2, Constants.Swerve.Mod2.constants, Constants.Swerve.Mod2.driveKS, Constants.Swerve.Mod2.driveKV, Constants.Swerve.Mod2.driveKA),
+            new SwerveModule(3, Constants.Swerve.Mod3.constants, Constants.Swerve.Mod3.driveKS, Constants.Swerve.Mod3.driveKV, Constants.Swerve.Mod3.driveKA)
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());

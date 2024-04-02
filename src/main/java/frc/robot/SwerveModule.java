@@ -21,7 +21,7 @@ public class SwerveModule {
     private TalonFX mDriveMotor;
     private CANcoder angleEncoder;
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    private SimpleMotorFeedforward driveFeedForward;
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
@@ -30,7 +30,10 @@ public class SwerveModule {
     /* angle motor control requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
+     /**
+     * Constructor for specifying unique kS, kV, and kA constants for each module.
+     */
+    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants, double kS, double kV, double kA){
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
         
@@ -47,6 +50,15 @@ public class SwerveModule {
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
+
+        driveFeedForward = new SimpleMotorFeedforward(kS, kV, kA);
+    }
+
+    /**
+     * Constructor uses the same kS, kV, and kA constants for all modules
+     */
+    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
+        this(moduleNumber, moduleConstants, Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
