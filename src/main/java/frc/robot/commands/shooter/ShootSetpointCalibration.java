@@ -33,10 +33,16 @@ public class ShootSetpointCalibration extends Command {
   BooleanSupplier fire;
   DoubleSupplier yawAim;
   DoubleSupplier pitchAim;
+  BooleanSupplier increaseLeftRPM;
+  BooleanSupplier decreaseLeftRPM;
+  BooleanSupplier increaseRightRPM;
+  BooleanSupplier decreaseRightRPM;
+
 
   /** Creates a new ShootSetpointCalibration. */
   public ShootSetpointCalibration(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-  DoubleSupplier yawAim, DoubleSupplier pitchAim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Limelight m_ll) {
+          DoubleSupplier yawAim, DoubleSupplier pitchAim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker,
+          LEDs m_led, Limelight m_ll, BooleanSupplier incLeftRPM, BooleanSupplier decLeftRPM, BooleanSupplier incRightRPM, BooleanSupplier decRightRPM) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -44,6 +50,10 @@ public class ShootSetpointCalibration extends Command {
     this.fire = fire;
     this.yawAim = yawAim;
     this.pitchAim = pitchAim;
+    this.increaseLeftRPM = incLeftRPM;
+    this.decreaseLeftRPM = decLeftRPM;
+    this.increaseRightRPM = incRightRPM;
+    this.decreaseRightRPM = decRightRPM;
 
     s_Shooter = m_shooter;
     s_Pitch = m_pitch;
@@ -63,18 +73,18 @@ public class ShootSetpointCalibration extends Command {
   @Override
   public void execute() {
    // this.yaw += this.yawAim.getAsDouble()*Constants.Turret.aimCoefficient;
-   // this.pitch += this.pitchAim.getAsDouble()*0.0001;
-    leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
-    rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
+    this.pitch += this.pitchAim.getAsDouble()*0.01;
+    this.leftRPM += (this.increaseLeftRPM.getAsBoolean()?10:0) + (this.decreaseLeftRPM.getAsBoolean()?-10:0);
+    this.rightRPM += (this.increaseRightRPM.getAsBoolean()?10:0) + (this.decreaseRightRPM.getAsBoolean()?-10:0);
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
-   s_Pitch.setPosition(this.pitch);
+    s_Pitch.setPosition(this.pitch);
     s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
     // if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
     //   s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Kicker.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     // } else {
       s_LEDs.setColor(-0.11);
     // }

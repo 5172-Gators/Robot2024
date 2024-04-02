@@ -30,20 +30,21 @@ public class Kicker extends SubsystemBase {
   public Kicker() {
 
     /* configure kicker motor */
-    kicker = new CANSparkFlex(Constants.Shooter.kickerMotorID, MotorType.kBrushless);
+    kicker = new CANSparkFlex(Constants.Kicker.kickerMotorID, MotorType.kBrushless);
     kicker.setIdleMode(IdleMode.kCoast);
     kicker.setInverted(true);
+    kicker.setSmartCurrentLimit(80);
 
     kickerEncoder = kicker.getEncoder();
     
     /* Kicker PID */
     kickerPID = kicker.getPIDController();
 
-    kickerPID.setP(Constants.Shooter.kicker_kP);
-    kickerPID.setI(Constants.Shooter.kicker_kI);
-    kickerPID.setD(Constants.Shooter.kicker_kD);
-    kickerPID.setFF(Constants.Shooter.kicker_kFF);
-    kickerPID.setOutputRange(Constants.Shooter.kicker_minOutput, Constants.Shooter.kicker_maxOutput);
+    kickerPID.setP(Constants.Kicker.kicker_kP);
+    kickerPID.setI(Constants.Kicker.kicker_kI);
+    kickerPID.setD(Constants.Kicker.kicker_kD);
+    kickerPID.setFF(Constants.Kicker.kicker_kFF);
+    kickerPID.setOutputRange(Constants.Kicker.kicker_minOutput, Constants.Kicker.kicker_maxOutput);
 
   }
 
@@ -82,7 +83,7 @@ public class Kicker extends SubsystemBase {
 
   double absError = Math.abs(this.getKickerRPM() - this.kickerSetpoint);
 
-    if (kickerDebounce.calculate(absError <= Constants.Shooter.kicker_allowableError)) {
+    if (kickerDebounce.calculate(absError <= Constants.Kicker.kicker_allowableError)) {
 
       return true;
 
@@ -99,6 +100,7 @@ public class Kicker extends SubsystemBase {
     // This method will be called once per scheduler run
 
     SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
+    SmartDashboard.putNumber("Kicker current", kicker.getOutputCurrent());
     SmartDashboard.putBoolean("Kicker Ready", kickerIsReady());
 
   }

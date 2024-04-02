@@ -114,15 +114,12 @@ public class Intake extends SubsystemBase {
 
     return relativeArmEncoder.getPosition();
 
-    // return armEncoder.getPosition().getValueAsDouble();
-
   }
 
   public void setIntakeSpeed(double speed){
     // open loop
 
     intakeMotor.set(speed);
-
     intakeMotor2.set(speed);
 
   }
@@ -149,17 +146,6 @@ public class Intake extends SubsystemBase {
     this.setpoint = setpoint;
 
     relativeArmPID.setReference(setpoint, CANSparkFlex.ControlType.kPosition);
-    
-    // absolute encoder PID control
-    // this.setpoint = setpoint;
-    // double speed = -intakeArmPID.calculate(getIntakePosition(), setpoint);
-
-    // if (this.getIntakePosition() <= Constants.Intake.stowedPosition)
-    //   speed = Math.min(speed,0); // Clipping so it's positive
-    // else if (this.getIntakePosition() >= Constants.Intake.deployedPosition)
-    //   speed = Math.max(speed,0); // Clipping so it's negative
-
-    // jointMotor.set(speed);
 
   }
 

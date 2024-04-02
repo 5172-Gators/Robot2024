@@ -73,7 +73,7 @@ public class ShootSetpoint extends Command {
     if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()){
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Kicker.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
       s_LEDs.setColor(-0.11);
     }

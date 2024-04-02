@@ -32,13 +32,32 @@ public final class Constants {
         public static final double floorToPivot = 12.82;//13.875; // inches
     }
 
+    public static final class Kicker{
+
+        /* Motor IDs */
+        public static final int kickerMotorID = 20;
+
+        // kicker PID
+        public static final double kicker_kP = 0.0001;
+        public static final double kicker_kI = 0.000001;
+        public static final double kicker_kD = 0;
+        public static final double kicker_kFF = 0.00014;
+        public static final double kicker_IZone = 150;
+
+        public static final double kicker_maxOutput = 1;
+        public static final double kicker_minOutput = -1;
+
+        public static final double kicker_allowableError = 50;
+        public static final double kicker_intakeRPM = 3500;
+        public static final double kicker_creepRPM = 500;
+        public static final double kicker_shoot = 1500;
+    }
 
     public static final class Shooter{
 
         /* Motor IDs */
         public static final int leftMotorID = 41;
         public static final int rightMotorID = 17;
-        public static final int kickerMotorID = 20;
 
         // right PID
         public static final double right_kP = 0.00020;
@@ -62,23 +81,9 @@ public final class Constants {
         public static final double left_maxOutput = 1;
         public static final double left_minOutput = -1;
 
-        public static final double left_allowableError = 30;
-        
-        // kicker PID
-        public static final double kicker_kP = 0.0001;
-        public static final double kicker_kI = 0.000001;
-        public static final double kicker_kD = 0;
-        public static final double kicker_kFF = 0.00014;
-        public static final double kicker_IZone = 150;
+        public static final double left_allowableError = 50;
 
-        public static final double kicker_maxOutput = 1;
-        public static final double kicker_minOutput = -1;
-
-        public static final double kicker_allowableError = 50;
-        public static final double kicker_intakeRPM = 3500;
-        public static final double kicker_creepRPM = 500;
-        public static final double kicker_shoot = 1500;
-
+        public static final double creepRPM = 350;
     }
 
 
@@ -137,9 +142,9 @@ public final class Constants {
 
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.01;//0.002;
-        public static final float minPitchPosition = 0.381f; // encoder units = 0.01
-        public static final float maxPitchPosition = 1.6f; // encoder units = 0.67
-        public static final double horizontalOffset = -0.36084;//-0.78;//0.1325; // Used for calculating angle of pitch mechanism 
+        public static final float minPitchPosition = 0.3f; //0.381f;
+        public static final float maxPitchPosition = 1.77f; //1.6f;
+        public static final double horizontalOffset = 0.06;//-0.78;//0.1325; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
         public static final double intakePosition = 0.86; 
@@ -152,11 +157,12 @@ public final class Constants {
         public static final double loadingPosition = 0; //TODO: find this position
         
         /* Relative Encoder PID Constants */
-        public static final double rel_kP = 0.16;
-        public static final double rel_kI = 0.000;
+        public static final double rel_kP = 3.5; //0.16;
+        public static final double rel_kI = 0.01;
         public static final double rel_kD = 0; //0.08;
-        public static final double rel_kFF = 0.02;
-        public static final double rel_IZone = 0;
+        public static final double rel_kFF = 0.035;
+        public static final double rel_IZone = 0.05;
+        public static final double rel_IMax = 0.5;
 
         /* Absolute Encoder PID Constants */
         public static final double abs_kP = 0.1;
@@ -203,7 +209,7 @@ public final class Constants {
         /* Positions */
 
         public static final double stowedPosition = 0;
-        public static final double travelPosition = -0.792;//-0.1188;//-0.156; // -0.025
+        public static final double travelPosition = -1.65; //-0.792;//-0.1188;//-0.156; // -0.025
         public static final double deployedPosition = -8.29;//0.12646484375;
 
         public static final double intakeRPM = 3000; // 5000

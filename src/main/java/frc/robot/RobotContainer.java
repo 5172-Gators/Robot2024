@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -15,7 +16,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 
 import frc.robot.commands.swerve.TeleopSwerve;
-import frc.robot.commands.turret.TeleopPitch;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
@@ -25,7 +25,10 @@ import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
+import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
+import frc.robot.commands.pitch.SetPitchPosition;
+import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoAimShootSetpoint;
@@ -65,8 +68,8 @@ public class RobotContainer {
 
     // Drive Stick
     private final JoystickButton intakeIn = new JoystickButton(driveStick, 1);
-    private final JoystickButton deployIntake = new JoystickButton(driveStick, 4);
     private final JoystickButton outtake = new JoystickButton(driveStick, 2);
+    private final JoystickButton beamBreakOverride = new JoystickButton(driveStick, 4);
     
     // Rotate Stick
     private final JoystickButton robotCentric = new JoystickButton(rotateStick, 1);
@@ -95,8 +98,11 @@ public class RobotContainer {
    
    /* Test Buttons */
 
-    private final JoystickButton fireLobShot = new JoystickButton(testStick, 1);
-    private final JoystickButton lobShot = new JoystickButton(testStick, 2);
+    // private final JoystickButton fireLobShot = new JoystickButton(testStick, 1);
+    // private final JoystickButton lobShot = new JoystickButton(testStick, 2);
+    private final JoystickButton testButton1 = new JoystickButton(testStick, 1);
+    private final JoystickButton testButton2 = new JoystickButton(testStick, 2);
+    private final JoystickButton testButton3 = new JoystickButton(testStick, 3);
     
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
@@ -132,7 +138,7 @@ public class RobotContainer {
         autoChooser = new SendableChooser<Command>();
 
         /* Configure PathPlanner Commands */
-        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
+        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs, () -> true));
 
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,Constants.Pitch.speakerSetpoint, 0.0, () -> true,
                                     () -> 0, () -> 0, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
@@ -197,7 +203,7 @@ public class RobotContainer {
         s_Pitch.setDefaultCommand(
            new TeleopPitch(
             s_Pitch,
-            () -> -operatorStick.getRawAxis(pitchAdjust)
+            () -> -operatorStick.getRawAxis(pitchAdjust)*0.1
            )
             // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
         );
@@ -209,6 +215,10 @@ public class RobotContainer {
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)
         );
+
+        // s_Kicker.setDefaultCommand(
+        //     new ZeroNote(s_Kicker, s_Shooter)
+        // );
 
         s_LEDs.setDefaultCommand(
             new LEDDefaultCommand(s_LEDs, s_Shooter)
@@ -228,9 +238,7 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
-
-        deployIntake.onTrue(new DeployIntake(s_Intake));
+        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs, beamBreakOverride.negate()));
 
         outtake.whileTrue(new Eject(s_Intake, s_Kicker));
 
@@ -254,8 +262,10 @@ public class RobotContainer {
         shooterReverse.onTrue(new ShootSetpoint(-500.0, -500.0, Constants.Pitch.intakePosition, 0, fireShooter,
                                     () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
-        shooterEject.onTrue(new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+        shooterEject.onTrue(new SequentialCommandGroup(
+            new ZeroNote(s_Kicker, s_Shooter),
+            new ShootSetpoint(500.0, 500.0, Constants.Pitch.intakePosition, 0, fireShooter,
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
                         
         ampScoringSetpoint.onTrue(new AmpScore(900.0, 900.0, 0.500488, fireShooter, () -> operatorStick.getY(), 
                                         s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, false));
@@ -269,22 +279,25 @@ public class RobotContainer {
 
         /* Test Buttons */
 
-        lobShot.onTrue(new ShootSetpoint(5000, 5000, Constants.Pitch.lobSetPoint, 2.04, fireLobShot, () -> operatorStick.getY(), () -> operatorStick.getX(),
-                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+        // lobShot.onTrue(new ShootSetpoint(5000, 5000, Constants.Pitch.lobSetPoint, 2.04, fireLobShot, () -> operatorStick.getY(), () -> operatorStick.getX(),
+        //                                     s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
-        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKickerRPM(1500)));
-
-        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setShooter(2750, 2000))).onFalse(new InstantCommand(() -> s_Shooter.stopShooter()));
-
-        // testSetPosition.whileTrue(new InstantCommand(() -> s_Intake.setIntakeRPM(3000))).onFalse(new InstantCommand(() -> s_Intake.stopIntake()));
-
-        // testSetPosition.whileTrue(new InstantCommand(() -> s_Shooter.setKicker1RPM(500))).onFalse(new InstantCommand(() -> s_Shooter.stopKicker()));
-
-        // testButton14.onTrue(new AutoAimShootSetpoint(1800.0, 3000.0, Constants.Pitch.ampSetpoint, -2.142856597, fireShooter,
-        //                             () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_LEDs, s_VisionLimelight));
-        shooterCalibrationMode.whileTrue(new ShootSetpointCalibration(1700.0, 1700.0, .64, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
-        // testButton16.whileTrue(new SetTurretPosition(s_Turret, -2.46));
+        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1700.0, 1700.0, .64, 0, fireShooter,
+                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch,
+                                    s_Turret, s_Kicker, s_LEDs, s_VisionLimelight,
+                                    new JoystickButton(operatorStick, 12),
+                                    new JoystickButton(operatorStick, 15),
+                                    new JoystickButton(operatorStick, 11),
+                                    new JoystickButton(operatorStick, 16)
+                                    ));
+        
+        // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
+        // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
+        // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
+        SmartDashboard.putData("Test Button 1", new SetPitchPosition(s_Pitch, 0.75));
+        SmartDashboard.putData("Test Button 2", new SetPitchPosition(s_Pitch, 1.0));
+        SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
+        
 
 
     }

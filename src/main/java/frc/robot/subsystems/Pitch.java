@@ -43,11 +43,8 @@ public class Pitch extends SubsystemBase {
     pitchMotor = new CANSparkFlex(Constants.Pitch.pitchMotorID, MotorType.kBrushless);
     pitchMotor.restoreFactoryDefaults();
     pitchMotor.setIdleMode(IdleMode.kBrake);
-    pitchMotor.setSmartCurrentLimit(30);
+    pitchMotor.setSmartCurrentLimit(36);
     pitchMotor.setInverted(true);
-
-    // absolute encoder pitch PID
-    pitchPID = new PIDController(Constants.Pitch.abs_kP, Constants.Pitch.abs_kI, Constants.Pitch.abs_kD);
 
     // relative encoder pitch PID
     relativePID = pitchMotor.getPIDController();
@@ -56,19 +53,19 @@ public class Pitch extends SubsystemBase {
     relativePID.setD(Constants.Pitch.rel_kD);
     relativePID.setFF(Constants.Pitch.rel_kFF);
     relativePID.setIZone(Constants.Pitch.rel_IZone);
+    relativePID.setIMaxAccum(Constants.Pitch.rel_IMax, 0);
   
     // define + configure CANcoder
-    absolutePitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
+    // absolutePitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
 
     // define relative encoder
     relativePitchEncoder = pitchMotor.getEncoder();
 
     // soft limits
-    // pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    // pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-
-    // pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Pitch.minPitchPosition);
-    // pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
+    pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Pitch.minPitchPosition);
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
 
   }
 
@@ -82,11 +79,12 @@ public class Pitch extends SubsystemBase {
 
     // + joystick value moves down
     // - joystick value moves up
-    
-    if (currentPitch <= Constants.Pitch.minPitchPosition)
-      speed = Math.max(speed,0); // Clipping so it's positive
-    else if (currentPitch >= Constants.Pitch.maxPitchPosition)
-      speed = Math.min(speed,0); // Clipping so it's negative
+
+    currentPitch = getRelativePitchPosition();
+    // if (currentPitch <= Constants.Pitch.minPitchPosition)
+    //   speed = Math.max(speed,0); // Clipping so it's positive
+    // else if (currentPitch >= Constants.Pitch.maxPitchPosition)
+    //   speed = Math.min(speed,0); // Clipping so it's negative
 
     pitchMotor.set(speed);
 
@@ -99,11 +97,11 @@ public class Pitch extends SubsystemBase {
 
   }
 
-  public double getAbsolutePitchPosition(){
+  // public double getAbsolutePitchPosition(){
 
-    return absolutePitchEncoder.getAbsolutePosition().getValueAsDouble();
+  //   return absolutePitchEncoder.getAbsolutePosition().getValueAsDouble();
 
-  }
+  // }
 
   public double encoderUnitsToDegrees(double pos) {
     
@@ -115,7 +113,7 @@ public class Pitch extends SubsystemBase {
   }
 
   public double getPitchDegrees() {
-    double pos = this.currentPitch / 23.33;//this.getRelativePitchPosition(); 23.33
+    double pos = this.currentPitch / 23.333333; //this.getRelativePitchPosition(); 23.33
     return encoderUnitsToDegrees(pos);
   }
 
@@ -165,17 +163,17 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    currentPitch = getRelativePitchPosition();
     double relativePitchPosition = getRelativePitchPosition();
-    double currentVoltage = pitchMotor.getOutputCurrent();
-    double absolutePosition = getAbsolutePitchPosition();
+    double outputCurrent = pitchMotor.getOutputCurrent();
+    // double absolutePosition = getAbsolutePitchPosition();
 
 
     SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
-    SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
+    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
     SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
-    SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
-    SmartDashboard.putNumber("Pitch Motor Voltage", currentVoltage);
+    // SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
+    // SmartDashboard.putNumber("Pitch Motor Current", outputCurrent);
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 
   }

@@ -4,6 +4,8 @@
 
 package frc.robot.commands.intake;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,6 +26,7 @@ public class RunIntake extends Command {
   Shooter s_Shooter;
   LEDs s_LEDs;
   Kicker s_Kicker;
+  BooleanSupplier s_useBeamBreaks;
 
   boolean kickerSensorValue;
   boolean shooterSensorValue;
@@ -31,7 +34,7 @@ public class RunIntake extends Command {
   int state;
 
   /** Creates a new RunIntake. */
-  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter, Kicker kicker, LEDs leds) {
+  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter, Kicker kicker, LEDs leds, BooleanSupplier useBeamBreaks) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = intake;
     this.s_Pitch = pitch;
@@ -39,6 +42,7 @@ public class RunIntake extends Command {
     this.s_Shooter = shooter;
     this.s_LEDs = leds;
     this.s_Kicker = kicker;
+    this.s_useBeamBreaks = useBeamBreaks;
     
     addRequirements(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs);
   }
@@ -47,7 +51,7 @@ public class RunIntake extends Command {
   @Override
   public void initialize() {
     state = 0;
-    s_Shooter.setShooterRPM(0,0);
+    s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,43 +59,53 @@ public class RunIntake extends Command {
   public void execute() {
     
     SmartDashboard.putNumber("Intake State", state);
-    if (s_Shooter.shooterIsReady())
 
-      s_Shooter.stopShooter();
+    if (s_useBeamBreaks.getAsBoolean()) {
 
-    if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor())
+      if (state == 0) {
+        s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
 
+        if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
+          s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+          s_Pitch.setPosition(Constants.Pitch.intakePosition);
+          s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+          s_LEDs.setColor(-0.09);
+        }
+
+        s_Intake.setIntakeSpeed(1);
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
+
+        if (s_Shooter.getShooterSensor() == false) // shooter sensor
+          state = 1;
+      }
+
+      if (state == 1) {
+
+        s_Intake.stopIntake(); // #TODO Let's question this
+        s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+        s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
+
+        if (s_Shooter.getShooterSensor() == true)
+          state = 2;
+
+      }
+
+      if (state == 2) {
+
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
+
+        if (s_Shooter.getShooterSensor() == false)
+        state = 3;
+      }
+    } else {
       s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
       s_Pitch.setPosition(Constants.Pitch.intakePosition);
       s_Turret.setPosition(Constants.Turret.R_intakingPosition);
       s_LEDs.setColor(-0.09);
 
-    if (state == 0) {
-
-      s_Intake.setIntakeSpeed(1); // s_Intake.setIntakeRPM(Constants.Intake.intakeRPM); 
-      s_Kicker.setKickerRPM(Constants.Shooter.kicker_intakeRPM);
-
-      if (s_Shooter.getShooterSensor() == false) // shooter sensor
-        state = 1;
-    }
-
-    if (state == 1) {
-
-      s_Intake.stopIntake();
-      s_Kicker.setKickerRPM(-Constants.Shooter.kicker_creepRPM);
-
-      if (s_Shooter.getShooterSensor() == true)
-        state = 2;
-
-    }
-
-    if (state == 2) {
-
-      s_Kicker.setKickerRPM(Constants.Shooter.kicker_creepRPM);
-
-      if (s_Shooter.getShooterSensor() == false)
-      state = 3;
-
+      s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
+      s_Intake.setIntakeSpeed(1);
+      s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
     }
 
   }
@@ -104,7 +118,7 @@ public class RunIntake extends Command {
     s_Intake.stopIntake();
     s_Pitch.stopPitch();
 
-    if (state == 3){
+    if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
       Commands.sequence(new LEDTimedCommand(0.15, 0.5, s_LEDs));
 
@@ -121,7 +135,7 @@ public class RunIntake extends Command {
   @Override
   public boolean isFinished() {
 
-    return (state == 3);
+    return (state == 3 && s_useBeamBreaks.getAsBoolean());
 
   }
 }

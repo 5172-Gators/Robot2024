@@ -49,12 +49,14 @@ public class Shooter extends SubsystemBase {
     /* define + configure left shooter motor */
     leftShooter = new CANSparkFlex(Constants.Shooter.leftMotorID, MotorType.kBrushless);
     leftShooter.setIdleMode(IdleMode.kCoast);
+    leftShooter.setSmartCurrentLimit(39);
     leftShooterEncoder = leftShooter.getEncoder();
     leftShooterPID = leftShooter.getPIDController();
 
     /* define + configure right shooter motor */
     rightShooter = new CANSparkFlex(Constants.Shooter.rightMotorID, MotorType.kBrushless);
     rightShooter.setIdleMode(IdleMode.kCoast);
+    rightShooter.setSmartCurrentLimit(39);
     rightShooterEncoder = rightShooter.getEncoder();
     rightShooterPID = rightShooter.getPIDController();
 
@@ -160,8 +162,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
     SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
-    SmartDashboard.putNumber("Right Side Speed", rightShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("Left Side Speed", leftShooterEncoder.getVelocity());
+    SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
+    SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
     // SmartDashboard.putNumber("Percent Left", leftShooter.getAppliedOutput());
     // SmartDashboard.putNumber("Percent Right", rightShooter.getAppliedOutput());
