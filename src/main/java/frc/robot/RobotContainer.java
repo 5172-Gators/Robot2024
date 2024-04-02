@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -182,15 +183,15 @@ public class RobotContainer {
 
         /* Set Default Commands */
 
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driveStick.getRawAxis(strafeAxis),
-                () -> -driveStick.getRawAxis(translationAxis), 
-                () -> -rotateStick.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driveStick.getRawAxis(strafeAxis),
+        //         () -> -driveStick.getRawAxis(translationAxis), 
+        //         () -> -rotateStick.getRawAxis(rotationAxis), 
+        //         () -> robotCentric.getAsBoolean()
+        //     )
+        // );
 
         s_Turret.setDefaultCommand(
             new TeleopTurret(
@@ -294,9 +295,15 @@ public class RobotContainer {
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
-        SmartDashboard.putData("Test Button 1", new SetPitchPosition(s_Pitch, 0.75));
-        SmartDashboard.putData("Test Button 2", new SetPitchPosition(s_Pitch, 1.0));
-        SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
+        // SmartDashboard.putData("Test Button 1", new SetPitchPosition(s_Pitch, 0.75));
+        // SmartDashboard.putData("Test Button 2", new SetPitchPosition(s_Pitch, 1.0));
+        // SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
+
+        new JoystickButton(operatorStick, 12).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        new JoystickButton(operatorStick, 15).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        new JoystickButton(operatorStick, 11).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        new JoystickButton(operatorStick, 16).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
         
 
 

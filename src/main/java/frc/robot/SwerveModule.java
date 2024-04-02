@@ -71,6 +71,18 @@ public class SwerveModule {
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
     }
 
+    public TalonFX getDriveMotor() {
+        return mDriveMotor;
+    }
+
+    public TalonFX getAngleMotor() {
+        return mAngleMotor;
+    }
+
+    public CANcoder getEncoder() {
+        return angleEncoder;
+    }
+
     public void resetToAbsolute(){
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
         mAngleMotor.setPosition(absolutePosition);

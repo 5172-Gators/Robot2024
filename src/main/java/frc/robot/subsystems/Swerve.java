@@ -19,14 +19,87 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import static edu.wpi.first.units.Units.Volts;
+import edu.wpi.first.units.MutableMeasure;
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
+    private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          new SysIdRoutine.Config(Units.Volts.of(1.0).per(Units.Seconds.of(1.0)), 
+            Units.Volts.of(4.0), 
+            Units.Seconds.of(12.0)),
+
+          new SysIdRoutine.Mechanism(
+              // Tell SysId how to plumb the driving voltage to the motors.
+              (Measure<Voltage> volts) -> {
+                mSwerveMods[0].getDriveMotor().setVoltage(volts.in(Volts));
+                mSwerveMods[1].getDriveMotor().setVoltage(volts.in(Volts));
+                mSwerveMods[2].getDriveMotor().setVoltage(volts.in(Volts));
+                mSwerveMods[3].getDriveMotor().setVoltage(volts.in(Volts));
+              },
+              // Tell SysId how to record a frame of data for each motor on the mechanism being
+              // characterized.
+              log -> {
+                log.motor("front-left")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[0].getDriveMotor().get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[0].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[0].getState().speedMetersPerSecond, MetersPerSecond));
+                log.motor("front-right")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[1].getDriveMotor().get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[1].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[1].getState().speedMetersPerSecond, MetersPerSecond));
+                log.motor("back-right")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[2].getDriveMotor().get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[2].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[2].getState().speedMetersPerSecond, MetersPerSecond));
+                log.motor("back-left")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[3].getDriveMotor().get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[3].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[3].getState().speedMetersPerSecond, MetersPerSecond));
+              },
+              // Tell SysId to make generated commands require this subsystem, suffix test state in
+              // WPILog with this subsystem's name ("Swerve")
+              this));
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -90,6 +163,24 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
+
+    /**
+     * Returns a command that will execute a quasistatic test in the given direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.quasistatic(direction);
+    }
+
+    /**
+     * Returns a command that will execute a dynamic test in the given direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.dynamic(direction);
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -160,6 +251,10 @@ public class Swerve extends SubsystemBase {
                                                                mSwerveMods[1].getState(),
                                                                mSwerveMods[2].getState(),
                                                                mSwerveMods[3].getState());}
+
+
+
+    
 
     @Override
     public void periodic(){
