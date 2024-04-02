@@ -25,7 +25,7 @@ import frc.robot.Constants;
 public class Pitch extends SubsystemBase {
   /** Creates a new TurretPitch. */
   
-  CANcoder absolutePitchEncoder;
+  // CANcoder absolutePitchEncoder;
   CANSparkFlex pitchMotor;
 
   SparkPIDController relativePID;
@@ -80,7 +80,7 @@ public class Pitch extends SubsystemBase {
     // + joystick value moves down
     // - joystick value moves up
 
-    currentPitch = getRelativePitchPosition();
+    // currentPitch = getRelativePitchPosition();
     // if (currentPitch <= Constants.Pitch.minPitchPosition)
     //   speed = Math.max(speed,0); // Clipping so it's positive
     // else if (currentPitch >= Constants.Pitch.maxPitchPosition)
@@ -163,15 +163,15 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    double relativePitchPosition = getRelativePitchPosition();
-    double outputCurrent = pitchMotor.getOutputCurrent();
+    // double relativePitchPosition = getRelativePitchPosition();
+    // double outputCurrent = pitchMotor.getOutputCurrent();
     // double absolutePosition = getAbsolutePitchPosition();
 
 
-    SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
+    // SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
     SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
-    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
-    SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
+    SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
     // SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
     // SmartDashboard.putNumber("Pitch Motor Current", outputCurrent);
     SmartDashboard.putBoolean("Pitch Ready", isReady());

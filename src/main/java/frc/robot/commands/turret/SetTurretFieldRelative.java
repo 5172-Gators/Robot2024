@@ -4,23 +4,25 @@
 
 package frc.robot.commands.turret;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
 
-public class SetTurretPosition extends Command {
-  /** Creates a new SetTurretPosition. */
+public class SetTurretFieldRelative extends Command {
 
   Turret s_Turret;
-  double position;
+  Rotation2d s_Angle;
+  DoubleSupplier s_ChassisToFieldAngleDegrees;
 
-  public SetTurretPosition(Turret s_Turret, double position) {
+  /** Creates a new SetTurretFieldRelative. */
+  public SetTurretFieldRelative(Turret turret, Rotation2d angle, DoubleSupplier chassisToFieldAngleDegrees) {
     // Use addRequirements() here to declare subsystem dependencies.
-    
-    this.s_Turret = s_Turret;
-    this.position = position;
+    this.s_Turret = turret;
+    this.s_Angle = angle;
+    this.s_ChassisToFieldAngleDegrees = chassisToFieldAngleDegrees;
     addRequirements(s_Turret);
-
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +33,7 @@ public class SetTurretPosition extends Command {
   @Override
   public void execute() {
 
-    s_Turret.setPosition(position);
+    s_Turret.setFieldRelativeAngle(s_Angle, Rotation2d.fromDegrees(s_ChassisToFieldAngleDegrees.getAsDouble()));
 
   }
 
@@ -42,9 +44,6 @@ public class SetTurretPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return s_Turret.isReady();
-    // return false;
-
+    return false;
   }
 }

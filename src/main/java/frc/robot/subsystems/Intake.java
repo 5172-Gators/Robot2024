@@ -72,7 +72,7 @@ public class Intake extends SubsystemBase {
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
     // absolute encoder
-    armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
+    // armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
 
     // relative encoder
     relativeArmEncoder = jointMotor.getEncoder();
@@ -172,9 +172,9 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
     // SmartDashboard.putNumber("Intake Motor 1 RPM", intakeWheelsEncoder.getVelocity());
 
@@ -182,7 +182,7 @@ public class Intake extends SubsystemBase {
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 
-     SmartDashboard.putBoolean("IntakeIsReady",this.isReady());
+    //  SmartDashboard.putBoolean("IntakeIsReady", this.isReady());
 
     // SmartDashboard.putNumber("Intake Arm Current", jointMotor.getOutputCurrent());
 

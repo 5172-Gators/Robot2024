@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,6 +17,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 
 import frc.robot.commands.swerve.TeleopSwerve;
+import frc.robot.commands.turret.SetTurretFieldRelative;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
@@ -32,10 +34,12 @@ import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoAimShootSetpoint;
+import frc.robot.commands.shooter.AutoAimWithStateEstimation;
 import frc.robot.commands.shooter.NoShootSetpoint;
 import frc.robot.commands.shooter.ShootReverse;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpointCalibration;
+import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
 import frc.robot.commands.shooter.StopShooter;
 
 import frc.robot.subsystems.*;
@@ -195,7 +199,7 @@ public class RobotContainer {
         s_Turret.setDefaultCommand(
             new TeleopTurret(
                 s_Turret,
-                () -> operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+                () -> -operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
             )
             // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
         );
@@ -244,14 +248,20 @@ public class RobotContainer {
 
 
         /* Operator Buttons */
-        autoAim.onTrue(new AutoAim(fireShooter, shootingTables,
-                        () -> operatorStick.getX(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
+        autoAim.onTrue(new SequentialCommandGroup(
+            new ZeroNote(s_Kicker, s_Shooter),
+            new AutoAimWithStateEstimation(fireShooter, () -> s_Swerve.getTranslationToSpeaker().getNorm(), shootingTables,
+                () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), () -> s_Swerve.getPose().getRotation().getDegrees(), s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
 
-        shooterSetpointStage.onTrue(new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
-                                       () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+        shooterSetpointStage.onTrue(new SequentialCommandGroup(
+            new ZeroNote(s_Kicker, s_Shooter),
+            new ShootSetpoint(1800.0, 3000.0, Constants.Pitch.stageSetpoint, 1.85714, fireShooter, 
+                () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
 
-        shooterSetpointSpeaker.onTrue(new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
-                                      () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+        shooterSetpointSpeaker.onTrue(new SequentialCommandGroup(
+            new ZeroNote(s_Kicker, s_Shooter),
+            new ShootSetpoint(1800.0, 1800.0, Constants.Pitch.speakerSetpoint, 0.0, fireShooter,
+                () -> operatorStick.getX(), () -> operatorStick.getY(),s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
 
         //shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
         //                             s_Shooter, s_Pitch, s_Turret, s_LEDs));
@@ -282,8 +292,8 @@ public class RobotContainer {
         // lobShot.onTrue(new ShootSetpoint(5000, 5000, Constants.Pitch.lobSetPoint, 2.04, fireLobShot, () -> operatorStick.getY(), () -> operatorStick.getX(),
         //                                     s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
-        shooterCalibrationMode.onTrue(new ShootSetpointCalibration(1700.0, 1700.0, .64, 0, fireShooter,
-                                    () -> operatorStick.getX(), () -> operatorStick.getY(), s_Shooter, s_Pitch,
+        shooterCalibrationMode.onTrue(new ShooterCalibrationWithStateEstimation(1700.0, 1700.0, .64, 0, fireShooter,
+                                    () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), () -> s_Swerve.getPose().getRotation().getDegrees(), () -> operatorStick.getY(), s_Shooter, s_Pitch,
                                     s_Turret, s_Kicker, s_LEDs, s_VisionLimelight,
                                     new JoystickButton(operatorStick, 12),
                                     new JoystickButton(operatorStick, 15),
@@ -294,9 +304,11 @@ public class RobotContainer {
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
-        SmartDashboard.putData("Test Button 1", new SetPitchPosition(s_Pitch, 0.75));
-        SmartDashboard.putData("Test Button 2", new SetPitchPosition(s_Pitch, 1.0));
-        SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
+        // SmartDashboard.putData("Test Button 1", new SetPitchPosition(s_Pitch, 0.75));
+        // SmartDashboard.putData("Test Button 2", new SetPitchPosition(s_Pitch, 1.0));
+        // SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
+
+        // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
         
 
 

@@ -49,14 +49,14 @@ public class Shooter extends SubsystemBase {
     /* define + configure left shooter motor */
     leftShooter = new CANSparkFlex(Constants.Shooter.leftMotorID, MotorType.kBrushless);
     leftShooter.setIdleMode(IdleMode.kCoast);
-    leftShooter.setSmartCurrentLimit(39);
+    leftShooter.setSmartCurrentLimit(36);
     leftShooterEncoder = leftShooter.getEncoder();
     leftShooterPID = leftShooter.getPIDController();
 
     /* define + configure right shooter motor */
     rightShooter = new CANSparkFlex(Constants.Shooter.rightMotorID, MotorType.kBrushless);
     rightShooter.setIdleMode(IdleMode.kCoast);
-    rightShooter.setSmartCurrentLimit(39);
+    rightShooter.setSmartCurrentLimit(36);
     rightShooterEncoder = rightShooter.getEncoder();
     rightShooterPID = rightShooter.getPIDController();
 

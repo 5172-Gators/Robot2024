@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,13 +42,14 @@ public class Turret extends SubsystemBase {
     // define + configure the rotate motor
     rotateMotor = new CANSparkMax(Constants.Turret.rotateMotorID, MotorType.kBrushless);
     rotateMotor.restoreFactoryDefaults();
-    rotateMotor.setInverted(false);
+    rotateMotor.setInverted(true);
     rotateMotor.setIdleMode(IdleMode.kBrake);
+    rotateMotor.setSmartCurrentLimit(36);
 
-    // rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
-    // rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
-    // rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
+    rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
+    rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
     // create instances of the built-in encoders in the motors
@@ -80,16 +82,26 @@ public class Turret extends SubsystemBase {
 
   }
 
-  // public double encoderUnitsToDegrees() {
-  //   return getRotatePosition()*
-  // }
+  public Rotation2d getTurretToChassis() {
+    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0).rotateBy(Rotation2d.fromDegrees(180));
+  }
 
   public void setPosition(double position) {
     m_currentAimMode = AimMode.kSetpoint;
     // position is in motor rotations
     this.setpoint = position;
     m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
+  }
 
+  public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // angle is a rotation2d object relative to the field
+    Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
+    this.setpoint = test.getDegrees() * 26.0 / 360;
+    // SmartDashboard.putNumber("robotRelative setpoint", this.setpoint);
+    // SmartDashboard.putNumber("fieldRelative setpoint", angle.getDegrees());
+    // SmartDashboard.putNumber("chassisfieldangle", chassisToField.getDegrees());
+    m_pidController.setReference(this.setpoint, CANSparkMax.ControlType.kPosition);
   }
 
   public void autoAimYaw(double tx, int tid, double joystickInput) {
@@ -159,10 +171,9 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    double m_currentPosition = rotateEncoder.getPosition();
-    
-    SmartDashboard.putNumber("Turret Rotate Positon", m_currentPosition);
+    // SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
+    // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
+    // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
     SmartDashboard.putBoolean("Turret Ready", isReady());
 
   }

@@ -19,6 +19,13 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static double maxModuleSpeed;
 
+    public static class Field {
+        public static final Translation2d blueSpeaker = new Translation2d(0, 5.3); //5.554
+        public static final Translation2d redSpeaker = new Translation2d(16.539, 5.3);
+        public static final Translation2d blueAmp = new Translation2d(1.219, 7.010);
+        public static final Translation2d redAmp = new Translation2d(15.240, 7.010);
+    }
+
     public static class Limelight{
 
         // allowable error / deadband
@@ -94,8 +101,8 @@ public final class Constants {
         
         /* Max + Min Positions, Allowable Error */
 
-        public static final double minTurretPosition = -3.1;
-        public static final double maxTurretPosition = 3.1;
+        public static final double minTurretPosition = -17.0;
+        public static final double maxTurretPosition = 17.0;
 
         public static final double allowableError = 0.05; // 0.05
         public static final double aimCoefficient = 0.03;
@@ -221,7 +228,7 @@ public final class Constants {
         public static final double arm_kFF = 0.005;
         public static final double arm_IZone = 0;//0.001;
 
-        public static final int stall_current_lim = 40;
+        public static final int stall_current_lim = 39;
         public static final int free_current_lim = 4;
         
         public static final double firstWheels_kP = 0.0004;//0.00085; 

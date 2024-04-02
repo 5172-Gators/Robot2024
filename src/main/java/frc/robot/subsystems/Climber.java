@@ -107,9 +107,9 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
-    SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
+    // SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
     // SmartDashboard.putBoolean("Climb Lim Switch", getLimSwitch());
-    SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
+    // SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }

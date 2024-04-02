@@ -99,9 +99,9 @@ public class Kicker extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
-    SmartDashboard.putNumber("Kicker current", kicker.getOutputCurrent());
-    SmartDashboard.putBoolean("Kicker Ready", kickerIsReady());
+    // SmartDashboard.putNumber("Kicker RPM", getKickerRPM());
+    // SmartDashboard.putNumber("Kicker current", kicker.getOutputCurrent());
+    // SmartDashboard.putBoolean("Kicker Ready", kickerIsReady());
 
   }
 }

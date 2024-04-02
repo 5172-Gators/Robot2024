@@ -17,25 +17,25 @@ public final class ShootingTables {
 
 
         // Pitch angle LUT (floor distance estimate, pitch angle)
-        m_pitchLUT.put(new InterpolatingDouble(89.5), new InterpolatingDouble(1.49539));
-        m_pitchLUT.put(new InterpolatingDouble(101.5), new InterpolatingDouble(1.2614));
-        m_pitchLUT.put(new InterpolatingDouble(131.0), new InterpolatingDouble(1.015));
-        m_pitchLUT.put(new InterpolatingDouble(151.0), new InterpolatingDouble(0.832));
-        m_pitchLUT.put(new InterpolatingDouble(177.0), new InterpolatingDouble(0.6485));
+        m_pitchLUT.put(new InterpolatingDouble(1.88), new InterpolatingDouble(1.715667));
+        m_pitchLUT.put(new InterpolatingDouble(2.45), new InterpolatingDouble(1.252));
+        m_pitchLUT.put(new InterpolatingDouble(3.245), new InterpolatingDouble(0.9295));
+        m_pitchLUT.put(new InterpolatingDouble(4.20), new InterpolatingDouble(0.70256));
+        m_pitchLUT.put(new InterpolatingDouble(5.05), new InterpolatingDouble(0.5063));
        
         // Pitch angle LUT (floor distance estimate, left flywheel RPM)
-        m_RPMLeftLUT.put(new InterpolatingDouble(89.5), new InterpolatingDouble(3000.0));
-        m_RPMLeftLUT.put(new InterpolatingDouble(101.5), new InterpolatingDouble(3000.0));
-        m_RPMLeftLUT.put(new InterpolatingDouble(131.0), new InterpolatingDouble(3000.0));
-        m_RPMLeftLUT.put(new InterpolatingDouble(151.0), new InterpolatingDouble(3000.0));
-        m_RPMLeftLUT.put(new InterpolatingDouble(177.0), new InterpolatingDouble(3170.0));
+        m_RPMLeftLUT.put(new InterpolatingDouble(1.88), new InterpolatingDouble(2810.0));
+        m_RPMLeftLUT.put(new InterpolatingDouble(2.45), new InterpolatingDouble(3080.0));
+        m_RPMLeftLUT.put(new InterpolatingDouble(3.245), new InterpolatingDouble(3470.0));
+        m_RPMLeftLUT.put(new InterpolatingDouble(4.20), new InterpolatingDouble(3640.0));
+        m_RPMLeftLUT.put(new InterpolatingDouble(5.05), new InterpolatingDouble(3930.0));
         
         // Pitch angle LUT (floor distance estimate, right flywheel RPM)
-        m_RPMRightLUT.put(new InterpolatingDouble(89.5), new InterpolatingDouble(3000.0));
-        m_RPMRightLUT.put(new InterpolatingDouble(101.5), new InterpolatingDouble(3200.0));
-        m_RPMRightLUT.put(new InterpolatingDouble(131.0), new InterpolatingDouble(3350.0));
-        m_RPMRightLUT.put(new InterpolatingDouble(151.0), new InterpolatingDouble(3350.0));
-        m_RPMRightLUT.put(new InterpolatingDouble(177.0), new InterpolatingDouble(3480.0));
+        m_RPMRightLUT.put(new InterpolatingDouble(1.88), new InterpolatingDouble(2710.0));
+        m_RPMRightLUT.put(new InterpolatingDouble(2.45), new InterpolatingDouble(3080.0));
+        m_RPMRightLUT.put(new InterpolatingDouble(3.245), new InterpolatingDouble(2810.0));
+        m_RPMRightLUT.put(new InterpolatingDouble(4.20), new InterpolatingDouble(3040.0));
+        m_RPMRightLUT.put(new InterpolatingDouble(5.05), new InterpolatingDouble(3300.0));
 
            // Pitch angle LUT (floor distance estimate, pitch angle)
     //     m_pitchLUT.put(new InterpolatingDouble(41.5), new InterpolatingDouble(2.3));
