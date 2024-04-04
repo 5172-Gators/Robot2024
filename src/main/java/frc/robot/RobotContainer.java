@@ -39,6 +39,7 @@ import frc.robot.commands.shooter.AmpScore;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoAimShootSetpoint;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
+import frc.robot.commands.shooter.LobShot;
 import frc.robot.commands.shooter.NoShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpointCalibration;
@@ -285,10 +286,9 @@ public class RobotContainer {
                                            () -> s_Swerve.getPose().getRotation().getDegrees(), 
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
 
-        // lobShotButton.onTrue(new AutoAimWithStateEstimation(() -> true,
-        //                                () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
-        //                                shootingTables,
-        //                                // lob position, 
+        // lobShotButton.onTrue(new LobShot(fireShooter,
+        //                                () -> s_Swerve.getTranslationToSpeaker().getNorm(),
+        //                                () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(),
         //                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
         //                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
@@ -385,12 +385,11 @@ public class RobotContainer {
 
         autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
         autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));  
-        autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
-        autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
-        autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
-        autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
-        autoChooser.addOption("testStateEstimation", new PathPlannerAuto("StateEstimation"));
-   
+        autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
+        // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
+        // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
+        // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
+        // autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
     }
 
     /**
