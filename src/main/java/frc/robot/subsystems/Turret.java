@@ -171,7 +171,7 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
+    SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
     SmartDashboard.putBoolean("Turret Ready", isReady());

@@ -34,7 +34,11 @@ public class ManualClimbControl extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    s_Climber.enableSoftLimits();
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -49,6 +53,7 @@ public class ManualClimbControl extends Command {
   public void end(boolean interrupted) {
 
     s_Climber.manualClimberControl(0);
+    s_Climber.disableSoftLimits();
     
   }
 

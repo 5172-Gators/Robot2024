@@ -111,7 +111,7 @@ public final class Constants {
 
         /* Positions */
         public static final double R_intakingPosition = 0;
-        public static final double turretAmpPosition = -13.147677; //counter
+        public static final double turretAmpPosition = -12.8333711; //counter
         public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
         
         /* PID */
@@ -123,6 +123,8 @@ public final class Constants {
 
         public static final double maxOutput = 1;
         public static final double minOutput = -1;
+
+        public static double ampScorePosition;
     
     }
 
@@ -161,7 +163,7 @@ public final class Constants {
         public static final double lobSetPoint = 0.61;
         public static final double climbPosition = 0.513;
         public static final double setpointAmp = 0.49823;
-        public static final double loadingPosition = 0; //TODO: find this position
+        public static final double ampScoreTravelPosition = 0.6821;
         
         /* Relative Encoder PID Constants */
         public static final double rel_kP = 3.5; //0.16;
@@ -200,8 +202,8 @@ public final class Constants {
         public static final double ampScorePosition = 190.33;
         public static final double climbPosition = 147.41;
         public static final double maxPosition = 191.0;
-        
 
+        
     }
 
 

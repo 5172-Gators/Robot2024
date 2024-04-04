@@ -2,29 +2,25 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.trap_scorer;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.TrapScorer;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Turret;
 
-public class SetElevatorPosition extends Command {
-  /** Creates a new SetElevatorPosition. */
-
-  TrapScorer s_TrapScorer;
-  Turret s_Turret;
+public class JankyClimberPosition extends Command {
+  /** Creates a new JankyClimberPosition. */
+  Climber s_Climber;
   double setpoint;
 
-  public SetElevatorPosition(TrapScorer trapScorer, Turret turret, double setpoint) {
-    
+  public JankyClimberPosition(double setpoint, Climber climber) {
 
     this.setpoint = setpoint;
-    s_TrapScorer = trapScorer;
-    s_Turret = turret;
-    
+    this.s_Climber = climber;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Turret, s_TrapScorer);
+    addRequirements(s_Climber);
 
   }
 
@@ -32,7 +28,7 @@ public class SetElevatorPosition extends Command {
   @Override
   public void initialize() {
 
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    s_Climber.enableSoftLimits();
 
   }
 
@@ -40,7 +36,7 @@ public class SetElevatorPosition extends Command {
   @Override
   public void execute() {
 
-    s_TrapScorer.setElevatorPosition(setpoint);
+    s_Climber.manualClimberControl(1);
 
   }
 
@@ -48,7 +44,7 @@ public class SetElevatorPosition extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_TrapScorer.setElevatorPosition(Constants.TrapScorer.stowedPosition);
+    s_Climber.manualClimberControl(0);
 
   }
 
@@ -56,7 +52,13 @@ public class SetElevatorPosition extends Command {
   @Override
   public boolean isFinished() {
 
-    return s_TrapScorer.elevatorisAtPosition();
+    if (s_Climber.getClimberPosition() >= setpoint){
+      
+      return true;
 
+    } else {
+
+      return false;
+    }
   }
 }

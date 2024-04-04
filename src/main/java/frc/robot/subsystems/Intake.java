@@ -174,7 +174,7 @@ public class Intake extends SubsystemBase {
 
     // SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
     // SmartDashboard.putNumber("Intake Motor 1 RPM", intakeWheelsEncoder.getVelocity());
 

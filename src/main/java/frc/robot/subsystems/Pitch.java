@@ -168,9 +168,9 @@ public class Pitch extends SubsystemBase {
     // double absolutePosition = getAbsolutePitchPosition();
 
 
-    // SmartDashboard.putNumber("RelativePitchPosition", relativePitchPosition);
+    SmartDashboard.putNumber("RelativePitchPosition", this.getRelativePitchPosition());
     SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
-    SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
+    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
     // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
     // SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
     // SmartDashboard.putNumber("Pitch Motor Current", outputCurrent);
