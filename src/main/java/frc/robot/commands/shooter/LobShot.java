@@ -33,7 +33,7 @@ public class LobShot extends Command {
   DoubleSupplier chassisToFieldAngle;
 
   /** Creates a new AutoAim. */
-  public LobShot(BooleanSupplier fire, DoubleSupplier dist, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
+  public LobShot(BooleanSupplier fire, ShootingTables shootingTables, DoubleSupplier dist, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
                   Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
@@ -42,6 +42,7 @@ public class LobShot extends Command {
     this.s_Kicker = m_kicker;
     this.fire = fire;
     this.dist = dist;
+    this.shootingTables = shootingTables;
     this.chassisToTargetAngle = chassisToTargetAngle;
     this.chassisToFieldAngle = chassisToFieldAngle;
 

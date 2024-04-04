@@ -41,9 +41,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "intakeAuto"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeAuto"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto1Path2"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -79,7 +92,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "auto1path2"
+                        "pathName": "auto1path3"
                       }
                     },
                     {
@@ -103,7 +116,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "auto1path3"
+            "pathName": "auto1path4"
           }
         },
         {

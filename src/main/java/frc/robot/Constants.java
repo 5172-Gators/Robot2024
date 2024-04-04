@@ -150,7 +150,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.01;//0.002;
+        public static final double allowableError = 0.03;//0.002;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
         public static final double horizontalOffset = 0.195833; //0.06 // Used for calculating angle of pitch mechanism 

@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.883798934502291,
-        "y": 4.075371117931965
+        "x": 2.8364283832704595,
+        "y": 5.550936522700434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.342016882212193,
-        "y": 4.047937920302484
+        "x": 4.445000498217827,
+        "y": 4.8131538203162
       },
       "isLocked": false,
-      "linkedName": "auto1path2end"
+      "linkedName": "auto2Path2End"
     },
     {
       "anchor": {
-        "x": 2.3106230827846286,
-        "y": 5.880697915241985
+        "x": 7.860377261410728,
+        "y": 4.087081954477746
       },
       "prevControl": {
-        "x": 4.581343028591905,
-        "y": 4.754599637587292
+        "x": 5.048440719501486,
+        "y": 4.087081954477746
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "auto1path2end"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "shootAuto1Setpoint3",
-      "waypointRelativePos": 0.2,
+      "name": "intakeAuto",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,7 +50,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
