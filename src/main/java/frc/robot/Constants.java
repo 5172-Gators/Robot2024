@@ -153,7 +153,7 @@ public final class Constants {
         public static final double allowableError = 0.01;//0.002;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
-        public static final double horizontalOffset = 0.06;//-0.78;//0.1325; // Used for calculating angle of pitch mechanism 
+        public static final double horizontalOffset = 0.195833; //0.06 // Used for calculating angle of pitch mechanism 
 
         /* Positions */
         public static final double intakePosition = 0.86; 
@@ -255,36 +255,36 @@ public final class Constants {
 
     public static final class TrapScorer {
 
-        /* Motor IDs */
-        public static final int elevatorMotorID = 0;
-        public static final int wheelsMotorID = 0;
+        // /* Motor IDs */
+        // public static final int elevatorMotorID = 0;
+        // public static final int wheelsMotorID = 0;
 
-        // elevator PID
-        public static final double elevator_kP = 0.01;
-        public static final double elevator_kI = 0;
-        public static final double elevator_kD = 0;
-        public static final double elevator_kFF = 0;
+        // // elevator PID
+        // public static final double elevator_kP = 0.01;
+        // public static final double elevator_kI = 0;
+        // public static final double elevator_kD = 0;
+        // public static final double elevator_kFF = 0;
 
-        // scoring wheels PID
-        public static final double wheels_kP = 0.01;
-        public static final double wheels_kI = 0;
-        public static final double wheels_kD = 0;
-        public static final double wheels_kFF = 0;
+        // // scoring wheels PID
+        // public static final double wheels_kP = 0.01;
+        // public static final double wheels_kI = 0;
+        // public static final double wheels_kD = 0;
+        // public static final double wheels_kFF = 0;
 
-        /* Soft Limits */
-        public static final float minElevatorPosition = 0f;
-        public static final float maxElevatorPosition = 0f;
+        // /* Soft Limits */
+        // public static final float minElevatorPosition = 0f;
+        // public static final float maxElevatorPosition = 0f;
 
-        /* Positions */
-        public static final double allowableError = 0; //TODO: Find these positions, RPMs + allowable error
-        public static final double stowedPosition = 0;
-        public static final double loadingPosition = 0;
-        public static final double ampScorePosition = 0;
-        public static final double trapScorePosition = 0;
+        // /* Positions */
+        // public static final double allowableError = 0; //TODO: Find these positions, RPMs + allowable error
+        // public static final double stowedPosition = 0;
+        // public static final double loadingPosition = 0;
+        // public static final double ampScorePosition = 0;
+        // public static final double trapScorePosition = 0;
 
-        /* Scoring Wheels RPMs */
-        public static final double loadingRPM = 0;
-        public static final double scoringRPM = 0;
+        // /* Scoring Wheels RPMs */
+        // public static final double loadingRPM = 0;
+        // public static final double scoringRPM = 0;
     }
 
 

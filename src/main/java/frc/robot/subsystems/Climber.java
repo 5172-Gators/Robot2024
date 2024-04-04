@@ -82,6 +82,9 @@ public class Climber extends SubsystemBase {
     winchMotor1.enableSoftLimit(SoftLimitDirection.kForward, false);
     winchMotor2.enableSoftLimit(SoftLimitDirection.kForward, false);
 
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    winchMotor2.enableSoftLimit(SoftLimitDirection.kReverse, false);
+
   }
 
   public void enableSoftLimits() {
@@ -89,6 +92,9 @@ public class Climber extends SubsystemBase {
     winchMotor1.enableSoftLimit(SoftLimitDirection.kForward, true);
     winchMotor2.enableSoftLimit(SoftLimitDirection.kForward, true);
 
+    winchMotor1.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    winchMotor2.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    
   }
 
   @Override

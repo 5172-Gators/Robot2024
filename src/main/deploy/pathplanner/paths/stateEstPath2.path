@@ -3,48 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.23,
-        "y": 5.550936522700434
+        "x": 1.7238989114212167,
+        "y": 3.688913511921175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2300000000000004,
-        "y": 5.550936522700434
+        "x": 3.176042643098124,
+        "y": 2.670070732438184
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "stateest1end"
     },
     {
       "anchor": {
-        "x": 2.4499707772596704,
-        "y": 5.550936522700434
+        "x": 5.682161663895367,
+        "y": 1.1125294718492431
       },
       "prevControl": {
-        "x": 1.4499707772596704,
-        "y": 5.550936522700434
+        "x": 4.956089798056913,
+        "y": 1.5692520971347208
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "auto1path1end"
+      "linkedName": "stateest2end"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "intakeAuto",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -54,10 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "auto1",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

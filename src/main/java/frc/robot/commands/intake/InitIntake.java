@@ -21,19 +21,17 @@ public class InitIntake extends ParallelCommandGroup {
   Intake s_Intake;
   Pitch s_Pitch;
   Turret s_Turret;
-  Climber s_Climber;
   
   /** Creates a new InitIntake. */
-  public InitIntake(Intake intake, Pitch pitch, Turret turret, Climber climber) {
+  public InitIntake(Intake intake, Pitch pitch, Turret turret) {
     s_Intake = intake;
     s_Pitch = pitch;
     s_Turret = turret;
-    s_Climber = climber;
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DeployIntake(s_Intake),
-      new StowClimber(s_Climber),
       new SetPitchPosition(s_Pitch, Constants.Pitch.intakePosition),
       new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
     );

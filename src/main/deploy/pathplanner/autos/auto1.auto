@@ -12,9 +12,41 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "shootAutoAim"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto1path1"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "updateStateEstimation"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stateEstimationShooting"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
+              }
+            ]
           }
         },
         {
@@ -22,37 +54,18 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "auto1path1"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeAuto"
-                      }
-                    }
-                  ]
+                  "name": "updateStateEstimation"
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 2.5
+                  "name": "stateEstimationShooting"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAutoAim"
           }
         },
         {
@@ -94,9 +107,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "shootAutoAim"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "updateStateEstimation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stateEstimationShooting"
+                }
+              }
+            ]
           }
         }
       ]

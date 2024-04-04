@@ -91,6 +91,19 @@ public class Pitch extends SubsystemBase {
 
   }
 
+  public void disableSoftLimits() {
+
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+  }
+
+  public void enableSoftLimits() {
+
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
+  }
+
   public double getRelativePitchPosition(){
 
     return relativePitchEncoder.getPosition();

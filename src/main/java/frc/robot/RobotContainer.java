@@ -17,6 +17,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 
 import frc.robot.commands.swerve.TeleopSwerve;
+import frc.robot.commands.swerve.UpdateStateEstimation;
 import frc.robot.commands.turret.InitAmpScore;
 import frc.robot.commands.turret.SetTurretFieldRelative;
 import frc.robot.commands.turret.TeleopTurret;
@@ -24,6 +25,7 @@ import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.JankyClimberPosition;
 import frc.robot.commands.climber.ManualClimbControl;
+import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
@@ -38,7 +40,6 @@ import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoAimShootSetpoint;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
 import frc.robot.commands.shooter.NoShootSetpoint;
-import frc.robot.commands.shooter.ShootReverse;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpointCalibration;
 import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
@@ -94,7 +95,7 @@ public class RobotContainer {
     private final JoystickButton shooterSetpointSpeaker = new JoystickButton(operatorStick, 9);
     private final JoystickButton ampShootSetpoint = new JoystickButton(operatorStick, 10);
     private final JoystickButton shooterEject = new JoystickButton(operatorStick, 4); // poop
-    private final JoystickButton ampScoringSetpoint = new JoystickButton(operatorStick, 7);
+    // private final JoystickButton ampScoringSetpoint = new JoystickButton(operatorStick, 7);
     // private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
     // private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
     private final JoystickButton shooterCalibrationMode = new JoystickButton(operatorStick, 14);
@@ -145,7 +146,15 @@ public class RobotContainer {
 
         /* Configure PathPlanner Commands */
 
-        // NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true, ))
+        NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true,
+                                                                () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
+                                                                shootingTables,
+                                                                () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
+                                                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+
+        NamedCommands.registerCommand("updateStateEstimation", new UpdateStateEstimation(s_Swerve, s_Turret));
+
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs, () -> true));
 
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
@@ -172,10 +181,10 @@ public class RobotContainer {
                                                                                     () -> 0, 
                                                                                     s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
                                     
-        NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, 
-                                                                   shootingTables,
-                                                                   () -> operatorStick.getX(),
-                                                                   s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
+        // NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, 
+                                                                //    shootingTables,
+                                                                //    () -> operatorStick.getX(),
+                                                                //    s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
       
         NamedCommands.registerCommand("Eject", new ShootSetpoint(1500.0, 1800.0, 
                                                                       Constants.Pitch.intakePosition, 
@@ -231,11 +240,9 @@ public class RobotContainer {
         );
 
         s_Pitch.setDefaultCommand(
-           new TeleopPitch(
-            s_Pitch,
-            () -> -operatorStick.getRawAxis(pitchAdjust) // * 0.1
-           )
-            // new SetPitchPosition(s_Pitch, Constants.Pitch.P_intakingPosition)
+          
+            new SetPitchPosition(s_Pitch, Constants.Pitch.intakePosition)
+
         );
 
         s_Intake.setDefaultCommand(
@@ -246,14 +253,9 @@ public class RobotContainer {
             new StopShooter(s_Shooter)
         );
 
-        // s_Kicker.setDefaultCommand(
-        //     new ZeroNote(s_Kicker, s_Shooter)
-        // );
-
         s_LEDs.setDefaultCommand(
             new LEDDefaultCommand(s_LEDs, s_Shooter)
         );
-
     }
 
     /**
@@ -283,15 +285,12 @@ public class RobotContainer {
                                            () -> s_Swerve.getPose().getRotation().getDegrees(), 
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
 
-        // shooterSetpointStage.onTrue(new SequentialCommandGroup(
-        //     new ZeroNote(s_Kicker, s_Shooter),
-        //     new ShootSetpoint(1800.0, 3000.0, 
-        //                       Constants.Pitch.stageSetpoint, 
-        //                       1.85714, 
-        //                       fireShooter, 
-        //                       () -> operatorStick.getX(), 
-        //                       () -> operatorStick.getY(),
-        //                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
+        // lobShotButton.onTrue(new AutoAimWithStateEstimation(() -> true,
+        //                                () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
+        //                                shootingTables,
+        //                                // lob position, 
+        //                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
+        //                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         shooterSetpointSpeaker.onTrue(new SequentialCommandGroup(
             new ZeroNote(s_Kicker, s_Shooter),
@@ -390,6 +389,7 @@ public class RobotContainer {
         autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
+        autoChooser.addOption("testStateEstimation", new PathPlannerAuto("StateEstimation"));
    
     }
 
