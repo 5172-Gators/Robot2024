@@ -20,27 +20,20 @@
                 "data": {
                   "pathName": "testAutoPath"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stateEstimationShoot"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 4.0
-                }
-              }
-            ]
+            "name": "Eject"
           }
         }
       ]

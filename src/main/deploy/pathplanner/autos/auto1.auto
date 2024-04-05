@@ -12,73 +12,47 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "shootAutoAim"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "auto1path1"
-                }
-              },
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "updateStateEstimation"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "stateEstimationShooting"
-                      }
-                    }
-                  ]
-                }
-              },
               {
                 "type": "parallel",
                 "data": {
                   "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto1path1"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
                         "name": "intakeAuto"
                       }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "auto1Path2"
-                      }
                     }
                   ]
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
                 }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "updateStateEstimation"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stateEstimationShooting"
-                }
-              }
-            ]
+            "name": "shootAutoAim"
           }
         },
         {
@@ -92,7 +66,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "auto1path3"
+                        "pathName": "auto1path2"
                       }
                     },
                     {
@@ -116,26 +90,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "auto1path4"
+            "pathName": "auto1path3"
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "updateStateEstimation"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stateEstimationShooting"
-                }
-              }
-            ]
+            "name": "shootAutoAim"
           }
         }
       ]

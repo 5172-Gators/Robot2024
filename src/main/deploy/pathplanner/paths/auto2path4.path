@@ -8,33 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2302057933645307,
-        "y": 4.03092837980712
+        "x": 5.02403235575702,
+        "y": 1.7267149918915226
       },
       "isLocked": false,
       "linkedName": "auto2Path3End"
     },
     {
       "anchor": {
-        "x": 7.286546270667433,
-        "y": 2.6583598958924024
+        "x": 8.082784627107717,
+        "y": 2.417400988648132
       },
       "prevControl": {
-        "x": 5.2254390386098875,
-        "y": -0.07026501927469005
+        "x": 4.9549637560813595,
+        "y": 1.6872472206482891
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "auto2Path4End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 37.79872455407652,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -56,13 +50,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 48.69138598645103,
+    "rotation": -169.69515353123398,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "auto2",
   "previewStartingState": {
-    "rotation": -35.03565433616263,
+    "rotation": 146.34807480613281,
     "velocity": 0
   },
   "useDefaultConstraints": true

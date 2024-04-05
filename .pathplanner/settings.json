@@ -1,12 +1,13 @@
 {
   "robotWidth": 0.64,
   "robotLength": 0.64,
-  "holonomicMode": false,
+  "holonomicMode": true,
   "pathFolders": [
-    "auto4",
+    "CenterLineEjectAll",
     "auto1",
     "auto2",
-    "auto3"
+    "auto3",
+    "auto4"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
