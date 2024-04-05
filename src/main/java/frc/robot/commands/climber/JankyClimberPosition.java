@@ -44,7 +44,7 @@ public class JankyClimberPosition extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Climber.manualClimberControl(0);
+    new StowClimber(s_Climber);
 
   }
 

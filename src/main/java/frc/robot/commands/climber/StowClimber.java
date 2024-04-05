@@ -34,8 +34,6 @@ public class StowClimber extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Climber.manualClimberControl(0);
-
   }
 
   // Returns true when the command should end.
@@ -51,6 +49,6 @@ public class StowClimber extends Command {
       return false;
 
     }
-    
+
   }
 }
