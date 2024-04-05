@@ -14,6 +14,7 @@ import frc.robot.commands.led.LEDTimedCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -24,6 +25,8 @@ public class RunIntake extends Command {
   Pitch s_Pitch;
   Turret s_Turret;
   Shooter s_Shooter;
+  Limelight s_VisionLL;
+  Limelight s_DriveLL;
   LEDs s_LEDs;
   Kicker s_Kicker;
   BooleanSupplier s_useBeamBreaks;
@@ -34,17 +37,19 @@ public class RunIntake extends Command {
   int state;
 
   /** Creates a new RunIntake. */
-  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter, Kicker kicker, LEDs leds, BooleanSupplier useBeamBreaks) {
+  public RunIntake(Intake intake, Pitch pitch, Turret turret, Shooter shooter, Kicker kicker, Limelight visionLL, Limelight driveLL, LEDs leds, BooleanSupplier useBeamBreaks) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = intake;
     this.s_Pitch = pitch;
     this.s_Turret = turret;
     this.s_Shooter = shooter;
+    this.s_VisionLL = visionLL;
+    this.s_DriveLL = driveLL;
     this.s_LEDs = leds;
     this.s_Kicker = kicker;
     this.s_useBeamBreaks = useBeamBreaks;
     
-    addRequirements(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs);
+    addRequirements(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLL, s_DriveLL, s_LEDs);
   }
 
   // Called when the command is initially scheduled.
@@ -120,11 +125,13 @@ public class RunIntake extends Command {
 
     if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
-      Commands.sequence(new LEDTimedCommand(0.15, 0.5, s_LEDs));
+      s_DriveLL.blinkLED();
+      s_VisionLL.blinkLED();
 
     } else {
 
-      s_LEDs.setColor(0.99);
+      s_DriveLL.turnOffLED();
+      s_VisionLL.turnOffLED();
 
     }
 

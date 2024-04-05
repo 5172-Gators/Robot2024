@@ -33,6 +33,7 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
+import frc.robot.commands.limelight.HumanPlayerSignal;
 import frc.robot.commands.pitch.SetPitchPosition;
 import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
@@ -120,6 +121,7 @@ public class RobotContainer {
     public final Turret s_Turret;
     public final Pitch s_Pitch;
     public final Limelight s_VisionLimelight;
+    public final Limelight s_DriveLimelight;
     public final Intake s_Intake;
     public final Climber s_Climber;
     public final Kicker s_Kicker;
@@ -136,6 +138,7 @@ public class RobotContainer {
         s_Turret = new Turret();
         s_Pitch = new Pitch();
         s_VisionLimelight = new Limelight(CamMode.Vision);
+        s_DriveLimelight = new Limelight(CamMode.Drive);
         s_Intake = new Intake();
         s_Climber = new Climber();
         s_LEDs = new LEDs();
@@ -156,7 +159,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateStateEstimation(s_Swerve, s_Turret));
 
-        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs, () -> true));
+        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -274,9 +277,11 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs, beamBreakOverride.negate()));
+        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, beamBreakOverride.negate()));
 
         outtake.whileTrue(new Eject(s_Intake, s_Kicker));
+
+        shooterReverse.whileTrue(new HumanPlayerSignal(s_VisionLimelight, s_DriveLimelight));
 
 
         /* Operator Buttons */

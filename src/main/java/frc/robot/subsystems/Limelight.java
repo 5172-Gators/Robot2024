@@ -33,6 +33,7 @@ public class Limelight extends SubsystemBase {
   private double lastDist = 50;
 
   private NetworkTable m_limelightTable;
+  private NetworkTableEntry ledMode;
 
   private CamMode s_camMode = CamMode.Drive;
 
@@ -40,10 +41,26 @@ public class Limelight extends SubsystemBase {
 
   public enum CamMode { Vision, Drive };
 
+  private enum LEDMode{
+
+    PIPELINE(0),
+    OFF(1),
+    BLINK(2),
+    ON(3);
+
+    private int modeValue;
+    private LEDMode(int modeVal){
+
+    this.modeValue = modeVal; 
+  }
+}
+
   public Limelight(CamMode camMode) {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-vision");
 
     m_Tid = m_limelightTable.getIntegerTopic("tid").subscribe(-1);
+
+    
     
     tx = m_limelightTable.getEntry("tx");
     ty = m_limelightTable.getEntry("ty");
@@ -53,6 +70,7 @@ public class Limelight extends SubsystemBase {
 
     // allows access to apriltags in code
     s_camMode = camMode;
+    ledMode = m_limelightTable.getEntry("ledMode");
 
   }
 
@@ -141,6 +159,23 @@ public class Limelight extends SubsystemBase {
     int currentTarget = (int) m_Tid.get();
     return currentTarget;
 
+  }
+
+  private void setLEDMode(LEDMode mode){
+
+    ledMode.setNumber(mode.modeValue);
+  }
+
+  public void blinkLED(){
+
+    this.setLEDMode(LEDMode.BLINK);
+
+  }
+
+  public void turnOffLED(){
+
+    this.setLEDMode(LEDMode.OFF);
+    
   }
 
   // public double getLatency() {
