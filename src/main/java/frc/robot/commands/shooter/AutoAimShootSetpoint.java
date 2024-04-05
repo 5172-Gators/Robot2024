@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pitch;
@@ -22,6 +23,7 @@ public class AutoAimShootSetpoint extends Command {
   Turret s_Turret;
   LEDs s_LEDs;
   Limelight s_LL;
+  Kicker s_Kicker;
 
   double leftRPM;
   double rightRPM;
@@ -33,7 +35,7 @@ public class AutoAimShootSetpoint extends Command {
 
   /** Creates a new AutoAimShootSetpoint. */
   public AutoAimShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yawAim, DoubleSupplier pitchAim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led, Limelight m_ll) {
+          DoubleSupplier yawAim, DoubleSupplier pitchAim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Limelight m_ll) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -45,6 +47,7 @@ public class AutoAimShootSetpoint extends Command {
     s_Shooter = m_shooter;
     s_Pitch = m_pitch;
     s_Turret = m_turret;
+    s_Kicker = m_kicker;
     s_LEDs = m_led;
     s_LL = m_ll;
 
@@ -65,7 +68,7 @@ public class AutoAimShootSetpoint extends Command {
     if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
       s_LEDs.setColor(-0.11);
     }
@@ -75,7 +78,7 @@ public class AutoAimShootSetpoint extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);

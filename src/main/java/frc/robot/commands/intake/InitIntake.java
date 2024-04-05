@@ -6,8 +6,10 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.turret.SetPitchPosition;
+import frc.robot.commands.climber.StowClimber;
+import frc.robot.commands.pitch.SetPitchPosition;
 import frc.robot.commands.turret.SetTurretPosition;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Turret;
@@ -25,6 +27,7 @@ public class InitIntake extends ParallelCommandGroup {
     s_Intake = intake;
     s_Pitch = pitch;
     s_Turret = turret;
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

@@ -2,26 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.turret;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Pitch;
+import frc.robot.subsystems.Climber;
 
-public class SetPitchPosition extends Command {
-  /** Creates a new SetPitchPosition. */
+public class StowClimber extends Command {
+  /** Creates a new StowClimber. */
+  Climber s_Climber;
+  
+  public StowClimber(Climber climber) {
 
-  Pitch s_Pitch;
-  double position;
-
-  public SetPitchPosition(Pitch s_Pitch, double position) {
+    this.s_Climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.s_Pitch = s_Pitch;
-    this.position = position;
-
-    addRequirements(s_Pitch);
-
+    addRequirements(s_Climber);
   }
 
   // Called when the command is initially scheduled.
@@ -32,23 +26,29 @@ public class SetPitchPosition extends Command {
   @Override
   public void execute() {
 
-    s_Pitch.setPosition(position);
+    s_Climber.manualClimberControl(-1);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Pitch.stopPitch();
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    return s_Pitch.isReady();
+
+    if (s_Climber.getClimberPosition() <= 10){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
 
   }
 }
-
-

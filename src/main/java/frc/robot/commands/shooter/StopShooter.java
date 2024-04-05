@@ -5,22 +5,25 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 
 public class StopShooter extends Command {
   Shooter s_Shooter;
+  Kicker s_Kicker;
 
   /** Creates a new StopShooter. */
   public StopShooter(Shooter shooter) {
     s_Shooter = shooter;
+   
     addRequirements(s_Shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Shooter.stopShooter();
+    //s_Shooter.setShooterRPM(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,7 +37,7 @@ public class StopShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.stopShooter();
-    s_Shooter.stopKicker();
+    // s_Kicker.stopKicker();
   }
 
   // Returns true when the command should end.

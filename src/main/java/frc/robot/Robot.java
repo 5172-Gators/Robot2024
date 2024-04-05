@@ -32,8 +32,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    SmartDashboard.putNumber("CalibrationLeftRPM", 550.0);
-    SmartDashboard.putNumber("CalibrationRightRPM", 550.0);
+    // SmartDashboard.putNumber("CalibrationLeftRPM", 550.0);
+    // SmartDashboard.putNumber("CalibrationRightRPM", 550.0);
     m_robotContainer = new RobotContainer();
   }
 
@@ -51,11 +51,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     
-    // double pitch_m = m_robotContainer.s_Pitch.getPitchDegrees();
-    // SmartDashboard.putNumber("LimelightHeightFromFloor", m_robotContainer.s_VisionLimelight.getLimelightHeightFromFloor(pitch_m));
-    // SmartDashboard.putNumber("camPitch", m_robotContainer.s_VisionLimelight.getCameraPitch(pitch_m));
-    // SmartDashboard.putNumber("LimelightHorzDistFromPivot", m_robotContainer.s_VisionLimelight.getLimelightHorizontalDistanceFromPivot(pitch_m));
-    // SmartDashboard.putNumber("distanceToTarget", m_robotContainer.s_VisionLimelight.getDist(pitch_m, m_robotContainer.s_VisionLimelight.currentTarget()));
+    m_robotContainer.s_Swerve.updateOdometry(m_robotContainer.s_Turret.getTurretToChassis());
 
     CommandScheduler.getInstance().run();
   }

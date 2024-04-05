@@ -33,6 +33,7 @@ public class Limelight extends SubsystemBase {
   private double lastDist = 50;
 
   private NetworkTable m_limelightTable;
+  private NetworkTableEntry ledMode;
 
   private CamMode s_camMode = CamMode.Drive;
 
@@ -40,10 +41,26 @@ public class Limelight extends SubsystemBase {
 
   public enum CamMode { Vision, Drive };
 
+  private enum LEDMode{
+
+    PIPELINE(0),
+    OFF(1),
+    BLINK(2),
+    ON(3);
+
+    private int modeValue;
+    private LEDMode(int modeVal){
+
+    this.modeValue = modeVal; 
+  }
+}
+
   public Limelight(CamMode camMode) {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-vision");
 
     m_Tid = m_limelightTable.getIntegerTopic("tid").subscribe(-1);
+
+    
     
     tx = m_limelightTable.getEntry("tx");
     ty = m_limelightTable.getEntry("ty");
@@ -53,6 +70,7 @@ public class Limelight extends SubsystemBase {
 
     // allows access to apriltags in code
     s_camMode = camMode;
+    ledMode = m_limelightTable.getEntry("ledMode");
 
   }
 
@@ -88,7 +106,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getLimelightHorizontalDistanceFromPivot(double pitch_m) {
-    return Constants.Limelight.limelightRadius*Math.cos(Math.toRadians(pitch_m+Constants.Limelight.camToPivotAngle));
+    return Constants.Limelight.limelightRadius * Math.cos(Math.toRadians(pitch_m + Constants.Limelight.camToPivotAngle));
   }
 
   public double getCameraPitch(double pitch_m) {
@@ -112,7 +130,7 @@ public class Limelight extends SubsystemBase {
     if ((alliance.get() == DriverStation.Alliance.Blue && tagID == 7) 
             || (alliance.get() == DriverStation.Alliance.Red && tagID == 4)) {
       q1 = Math.abs(cam_pitch + y);
-      h1 = Constants.Limelight.speakerAprilTagCenterHeight-getLimelightHeightFromFloor(pitch_m);
+      h1 = Constants.Limelight.speakerAprilTagCenterHeight - getLimelightHeightFromFloor(pitch_m);
       d1 = h1/Math.tan(Math.toRadians(q1));
 
       d2 = getLimelightHorizontalDistanceFromPivot(pitch_m);
@@ -143,6 +161,23 @@ public class Limelight extends SubsystemBase {
 
   }
 
+  private void setLEDMode(LEDMode mode){
+
+    ledMode.setNumber(mode.modeValue);
+  }
+
+  public void blinkLED(){
+
+    this.setLEDMode(LEDMode.BLINK);
+
+  }
+
+  public void turnOffLED(){
+
+    this.setLEDMode(LEDMode.OFF);
+    
+  }
+
   // public double getLatency() {
   //   // total latency = Capture latency + pipeline latency + posting latency + update latency
   //   // Limelight posts to networktables every 10 ms, so the posting latency should be 5 ms on average.
@@ -166,13 +201,13 @@ public class Limelight extends SubsystemBase {
     last_id = (int) m_Tid.get();
 
     if (s_camMode == CamMode.Vision) {
+      
       // SmartDashboard.putNumber("tx", x);
       // SmartDashboard.putNumber("ty", y);
       // SmartDashboard.putNumber("ta", a);
       // SmartDashboard.putNumber("tvert", vert);
       // SmartDashboard.putBoolean("tv", target_valid);
       // SmartDashboard.putNumber("tid", last_id);
-
       SmartDashboard.getNumber("Current Target", currentTarget());
     }
 

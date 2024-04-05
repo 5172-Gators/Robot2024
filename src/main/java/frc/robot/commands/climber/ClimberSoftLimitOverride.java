@@ -34,16 +34,16 @@ public class ClimberSoftLimitOverride extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Pitch.setPosition(Constants.Pitch.climbPosition);
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    // s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    // s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     s_Climber.disableSoftLimits();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Pitch.setPosition(Constants.Pitch.climbPosition);
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    // s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    // s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     s_Climber.manualClimberControl(this.control.getAsDouble());
   }
 
@@ -57,6 +57,9 @@ public class ClimberSoftLimitOverride extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return s_Climber.getLimSwitch();
+    // return s_Climber.getLimSwitch();
+
+    return false;
+    
   }
 }

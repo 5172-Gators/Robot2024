@@ -1,0 +1,69 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0635131712488803,
+        "y": 3.4781184540971077
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2302057933645307,
+        "y": 4.03092837980712
+      },
+      "isLocked": false,
+      "linkedName": "auto2Path3End"
+    },
+    {
+      "anchor": {
+        "x": 7.286546270667433,
+        "y": 2.6583598958924024
+      },
+      "prevControl": {
+        "x": 5.2254390386098875,
+        "y": -0.07026501927469005
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 37.79872455407652,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intakeAuto",
+      "waypointRelativePos": 0.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 48.69138598645103,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "auto2",
+  "previewStartingState": {
+    "rotation": -35.03565433616263,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

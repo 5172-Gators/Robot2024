@@ -7,90 +7,65 @@ package frc.robot.commands.shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.climber.StowClimber;
+import frc.robot.commands.intake.StowIntake;
+import frc.robot.commands.kicker.ZeroNote;
+import frc.robot.commands.turret.InitAmpScore;
+import frc.robot.commands.turret.ReturnToForward;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-public class AmpScore extends Command {
-  
-  Shooter s_Shooter;
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class AmpScore extends SequentialCommandGroup {
+  /** Creates a new AmpScore. */
+
   Pitch s_Pitch;
   Turret s_Turret;
+  Climber s_Climber;
+  Shooter s_Shooter;
+  Kicker s_Kicker;
   LEDs s_LEDs;
 
+  BooleanSupplier fireShooter;
   double leftRPM;
   double rightRPM;
-  double pitch;
-  double yaw;
   BooleanSupplier fire;
   DoubleSupplier yaw_aim;
   DoubleSupplier pitch_aim;
-  Boolean calibrationMode;
 
-  /** Creates a new ampScore. */
-  public AmpScore(double leftRPM, double rightRPM, double pitch, BooleanSupplier fire, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led, Boolean calibrationMode) {
-    this.rightRPM = rightRPM;
-    this.leftRPM = leftRPM;
-    this.pitch = pitch;
-    this.fire = fire;
+  
+  public AmpScore(double leftRPM, double rightRPM, BooleanSupplier fire, DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter shooter, Pitch pitch, Turret turret, Climber climber, Kicker kicker, LEDs leds) {
+
+    s_Pitch = pitch;
+    s_Turret = turret;
+    s_Climber = climber;
+    s_Kicker =  kicker;
+    s_Shooter = shooter;
+    s_LEDs = leds;
+    
+    this.fire = fire; 
+    this.yaw_aim = yaw_aim;
     this.pitch_aim = pitch_aim;
+    this.leftRPM = leftRPM;
+    this.rightRPM = rightRPM;
 
-    this.s_Shooter = m_shooter;
-    this.s_Pitch = m_pitch;
-    this.s_Turret = m_turret;
-    this.s_LEDs = m_led;
-    
-    this.calibrationMode = calibrationMode;
-    
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
-  }
+    addRequirements(s_Shooter, s_Pitch, s_Turret, s_Climber, s_Kicker, s_LEDs);
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-
-    if (this.calibrationMode) {
-      this.pitch += this.pitch_aim.getAsDouble()*0.0001;
-      this.leftRPM = SmartDashboard.getNumber("CalibrationLeftRPM", 0);
-      this.rightRPM = SmartDashboard.getNumber("CalibrationRightRPM", 0);
-    }
-    
-
-    s_Pitch.setPosition(this.pitch);
-    s_Turret.setPosition(0);
-
-    if (s_Turret.isSetpointAimReady() && s_Pitch.isReady()) {
-      s_LEDs.setColor(0.91);
-      if (this.fire.getAsBoolean()) {
-        s_Shooter.setShooterVoltage(8.5, 12.0);
-        s_Shooter.setKickerVoltage(8.5);
-      }
-    } else {
-      s_LEDs.setColor(-0.11);
-    }
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
-    s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
-    s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return (s_Shooter.getShooterSensor() && s_Shooter.getKickerSensor());
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(new ZeroNote(s_Kicker, s_Shooter),
+                new InitAmpScore(s_Climber, s_Pitch, s_Turret),
+                new ShootSetpoint(leftRPM, rightRPM, 1.77, Constants.Turret.turretAmpPosition, fire, 
+                                  yaw_aim, pitch_aim, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs),
+                new StowClimber(s_Climber),
+                new ReturnToForward(s_Pitch, s_Turret));
   }
 }

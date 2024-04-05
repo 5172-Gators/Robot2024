@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.68,
+        "x": 1.9229831326995024,
         "y": 5.550936522700434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.110074005124073,
+        "x": 2.9229831326995024,
         "y": 5.550936522700434
       },
       "isLocked": false,
@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 7.95406395377698,
-        "y": 4.122214464115091
+        "x": 2.8364283832704595,
+        "y": 5.550936522700434
       },
       "prevControl": {
-        "x": 5.142127411867738,
-        "y": 4.122214464115091
+        "x": 1.8364283832704595,
+        "y": 5.550936522700434
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "auto1path2end"
+      "linkedName": "auto2Path2End"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "intakeAuto",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -43,7 +43,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -54,7 +54,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "auto1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,8 +42,9 @@ public class Turret extends SubsystemBase {
     // define + configure the rotate motor
     rotateMotor = new CANSparkMax(Constants.Turret.rotateMotorID, MotorType.kBrushless);
     rotateMotor.restoreFactoryDefaults();
-    rotateMotor.setInverted(false);
+    rotateMotor.setInverted(true);
     rotateMotor.setIdleMode(IdleMode.kBrake);
+    rotateMotor.setSmartCurrentLimit(36);
 
     rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
     rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
@@ -80,16 +82,26 @@ public class Turret extends SubsystemBase {
 
   }
 
-  // public double encoderUnitsToDegrees() {
-  //   return getRotatePosition()*
-  // }
+  public Rotation2d getTurretToChassis() {
+    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0).rotateBy(Rotation2d.fromDegrees(180));
+  }
 
   public void setPosition(double position) {
     m_currentAimMode = AimMode.kSetpoint;
     // position is in motor rotations
     this.setpoint = position;
     m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
+  }
 
+  public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // angle is a rotation2d object relative to the field
+    Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
+    this.setpoint = test.getDegrees() * 26.0 / 360;
+    // SmartDashboard.putNumber("robotRelative setpoint", this.setpoint);
+    // SmartDashboard.putNumber("fieldRelative setpoint", angle.getDegrees());
+    // SmartDashboard.putNumber("chassisfieldangle", chassisToField.getDegrees());
+    m_pidController.setReference(this.setpoint, CANSparkMax.ControlType.kPosition);
   }
 
   public void autoAimYaw(double tx, int tid, double joystickInput) {
@@ -97,10 +109,12 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kAuto;
     var alliance = DriverStation.getAlliance();
 
-    if ((alliance.get() == DriverStation.Alliance.Blue && tid == 7) 
-            || (alliance.get() == DriverStation.Alliance.Red && tid == 4))
+    if ((alliance.get() == DriverStation.Alliance.Blue && tid == 7) || (alliance.get() == DriverStation.Alliance.Red && tid == 4))
+
       control = -autoAimPIDController.calculate(tx, 0);
+
     else
+    
       control = joystickInput / 2;
 
     rotateMotor.set(control);
@@ -108,42 +122,58 @@ public class Turret extends SubsystemBase {
 
   public boolean isSetpointAimReady() {
     if (m_currentAimMode == AimMode.kSetpoint) {
+
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
+
       if (debounce.calculate(absError <= Constants.Turret.allowableError)){
+
         return true;
+
       }
     }
     return false;
   }
 
   public boolean isAutoAimReady(double tx, int tid) {
+
     if (m_currentAimMode == AimMode.kAuto) {
+
       var alliance = DriverStation.getAlliance();
+
       if (autoAimDebounce.calculate((alliance.get() == DriverStation.Alliance.Blue && tid == 7) 
+
               || (alliance.get() == DriverStation.Alliance.Red && tid == 4)))
+
         return Math.abs(tx) < Constants.Turret.autoAimAllowableError;
     }
+
     return false;
   }
 
   public boolean isAutoAimReady() {
+
     if (m_currentAimMode == AimMode.kAuto) {
+
       return autoAimPIDController.atSetpoint();
+
     }
+
     return false;
+
   }
 
   public boolean isReady() {
+
     return isAutoAimReady() || isSetpointAimReady();
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    double m_currentPosition = rotateEncoder.getPosition();
-    
-    // SmartDashboard.putNumber("Turret Rotate Positon", m_currentPosition);
+    SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
+    // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
+    // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
     SmartDashboard.putBoolean("Turret Ready", isReady());
 
   }

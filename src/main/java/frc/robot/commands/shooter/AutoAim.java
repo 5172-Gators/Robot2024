@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
 import frc.robot.Constants;
 import frc.robot.ShootingTables;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pitch;
@@ -24,6 +25,7 @@ public class AutoAim extends Command {
   Turret s_Turret;
   LEDs s_LEDs;
   Limelight s_LL;
+  Kicker s_Kicker;
 
   BooleanSupplier fire;
   ShootingTables shootingTables;
@@ -31,12 +33,13 @@ public class AutoAim extends Command {
 
   /** Creates a new AutoAim. */
   public AutoAim(BooleanSupplier fire, ShootingTables shootingTables, DoubleSupplier yawAim, 
-                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, LEDs m_led, Limelight m_ll) {
+                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Limelight m_ll) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
     this.s_Turret = m_turret;
     this.s_LEDs = m_led;
     this.s_LL = m_ll;
+    this.s_Kicker = m_kicker;
     this.fire = fire;
     this.shootingTables = shootingTables;
     this.yawAim = yawAim;
@@ -61,7 +64,7 @@ public class AutoAim extends Command {
     if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
-        s_Shooter.setKickerRPM(Constants.Shooter.kicker_shoot);
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
       s_LEDs.setColor(-0.11);
     }
@@ -71,7 +74,7 @@ public class AutoAim extends Command {
   @Override
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
-    s_Shooter.stopKicker();
+    s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
     s_Pitch.setPosition(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
