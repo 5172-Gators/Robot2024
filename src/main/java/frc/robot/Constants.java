@@ -163,7 +163,7 @@ public final class Constants {
         public static final double lobSetPoint = 0.61;
         public static final double climbPosition = 0.513;
         public static final double setpointAmp = 0.49823;
-        public static final double ampScoreTravelPosition = 0.6821;
+        public static final double ampScoreTravelPosition = 0.9031;
         
         /* Relative Encoder PID Constants */
         public static final double rel_kP = 3.5; //0.16;

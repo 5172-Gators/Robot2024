@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.commands.led.LEDTimedCommand;
+import frc.robot.commands.limelight.BlinkLimelight;
+import frc.robot.commands.limelight.HumanPlayerSignal;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
@@ -125,13 +127,7 @@ public class RunIntake extends Command {
 
     if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
-      s_DriveLL.blinkLED();
-      s_VisionLL.blinkLED();
-
-    } else {
-
-      s_DriveLL.turnOffLED();
-      s_VisionLL.turnOffLED();
+      new BlinkLimelight(s_VisionLL);
 
     }
 
