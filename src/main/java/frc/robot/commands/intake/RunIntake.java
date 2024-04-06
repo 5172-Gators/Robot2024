@@ -79,7 +79,7 @@ public class RunIntake extends Command {
           s_LEDs.setColor(-0.09);
         }
 
-        s_Intake.setIntakeSpeed(1);
+        s_Intake.setIntakeSpeed(1); // 1
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
 
         if (s_Shooter.getShooterSensor() == false) // shooter sensor
@@ -111,7 +111,7 @@ public class RunIntake extends Command {
       s_LEDs.setColor(-0.09);
 
       s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
-      s_Intake.setIntakeSpeed(1);
+      s_Intake.setIntakeSpeed(1); // 1
       s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
     }
 

@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pitch;
+import frc.robot.subsystems.Stabilizer;
 import frc.robot.subsystems.Turret;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -17,10 +18,10 @@ import frc.robot.subsystems.Turret;
 public class ClimbModeRoutine extends SequentialCommandGroup {
   DoubleSupplier control;
   /** Creates a new ClimbModeRoutine. */
-  public ClimbModeRoutine(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret) {
+  public ClimbModeRoutine(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret, Stabilizer stabilizer) {
     addCommands(
       new InitClimber(climber, pitch, turret),
-      new ManualClimbControl(control, climber, pitch, turret)
+      new ManualClimbControl(control, climber, pitch, turret, stabilizer)
     );
   }
 }

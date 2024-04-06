@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pitch;
+import frc.robot.subsystems.Stabilizer;
 import frc.robot.subsystems.Turret;
 
 public class ManualClimbControl extends Command {
@@ -17,19 +18,21 @@ public class ManualClimbControl extends Command {
   Climber s_Climber;
   Pitch s_Pitch;
   Turret s_Turret;
+  Stabilizer s_Stabilizer;
 
   DoubleSupplier control;
 
   /** Creates a new ManualClimbControl. */
-  public ManualClimbControl(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret) {
+  public ManualClimbControl(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret, Stabilizer stab) {
     s_Climber = climber;
     s_Pitch = pitch;
     s_Turret = turret;
+    s_Stabilizer = stab;
 
     this.control = control;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Climber,s_Pitch,s_Turret);
+    addRequirements(s_Climber,s_Pitch,s_Turret, s_Stabilizer);
   }
 
   // Called when the command is initially scheduled.
@@ -43,8 +46,11 @@ public class ManualClimbControl extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    s_Pitch.setPosition(Constants.Pitch.climbPosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    if(s_Climber.getClimberPosition() >= 0.5*Constants.Climber.maxSoftLimit)
+      s_Stabilizer.stabilizerControl(0.5);
+      
     s_Climber.manualClimberControl(this.control.getAsDouble());
   }
 

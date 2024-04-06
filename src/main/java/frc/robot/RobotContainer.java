@@ -26,6 +26,7 @@ import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.DeployStablizer;
 import frc.robot.commands.climber.JankyClimberPosition;
 import frc.robot.commands.climber.ManualClimbControl;
+import frc.robot.commands.climber.StabilizerDefaultCommand;
 import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
@@ -168,7 +169,7 @@ public class RobotContainer {
                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
                                                                 s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
-        NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret));
+        NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
@@ -215,7 +216,7 @@ public class RobotContainer {
        
         // (double leftRPM, double rightRPM, double pitch, double yaw, 
         //   DoubleSupplier yaw_aim, DoubleSupplier pitch_aim,  Pitch m_pitch, Turret m_turret, LEDs m_led) {
-       
+        NamedCommands.registerCommand("intakeTravel", new IntakeTravel(s_Intake));
         NamedCommands.registerCommand("resetHeading", new InstantCommand(() -> s_Swerve.setHeading(s_Swerve.getHeading())));
 
         NamedCommands.registerCommand("setIntakeDefaultPositionDeploy", new InstantCommand(() -> s_Intake.setDefaultCommand(new DeployIntake(s_Intake))));
@@ -251,7 +252,7 @@ public class RobotContainer {
         s_Turret.setDefaultCommand(
             new TeleopTurret(
                 s_Turret,
-                () -> -operatorStick.getRawAxis(turretRotate) / 2 // divided by 2 to slow down the speed of rotating the turret
+                () -> -operatorStick.getRawAxis(turretRotate) * 0.3 // divided by 2 to slow down the speed of rotating the turret
             )
             // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
         );
@@ -260,7 +261,7 @@ public class RobotContainer {
           
             new TeleopPitch(
                 s_Pitch,
-                () -> operatorStick.getY()
+                () -> operatorStick.getY()*0.1
             )
 
         );
@@ -276,6 +277,8 @@ public class RobotContainer {
         s_LEDs.setDefaultCommand(
             new LEDDefaultCommand(s_LEDs, s_Shooter)
         );
+
+        s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
     }
 
     /**
@@ -294,7 +297,7 @@ public class RobotContainer {
 
         outtake.whileTrue(new Eject(s_Intake, s_Kicker));
 
-        testStabilizer.onTrue(new DeployStablizer(s_Stabilizer));
+        testStabilizer.whileTrue(new DeployStablizer(s_Stabilizer));
 
 
 
@@ -363,7 +366,7 @@ public class RobotContainer {
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
-        climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret)); // Climb Mode Routine
+        climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer)); // Climb Mode Routine
 
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
@@ -411,10 +414,12 @@ public class RobotContainer {
         autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));  
         autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
         autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
+        autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
+        autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
-        // autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
+        autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
     }
 
     /**

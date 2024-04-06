@@ -20,10 +20,10 @@ public final class Constants {
     public static double maxModuleSpeed;
 
     public static class Field {
-        public static final Translation2d blueSpeaker = new Translation2d(0, 5.3); //5.3 // 5.554
+        public static final Translation2d blueSpeaker = new Translation2d(0, 5.554); //5.3 // 5.554
         public static final Translation2d redSpeaker = new Translation2d(16.539, 5.554);
-        public static final Translation2d blueAmp = new Translation2d(1.219, 7.010);
-        public static final Translation2d redAmp = new Translation2d(15.240, 7.010);
+        public static final Translation2d blueAmp = new Translation2d(0, 6.89); // 7.01
+        public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
     }
 
     public static class Limelight{
@@ -76,7 +76,7 @@ public final class Constants {
         public static final double right_maxOutput = 1;
         public static final double right_minOutput = -1;
 
-        public static final double right_allowableError = 50;
+        public static final double right_allowableError = 35; // 50
         public static final double right_allowableErrorLob = 100;
 
         // left PID
@@ -89,7 +89,7 @@ public final class Constants {
         public static final double left_maxOutput = 1;
         public static final double left_minOutput = -1;
 
-        public static final double left_allowableError = 50;
+        public static final double left_allowableError = 35; //50
         public static final double left_allowableErrorLob  = 100;
 
         public static final double creepRPM = 350;
@@ -152,7 +152,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.03;//0.002;
+        public static final double allowableError = 0.02;//0.03;
         public static final double allowableErrorLob = 0.05;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
@@ -164,7 +164,7 @@ public final class Constants {
         public static final double speakerSetpoint = 0.510625;
         public static final double ampSetpoint = 1.7;
         public static final double lobSetPoint = 0.61;
-        public static final double climbPosition = 0.513;
+        public static final double climbPosition = 1.75; //0.513
         public static final double setpointAmp = 0.49823;
         public static final double ampScoreTravelPosition = 0.9031;
         
@@ -221,7 +221,7 @@ public final class Constants {
         /* Positions */
 
         public static final double stowedPosition = 0;
-        public static final double travelPosition = -1.65; //-0.792;//-0.1188;//-0.156; // -0.025
+        public static final double travelPosition = -4.26;//-1.65; //-0.792;//-0.1188;//-0.156; // -0.025
         public static final double deployedPosition = -8.29;//0.12646484375;
 
         public static final double intakeRPM = 3000; // 5000

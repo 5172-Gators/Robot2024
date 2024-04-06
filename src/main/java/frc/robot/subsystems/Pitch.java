@@ -60,6 +60,7 @@ public class Pitch extends SubsystemBase {
 
     // define relative encoder
     relativePitchEncoder = pitchMotor.getEncoder();
+    relativePitchEncoder.setPosition(0);
 
     // soft limits
     pitchMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Pitch.minPitchPosition);

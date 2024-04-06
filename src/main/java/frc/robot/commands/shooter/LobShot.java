@@ -58,7 +58,7 @@ public class LobShot extends Command {
   public void execute() {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
-    s_Shooter.setShooterRPM(3009, 3069);
+    s_Shooter.setShooterRPM(3009+100, 3069-300);
     s_Pitch.setPosition(1.4366607);
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
 

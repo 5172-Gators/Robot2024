@@ -5,6 +5,7 @@
 package frc.robot.commands.swerve;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
@@ -13,11 +14,13 @@ public class UpdateVisionPoseEstimation extends Command {
 
   Swerve s_Swerve;
   Turret s_Turret;
+  Shooter s_Shooter;
 
-  public UpdateVisionPoseEstimation(Swerve swerve, Turret turret) {
+  public UpdateVisionPoseEstimation(Swerve swerve, Turret turret, Shooter shooter) {
 
     s_Swerve = swerve;
     s_Turret = turret;
+    s_Shooter = shooter;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,7 +33,7 @@ public class UpdateVisionPoseEstimation extends Command {
   @Override
   public void execute() {
 
-    s_Swerve.updateVisionPoseEstimation(s_Turret.getTurretToChassis());
+    // s_Swerve.updateVisionPoseEstimation(s_Turret.getTurretToChassis(), s_Shooter);
 
   }
 

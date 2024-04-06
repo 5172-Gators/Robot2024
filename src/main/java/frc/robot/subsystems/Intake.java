@@ -76,6 +76,7 @@ public class Intake extends SubsystemBase {
 
     // relative encoder
     relativeArmEncoder = jointMotor.getEncoder();
+    relativeArmEncoder.setPosition(0);
 
     // arm PID using absolute encoder
     intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);

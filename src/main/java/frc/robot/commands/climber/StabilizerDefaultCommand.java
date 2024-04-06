@@ -4,17 +4,16 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Stabilizer;
 
-public class DeployStablizer extends Command {
-  /** Creates a new DeployStablizer. */
+public class StabilizerDefaultCommand extends Command {
   Stabilizer s_Stabilizer;
-
-  public DeployStablizer(Stabilizer stabilizer) {
-
-    s_Stabilizer = stabilizer;
-
+  /** Creates a new StabilizerDefaultCommand. */
+  public StabilizerDefaultCommand(Stabilizer stab) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.s_Stabilizer = stab;
     addRequirements(s_Stabilizer);
   }
 
@@ -25,18 +24,12 @@ public class DeployStablizer extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    s_Stabilizer.stabilizerControl(0.5);
-
+    s_Stabilizer.stabilizerControl(0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    s_Stabilizer.stabilizerControl(0);
-    
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
