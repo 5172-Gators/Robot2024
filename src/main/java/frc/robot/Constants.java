@@ -20,8 +20,8 @@ public final class Constants {
     public static double maxModuleSpeed;
 
     public static class Field {
-        public static final Translation2d blueSpeaker = new Translation2d(0, 5.3); //5.554
-        public static final Translation2d redSpeaker = new Translation2d(16.539, 5.3);
+        public static final Translation2d blueSpeaker = new Translation2d(0, 5.3); //5.3 // 5.554
+        public static final Translation2d redSpeaker = new Translation2d(16.539, 5.554);
         public static final Translation2d blueAmp = new Translation2d(1.219, 7.010);
         public static final Translation2d redAmp = new Translation2d(15.240, 7.010);
     }
@@ -76,7 +76,7 @@ public final class Constants {
         public static final double right_maxOutput = 1;
         public static final double right_minOutput = -1;
 
-        public static final double right_allowableError = 50;
+        public static final double right_allowableError = 100;
 
         // left PID
         public static final double left_kP = 0.00046;
@@ -88,7 +88,7 @@ public final class Constants {
         public static final double left_maxOutput = 1;
         public static final double left_minOutput = -1;
 
-        public static final double left_allowableError = 50;
+        public static final double left_allowableError = 100;
 
         public static final double creepRPM = 350;
     }
@@ -150,7 +150,7 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.03;//0.002;
+        public static final double allowableError = 0.05;//0.002;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
         public static final double horizontalOffset = 0.195833; //0.06 // Used for calculating angle of pitch mechanism 

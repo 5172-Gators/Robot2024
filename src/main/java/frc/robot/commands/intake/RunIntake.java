@@ -127,7 +127,11 @@ public class RunIntake extends Command {
 
     if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
-      new BlinkLimelight(s_VisionLL);
+      s_LEDs.setColor(0.13);
+
+    } else {
+
+      s_LEDs.setColor(0.99);
 
     }
 

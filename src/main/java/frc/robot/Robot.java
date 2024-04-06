@@ -50,8 +50,6 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    
-    m_robotContainer.s_Swerve.updateOdometry(m_robotContainer.s_Turret.getTurretToChassis());
 
     CommandScheduler.getInstance().run();
   }
@@ -61,7 +59,12 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis());
+    m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -79,6 +82,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // SmartDashboard.putNumber("Autonomous Y setpoint", PathPlannerAuto.getPathGroupFromAutoFile("auto1").get(1).getPoint(10).position.getY());
     // System.out.println(PathPlannerAuto.getPathGroupFromAutoFile("auto1").get(1).getPoint(10).position.getY());
+    m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
   }
 
   @Override
@@ -94,7 +98,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis());
+    m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
+  }
 
   @Override
   public void testInit() {
@@ -104,5 +112,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis());
+    m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
+  }
 }

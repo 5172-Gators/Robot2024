@@ -8,19 +8,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
-public class UpdateStateEstimation extends Command {
+public class UpdateVisionPoseEstimation extends Command {
   /** Creates a new UpdateStateEstimation. */
 
   Swerve s_Swerve;
   Turret s_Turret;
 
-  public UpdateStateEstimation(Swerve swerve, Turret turret) {
+  public UpdateVisionPoseEstimation(Swerve swerve, Turret turret) {
 
     s_Swerve = swerve;
     s_Turret = turret;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Swerve);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +30,7 @@ public class UpdateStateEstimation extends Command {
   @Override
   public void execute() {
 
-    s_Swerve.updateOdometry(s_Turret.getTurretToChassis());
+    s_Swerve.updateVisionPoseEstimation(s_Turret.getTurretToChassis());
 
   }
 
