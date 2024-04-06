@@ -172,6 +172,20 @@ public class Pitch extends SubsystemBase {
     }
   }
 
+  public boolean isReadyLob() {
+    double absError = Math.abs(this.getRelativePitchPosition() - this.setpoint);
+    
+    if (debounce.calculate(absError <= Constants.Pitch.allowableErrorLob)){
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

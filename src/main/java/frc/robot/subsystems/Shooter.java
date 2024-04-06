@@ -155,6 +155,21 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  public boolean shooterIsReadyLob() {
+    double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
+    double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
+    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableErrorLob 
+        && absErrorRight <= Constants.Shooter.right_allowableErrorLob)) {
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

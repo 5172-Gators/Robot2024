@@ -62,7 +62,7 @@ public class LobShot extends Command {
     s_Pitch.setPosition(1.4366607);
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
+    if (s_Shooter.shooterIsReadyLob() && s_Turret.isReady() && s_Pitch.isReadyLob()) {
       s_LEDs.setColor(0.91);
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
