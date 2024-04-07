@@ -14,10 +14,12 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,7 +34,6 @@ public class Pitch extends SubsystemBase {
   RelativeEncoder relativePitchEncoder;
 
   PIDController pitchPID;
-  double currentPitch;
 
   double setpoint = Constants.Pitch.intakePosition;
   Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
@@ -71,25 +72,13 @@ public class Pitch extends SubsystemBase {
   }
 
   public void movePitch(double speed){
-
-    pitchMotor.set(speed);
-
+    double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+    pitchMotor.set(speed + arbFF);
   }
 
   public void joystickPitchControl(double speed) {
-
-    // + joystick value moves down
-    // - joystick value moves up
-
-    // currentPitch = getRelativePitchPosition();
-    // if (currentPitch <= Constants.Pitch.minPitchPosition)
-    //   speed = Math.max(speed,0); // Clipping so it's positive
-    // else if (currentPitch >= Constants.Pitch.maxPitchPosition)
-    //   speed = Math.min(speed,0); // Clipping so it's negative
-
-    pitchMotor.set(speed);
-
-
+    double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+    pitchMotor.set(speed + arbFF);
   }
 
   // public void disableSoftLimits() {
@@ -105,54 +94,47 @@ public class Pitch extends SubsystemBase {
 
   // }
 
-  public double getRelativePitchPosition(){
+  public double getRawPitchPosition(){
 
     return relativePitchEncoder.getPosition();
 
   }
 
-  // public double getAbsolutePitchPosition(){
-
-  //   return absolutePitchEncoder.getAbsolutePosition().getValueAsDouble();
-
-  // }
-
-  public double encoderUnitsToDegrees(double pos) {
-    
-    // pos = -1 * this.getAbsolutePitchPosition();
-    // SmartDashboard.putNumber("pitchdegrees", pos);
+  private double encoderUnitsToDegrees(double pos) {
     return (pos + Constants.Pitch.horizontalOffset) * 360;
-    
-    // return ((pos + Constants.Pitch.horizontalOffset) / 22.25) * 360;
+  }
+
+  private double Rotation2dToEncoderUnits(Rotation2d angle) {
+    return (angle.getDegrees() / 360 - Constants.Pitch.horizontalOffset);
   }
 
   public double getPitchDegrees() {
-    double pos = this.currentPitch / 23.333333; //this.getRelativePitchPosition(); 23.33
+    double rawPos = getRawPitchPosition();
+    double pos = rawPos / (70.0 / 3.0); // Gear ratio of mechanism
     return encoderUnitsToDegrees(pos);
   }
 
-  public void setPosition(double position){
+  public Rotation2d getPitchAngle() {
+    return Rotation2d.fromDegrees(getPitchDegrees());
+  }
 
-    // changed to use the relative encoder for set positions
-    this.setpoint = position;
-    currentPitch = getRelativePitchPosition(); //getPosition();
+  public void setPosition(Rotation2d position) {
 
-    relativePID.setReference(position, CANSparkBase.ControlType.kPosition);
-    
+    this.setpoint = Rotation2dToEncoderUnits(position);
 
-    // positive speed moves down, negative speed moves up
+    double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
 
-    
-    // uses the absolute encoder for PID controller
-    // double speed = -pitchPID.calculate(currentPitch, position);
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
 
-    // if (currentPitch <= Constants.Pitch.minPitchPosition)
-    //   speed = Math.min(speed,0); // Clipping so it's positive
-    // else if (currentPitch >= Constants.Pitch.maxPitchPosition)
-    //   speed = Math.max(speed,0); // Clipping so it's negative
+  }
 
-    // pitchMotor.set(speed);
+  public void setPositionRaw(double pos) {
 
+    this.setpoint = pos;
+
+    double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
   }
 
   public void stopPitch() {
@@ -160,48 +142,23 @@ public class Pitch extends SubsystemBase {
   }
 
   public boolean isReady() {
-    double absError = Math.abs(this.getRelativePitchPosition() - this.setpoint);
-    
-    if (debounce.calculate(absError <= Constants.Pitch.allowableError)){
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
+    return debounce.calculate(absError <= Constants.Pitch.allowableError);
   }
 
   public boolean isReadyLob() {
-    double absError = Math.abs(this.getRelativePitchPosition() - this.setpoint);
-    
-    if (debounce.calculate(absError <= Constants.Pitch.allowableErrorLob)){
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
+    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
+    return debounce.calculate(absError <= Constants.Pitch.allowableErrorLob);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // double relativePitchPosition = getRelativePitchPosition();
-    // double outputCurrent = pitchMotor.getOutputCurrent();
-    // double absolutePosition = getAbsolutePitchPosition();
-
-
-    SmartDashboard.putNumber("RelativePitchPosition", this.getRelativePitchPosition());
+    SmartDashboard.putNumber("RelativePitchPosition", this.getRawPitchPosition());
+    SmartDashboard.putNumber("PitchDegrees", getPitchAngle().getDegrees());
     SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
-    // SmartDashboard.putNumber("Pitch Encoder Value", currentPitch);
-    // SmartDashboard.putNumber("Pitch_m", getPitchDegrees());
-    // SmartDashboard.putNumber("AbsolutePitchPosition", absolutePosition);
-    // SmartDashboard.putNumber("Pitch Motor Current", outputCurrent);
+
     SmartDashboard.putBoolean("Pitch Ready", isReady());
 
   }

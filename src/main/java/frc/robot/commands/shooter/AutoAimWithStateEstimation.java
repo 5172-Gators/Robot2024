@@ -59,8 +59,8 @@ public class AutoAimWithStateEstimation extends Command {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
     s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
-    s_Pitch.setPosition(aimingParams.getPitchAngle());
-    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
+    s_Pitch.setPositionRaw(aimingParams.getPitchAngle());
+    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
 
     if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
       s_LEDs.setColor(0.91);
@@ -77,7 +77,7 @@ public class AutoAimWithStateEstimation extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

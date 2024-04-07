@@ -49,15 +49,16 @@ public class Shooter extends SubsystemBase {
     /* define + configure left shooter motor */
     leftShooter = new CANSparkFlex(Constants.Shooter.leftMotorID, MotorType.kBrushless);
     leftShooter.setIdleMode(IdleMode.kCoast);
-    leftShooter.setSmartCurrentLimit(36);
+    leftShooter.setSmartCurrentLimit(80);
     leftShooterEncoder = leftShooter.getEncoder();
     leftShooterPID = leftShooter.getPIDController();
 
     /* define + configure right shooter motor */
     rightShooter = new CANSparkFlex(Constants.Shooter.rightMotorID, MotorType.kBrushless);
     rightShooter.setIdleMode(IdleMode.kCoast);
-    rightShooter.setSmartCurrentLimit(36);
+    rightShooter.setSmartCurrentLimit(80);
     rightShooterEncoder = rightShooter.getEncoder();
+    
     rightShooterPID = rightShooter.getPIDController();
 
     /* Set Inverted */
@@ -73,16 +74,14 @@ public class Shooter extends SubsystemBase {
     rightShooterPID.setI(Constants.Shooter.right_kI);
     rightShooterPID.setD(Constants.Shooter.right_kD);
     rightShooterPID.setFF(Constants.Shooter.right_kFF);
-    rightShooterPID.setIZone(Constants.Shooter.right_IZone);
-    rightShooterPID.setOutputRange(Constants.Shooter.right_minOutput, Constants.Shooter.right_maxOutput);
+    // rightShooterPID.setIZone(Constants.Shooter.right_IZone);
 
     /* Left Side PID */
     leftShooterPID.setP(Constants.Shooter.left_kP);
     leftShooterPID.setI(Constants.Shooter.left_kI);
     leftShooterPID.setD(Constants.Shooter.left_kD);
     leftShooterPID.setFF(Constants.Shooter.left_kFF);
-    leftShooterPID.setIZone(Constants.Shooter.left_IZone);
-    leftShooterPID.setOutputRange(Constants.Shooter.left_minOutput, Constants.Shooter.left_maxOutput);
+    // leftShooterPID.setIZone(Constants.Shooter.left_IZone);
 
   }
 

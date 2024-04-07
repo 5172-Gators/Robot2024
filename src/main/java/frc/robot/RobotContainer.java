@@ -35,7 +35,7 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
-import frc.robot.commands.pitch.SetPitchPosition;
+import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
 import frc.robot.commands.shooter.AutoAim;
@@ -258,7 +258,7 @@ public class RobotContainer {
         );
 
         s_Pitch.setDefaultCommand(
-          
+        
             new TeleopPitch(
                 s_Pitch,
                 () -> operatorStick.getY()*0.1

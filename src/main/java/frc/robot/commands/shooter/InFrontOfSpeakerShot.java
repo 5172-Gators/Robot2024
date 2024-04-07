@@ -68,7 +68,7 @@ public class InFrontOfSpeakerShot extends Command {
     // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
-    s_Pitch.setPosition(this.pitch);
+    s_Pitch.setPositionRaw(this.pitch);
     s_Turret.setPosition(this.yaw);
 
     if (s_Shooter.shooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.isReady()){
@@ -87,7 +87,7 @@ public class InFrontOfSpeakerShot extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     
   }

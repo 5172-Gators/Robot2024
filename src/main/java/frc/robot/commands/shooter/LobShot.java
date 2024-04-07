@@ -56,10 +56,9 @@ public class LobShot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
-    s_Shooter.setShooterRPM(3009+100, 3069-300);
-    s_Pitch.setPosition(1.4366607);
+    s_Shooter.setShooterRPM(3109-200, 2769-200);
+    s_Pitch.setPositionRaw(1.4366607);
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
 
     if (s_Shooter.shooterIsReadyLob() && s_Turret.isReady() && s_Pitch.isReadyLob()) {
@@ -77,7 +76,7 @@ public class LobShot extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

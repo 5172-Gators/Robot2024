@@ -96,8 +96,8 @@ public class Intake extends SubsystemBase {
     intakeWheelsPID.setI(Constants.Intake.firstWheels_kI);
     intakeWheelsPID.setD(Constants.Intake.firstWheels_kD);
     intakeWheelsPID.setFF(Constants.Intake.firstWheels_kFF);
-    intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
-    intakeWheelsPID.setIZone(Constants.Intake.firstWheels_IZone);
+    // intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    // intakeWheelsPID.setIZone(Constants.Intake.firstWheels_IZone);
 
     intakeWheelsPID2 = intakeMotor2.getPIDController();
 
@@ -105,7 +105,7 @@ public class Intake extends SubsystemBase {
     intakeWheelsPID2.setI(Constants.Intake.secondWheels_kI);
     intakeWheelsPID2.setD(Constants.Intake.secondWheels_kD);
     intakeWheelsPID2.setFF(Constants.Intake.secondWheels_kFF);
-    intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    // intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
     // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
   }

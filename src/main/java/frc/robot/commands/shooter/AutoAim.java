@@ -7,6 +7,7 @@ package frc.robot.commands.shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
 import frc.robot.Constants;
@@ -58,7 +59,7 @@ public class AutoAim extends Command {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist);
 
     s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
-    s_Pitch.setPosition(aimingParams.getPitchAngle());
+    s_Pitch.setPositionRaw(aimingParams.getPitchAngle());
     s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
     if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
@@ -76,7 +77,7 @@ public class AutoAim extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

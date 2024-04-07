@@ -1,8 +1,5 @@
 package frc.robot;
 
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-// import com.pathplanner.lib.util.PIDConstants;
-// import com.pathplanner.lib.util.ReplanningConfig;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -51,9 +48,6 @@ public final class Constants {
         public static final double kicker_kFF = 0.00014;
         public static final double kicker_IZone = 150;
 
-        public static final double kicker_maxOutput = 1;
-        public static final double kicker_minOutput = -1;
-
         public static final double kicker_allowableError = 50;
         public static final double kicker_intakeRPM = 3500;
         public static final double kicker_creepRPM = 500;
@@ -67,30 +61,24 @@ public final class Constants {
         public static final int rightMotorID = 17;
 
         // right PID
-        public static final double right_kP = 0.00020;
-        public static final double right_kI = 0.000001;
+        public static final double right_kP = 0;//0.00020;
+        public static final double right_kI = 0;//0.000001;
         public static final double right_kD = 0;
         public static final double right_kFF = 0.00018;
-        public static final double right_IZone = 200;
+        public static final double right_IZone = 0;//200;
 
-        public static final double right_maxOutput = 1;
-        public static final double right_minOutput = -1;
-
-        public static final double right_allowableError = 35; // 50
-        public static final double right_allowableErrorLob = 100;
+        public static final double right_allowableError = 75; //35; // 50
+        public static final double right_allowableErrorLob = 150; //100;
 
         // left PID
-        public static final double left_kP = 0.00046;
-        public static final double left_kI = 0.000001;
-        public static final double left_kD = 0.0015;
+        public static final double left_kP = 0;//0.00046;
+        public static final double left_kI = 0;//0.000001;
+        public static final double left_kD = 0;//0.0015;
         public static final double left_kFF = 0.00015;
-        public static final double left_IZone = 200;
+        public static final double left_IZone = 0;//200;
 
-        public static final double left_maxOutput = 1;
-        public static final double left_minOutput = -1;
-
-        public static final double left_allowableError = 35; //50
-        public static final double left_allowableErrorLob  = 100;
+        public static final double left_allowableError = 75; //35; //50
+        public static final double left_allowableErrorLob  = 150; //100;
 
         public static final double creepRPM = 350;
     }
@@ -102,14 +90,17 @@ public final class Constants {
         public static final int rotateMotorID = 2;
         
         /* Max + Min Positions, Allowable Error */
-
+        
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableError = 0.05; // 0.05
+        public static final double allowableError = 0.1; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
         public static final double autoAimAllowableError = 6; 
+
+        // This is added to the turret setpoint to counteract the the effect of adding spin to the note while shooting
+        public static final Rotation2d noteSpinOffset = Rotation2d.fromDegrees(1);
 
         /* Positions */
         public static final double R_intakingPosition = 0;
@@ -122,9 +113,6 @@ public final class Constants {
         public static final double kD = 0; // 8
         public static final double kFF = 0; //0.015;
         public static final double IZone = 0.1;
-
-        public static final double maxOutput = 1;
-        public static final double minOutput = -1;
 
         public static double ampScorePosition;
     
@@ -152,37 +140,31 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.02;//0.03;
-        public static final double allowableErrorLob = 0.05;
+        public static final double allowableError = 0.03;//0.02;//0.03;
+        public static final double allowableErrorLob = 0.1; //0.05;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
-        public static final double horizontalOffset = 0.195833; //0.06 // Used for calculating angle of pitch mechanism 
+        public static final double horizontalOffset = 0.06; //0.195833; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
-        public static final double intakePosition = 0.86; 
-        public static final double stageSetpoint = 0.450459; // -0.0466113125
-        public static final double speakerSetpoint = 0.510625;
-        public static final double ampSetpoint = 1.7;
-        public static final double lobSetPoint = 0.61;
-        public static final double climbPosition = 1.75; //0.513
-        public static final double setpointAmp = 0.49823;
-        public static final double ampScoreTravelPosition = 0.9031;
+        public static final double intakePosition = 0.86; // 34.86 deg
+        public static final double stageSetpoint = 0.450459; // 28.55 deg
+        public static final double speakerSetpoint = 0.510625; // 29.478 deg
+        public static final double ampSetpoint = 1.7; // 47.829 deg
+        public static final double lobSetPoint = 0.61; // 31.01 deg
+        public static final double climbPosition = 1.75; // 48.6 deg
+        public static final double setpointAmp = 0.49823; // 29.287 deg
+        public static final double ampScoreTravelPosition = 0.9031; // 35.534
         
         /* Relative Encoder PID Constants */
-        public static final double rel_kP = 3.5; //0.16;
-        public static final double rel_kI = 0.01;
+        public static final double rel_kP = 0;//3.5; //0.16;
+        public static final double rel_kI = 0;//0.01;
         public static final double rel_kD = 0; //0.08;
-        public static final double rel_kFF = 0.035;
-        public static final double rel_IZone = 0.05;
-        public static final double rel_IMax = 0.5;
+        public static final double rel_kFF = 0;//0.035;
+        public static final double rel_IZone = 0;//0.05;
+        public static final double rel_IMax = 0;//0.5;
 
-        /* Absolute Encoder PID Constants */
-        public static final double abs_kP = 0.1;
-        public static final double abs_kI = 0.0;
-        public static final double abs_kD = 0.0;
-
-        public static final double minOutput = -1;
-        public static final double maxOutput = 1;
+        public static final double arm_cos_kF = 0.1; // TODO: tune this
 
     }
 
@@ -247,9 +229,6 @@ public final class Constants {
         public static final double secondWheels_kD = 0.015;
         public static final double secondWheels_kFF = 0;
         public static final double secondWheels_IZone = 100;
-
-        public static final double maxOutput = 1;
-        public static final double minOutput = -1;
 
         public static final double allowableError = 0.02;
 

@@ -63,8 +63,8 @@ public class Turret extends SubsystemBase {
     m_pidController.setI(Constants.Turret.kI);
     m_pidController.setD(Constants.Turret.kD);
     m_pidController.setFF(Constants.Turret.kFF);
-    m_pidController.setOutputRange(Constants.Turret.minOutput, Constants.Turret.maxOutput);
-    m_pidController.setIZone(Constants.Turret.IZone);
+    // m_pidController.setOutputRange(Constants.Turret.minOutput, Constants.Turret.maxOutput);
+    // m_pidController.setIZone(Constants.Turret.IZone);
 
     autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
     autoAimPIDController.setTolerance(Constants.Turret.autoAimAllowableError);

@@ -74,7 +74,7 @@ public class RunIntake extends Command {
 
         if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
           s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
-          s_Pitch.setPosition(Constants.Pitch.intakePosition);
+          s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
           s_Turret.setPosition(Constants.Turret.R_intakingPosition);
           s_LEDs.setColor(-0.09);
         }
@@ -106,7 +106,7 @@ public class RunIntake extends Command {
       }
     } else {
       s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
-      s_Pitch.setPosition(Constants.Pitch.intakePosition);
+      s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
       s_Turret.setPosition(Constants.Turret.R_intakingPosition);
       s_LEDs.setColor(-0.09);
 

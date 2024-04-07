@@ -29,14 +29,14 @@ public class InitClimber extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.climbPosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Pitch.setPosition(Constants.Pitch.climbPosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.climbPosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

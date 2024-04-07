@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pitch;
 
-public class SetPitchPosition extends Command {
+public class SetPitchPositionRaw extends Command {
   /** Creates a new SetPitchPosition. */
 
   Pitch s_Pitch;
   double position;
 
-  public SetPitchPosition(Pitch s_Pitch, double position) {
+  public SetPitchPositionRaw(Pitch s_Pitch, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.s_Pitch = s_Pitch;
@@ -32,7 +32,7 @@ public class SetPitchPosition extends Command {
   @Override
   public void execute() {
 
-    s_Pitch.setPosition(position);
+    s_Pitch.setPositionRaw(position);
 
   }
 

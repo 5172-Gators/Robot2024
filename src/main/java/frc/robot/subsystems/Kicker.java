@@ -44,7 +44,7 @@ public class Kicker extends SubsystemBase {
     kickerPID.setI(Constants.Kicker.kicker_kI);
     kickerPID.setD(Constants.Kicker.kicker_kD);
     kickerPID.setFF(Constants.Kicker.kicker_kFF);
-    kickerPID.setOutputRange(Constants.Kicker.kicker_minOutput, Constants.Kicker.kicker_maxOutput);
+    // kickerPID.setOutputRange(Constants.Kicker.kicker_minOutput, Constants.Kicker.kicker_maxOutput);
 
   }
 

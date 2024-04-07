@@ -65,7 +65,7 @@ public class NoShootSetpoint extends Command {
     this.yaw += this.yaw_aim.getAsDouble()*Constants.Turret.aimCoefficient;
     // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
 
-    s_Pitch.setPosition(this.pitch);
+    s_Pitch.setPositionRaw(this.pitch);
     s_Turret.setPosition(this.yaw);
 
 
@@ -76,7 +76,7 @@ public class NoShootSetpoint extends Command {
   public void end(boolean interrupted) {
  
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 

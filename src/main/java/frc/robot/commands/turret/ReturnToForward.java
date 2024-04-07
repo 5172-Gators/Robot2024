@@ -6,7 +6,7 @@ package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.pitch.SetPitchPosition;
+import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Turret;
 
@@ -25,7 +25,7 @@ public class ReturnToForward extends SequentialCommandGroup {
     this.s_Turret = turret;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetPitchPosition(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
+    addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
                 new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition));
   }
 }

@@ -78,7 +78,7 @@ public class ShootSetpointCalibration extends Command {
     this.rightRPM += (this.increaseRightRPM.getAsBoolean()?10:0) + (this.decreaseRightRPM.getAsBoolean()?-10:0);
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
-    s_Pitch.setPosition(this.pitch);
+    s_Pitch.setPositionRaw(this.pitch);
     s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
     // if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
@@ -96,7 +96,7 @@ public class ShootSetpointCalibration extends Command {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(0.99);
-    s_Pitch.setPosition(Constants.Pitch.intakePosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }
 
