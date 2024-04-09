@@ -19,7 +19,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.swerve.UpdateVisionPoseEstimation;
 import frc.robot.commands.turret.InitAmpScore;
+import frc.robot.commands.turret.SetTurretAngle;
 import frc.robot.commands.turret.SetTurretFieldRelative;
+import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
@@ -35,6 +37,7 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
+import frc.robot.commands.pitch.SetPitchAngle;
 import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
@@ -47,7 +50,7 @@ import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpointCalibration;
 import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
 import frc.robot.commands.shooter.StopShooter;
-
+import frc.robot.commands.shooter.testShooterFlywheels;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Limelight.CamMode;
 
@@ -112,9 +115,9 @@ public class RobotContainer {
 
     // private final JoystickButton fireLobShot = new JoystickButton(testStick, 1);
     // private final JoystickButton lobShot = new JoystickButton(testStick, 2);
-    private final JoystickButton testButton1 = new JoystickButton(testStick, 1);
-    private final JoystickButton testButton2 = new JoystickButton(testStick, 2);
-    private final JoystickButton testButton3 = new JoystickButton(testStick, 3);
+    private final JoystickButton testButton1 = new JoystickButton(operatorStick, 9);
+    private final JoystickButton testButton2 = new JoystickButton(operatorStick, 2);
+    private final JoystickButton testButton3 = new JoystickButton(operatorStick, 3);
     
     // private final JoystickButton setPosition = new JoystickButton(testStick, 3);
 
@@ -403,7 +406,7 @@ public class RobotContainer {
         // SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
 
         // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
-        
+        // testButton1.whileTrue(new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
 
     }

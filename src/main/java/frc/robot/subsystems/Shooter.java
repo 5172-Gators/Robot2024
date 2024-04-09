@@ -75,6 +75,7 @@ public class Shooter extends SubsystemBase {
     rightShooterPID.setD(Constants.Shooter.right_kD);
     rightShooterPID.setFF(Constants.Shooter.right_kFF);
     // rightShooterPID.setIZone(Constants.Shooter.right_IZone);
+    rightShooterPID.setOutputRange(-1, 1);
 
     /* Left Side PID */
     leftShooterPID.setP(Constants.Shooter.left_kP);
@@ -82,6 +83,7 @@ public class Shooter extends SubsystemBase {
     leftShooterPID.setD(Constants.Shooter.left_kD);
     leftShooterPID.setFF(Constants.Shooter.left_kFF);
     // leftShooterPID.setIZone(Constants.Shooter.left_IZone);
+    leftShooterPID.setOutputRange(-1, 1);
 
   }
 
@@ -176,9 +178,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
     SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
 
-    SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
+    // SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
+    // SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
+
+    // SmartDashboard.putNumber("RightOutput", rightShooter.getAppliedOutput());
+    // SmartDashboard.putNumber("LeftOutput", leftShooter.getAppliedOutput());
     // SmartDashboard.putNumber("Percent Left", leftShooter.getAppliedOutput());
     // SmartDashboard.putNumber("Percent Right", rightShooter.getAppliedOutput());
 

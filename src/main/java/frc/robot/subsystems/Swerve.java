@@ -230,6 +230,10 @@ public class Swerve extends SubsystemBase {
         return Constants.Field.blueAmp.minus(getPose().getTranslation());
     }
 
+    public void setRobotPose(Pose2d pose) {
+        swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    }
+
     public void updateOdometryPoseEstimation() {
         // Update using swerve odometry
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
@@ -332,8 +336,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Distance Estimate", getTranslationToSpeaker().getNorm());
-        SmartDashboard.putNumber("Angle Estimate", getTranslationToSpeaker().getAngle().getDegrees());
+        // SmartDashboard.putNumber("Distance Estimate", getTranslationToSpeaker().getNorm());
+        // SmartDashboard.putNumber("Angle Estimate", getTranslationToSpeaker().getAngle().getDegrees());
 
         for(SwerveModule mod : mSwerveMods){
             // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

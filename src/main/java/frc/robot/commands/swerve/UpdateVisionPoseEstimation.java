@@ -4,6 +4,7 @@
 
 package frc.robot.commands.swerve;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
@@ -15,6 +16,7 @@ public class UpdateVisionPoseEstimation extends Command {
   Swerve s_Swerve;
   Turret s_Turret;
   Shooter s_Shooter;
+  Pose2d initialPose;
 
   public UpdateVisionPoseEstimation(Swerve swerve, Turret turret, Shooter shooter) {
 
@@ -27,19 +29,23 @@ public class UpdateVisionPoseEstimation extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    initialPose = s_Swerve.getPose();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    // s_Swerve.updateVisionPoseEstimation(s_Turret.getTurretToChassis(), s_Shooter);
+    s_Swerve.updateVisionPoseEstimation(s_Turret.getTurretToChassis(), s_Shooter);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    s_Swerve.setRobotPose(initialPose);
+  }
 
   // Returns true when the command should end.
   @Override

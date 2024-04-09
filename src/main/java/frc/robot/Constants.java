@@ -61,20 +61,20 @@ public final class Constants {
         public static final int rightMotorID = 17;
 
         // right PID
-        public static final double right_kP = 0;//0.00020;
+        public static final double right_kP = 0.0003;//0.00020;
         public static final double right_kI = 0;//0.000001;
-        public static final double right_kD = 0;
-        public static final double right_kFF = 0.00018;
+        public static final double right_kD = 0;//0.0015;
+        public static final double right_kFF = 0.00017;
         public static final double right_IZone = 0;//200;
 
         public static final double right_allowableError = 75; //35; // 50
         public static final double right_allowableErrorLob = 150; //100;
 
         // left PID
-        public static final double left_kP = 0;//0.00046;
+        public static final double left_kP = 0.0003;//0.00046;
         public static final double left_kI = 0;//0.000001;
-        public static final double left_kD = 0;//0.0015;
-        public static final double left_kFF = 0.00015;
+        public static final double left_kD = 0;//0.0015;//0.0015;
+        public static final double left_kFF = 0.000165;
         public static final double left_IZone = 0;//200;
 
         public static final double left_allowableError = 75; //35; //50
@@ -108,10 +108,10 @@ public final class Constants {
         public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
         
         /* PID */
-        public static final double kP = 0.15; // 0.5
-        public static final double kI = 0.001;
-        public static final double kD = 0; // 8
-        public static final double kFF = 0; //0.015;
+        public static final double kP = 0.25;//0.1;//0.15; // 0.5
+        public static final double kI = 0;//0.001;
+        public static final double kD = 5.0; // 8
+        public static final double kFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double IZone = 0.1;
 
         public static double ampScorePosition;
@@ -144,7 +144,7 @@ public final class Constants {
         public static final double allowableErrorLob = 0.1; //0.05;
         public static final float minPitchPosition = 0.3f; //0.381f;
         public static final float maxPitchPosition = 1.77f; //1.6f;
-        public static final double horizontalOffset = 0.06; //0.195833; // Used for calculating angle of pitch mechanism 
+        public static final double horizontalOffset = 0.022789; //0.195833; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
         public static final double intakePosition = 0.86; // 34.86 deg
@@ -157,14 +157,14 @@ public final class Constants {
         public static final double ampScoreTravelPosition = 0.9031; // 35.534
         
         /* Relative Encoder PID Constants */
-        public static final double rel_kP = 0;//3.5; //0.16;
+        public static final double rel_kP = 15;//3.5; //0.16;
         public static final double rel_kI = 0;//0.01;
         public static final double rel_kD = 0; //0.08;
         public static final double rel_kFF = 0;//0.035;
         public static final double rel_IZone = 0;//0.05;
         public static final double rel_IMax = 0;//0.5;
 
-        public static final double arm_cos_kF = 0.1; // TODO: tune this
+        public static final double arm_cos_kF = 0.016;
 
     }
 

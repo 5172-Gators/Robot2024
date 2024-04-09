@@ -19,6 +19,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
@@ -44,7 +45,7 @@ public class Turret extends SubsystemBase {
     rotateMotor.restoreFactoryDefaults();
     rotateMotor.setInverted(true);
     rotateMotor.setIdleMode(IdleMode.kBrake);
-    rotateMotor.setSmartCurrentLimit(36);
+    rotateMotor.setSmartCurrentLimit(80);
 
     rotateMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Turret.maxTurretPosition);
     rotateMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Turret.minTurretPosition);
@@ -62,9 +63,10 @@ public class Turret extends SubsystemBase {
     m_pidController.setP(Constants.Turret.kP);
     m_pidController.setI(Constants.Turret.kI);
     m_pidController.setD(Constants.Turret.kD);
-    m_pidController.setFF(Constants.Turret.kFF);
+    m_pidController.setFF(0);
     // m_pidController.setOutputRange(Constants.Turret.minOutput, Constants.Turret.maxOutput);
     // m_pidController.setIZone(Constants.Turret.IZone);
+    m_pidController.setOutputRange(-1, 1);
 
     autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
     autoAimPIDController.setTolerance(Constants.Turret.autoAimAllowableError);
@@ -82,6 +84,8 @@ public class Turret extends SubsystemBase {
 
   }
 
+
+
   public Rotation2d getTurretToChassis() {
     return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0).rotateBy(Rotation2d.fromDegrees(180));
   }
@@ -93,6 +97,23 @@ public class Turret extends SubsystemBase {
     m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
   }
 
+  private double degreesToEncoderUnits(double degrees) {
+    return degrees * 26.0 / 360;
+  }
+
+  private double encoderUnitsToDegrees(double pos) {
+    return pos * 360.0 / 26.0;
+  }
+
+  public void setAngle(Rotation2d angle) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // position is in motor rotations
+    this.setpoint = degreesToEncoderUnits(angle.getDegrees());
+    double arbFF = Constants.Turret.kFF * Math.signum(rotateEncoder.getVelocity());
+    m_pidController.setReference(setpoint, CANSparkMax.ControlType.kPosition,0,arbFF,ArbFFUnits.kPercentOut);
+    // m_pidController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+  }
+
   public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField) {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
@@ -101,7 +122,10 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("robotRelative setpoint", this.setpoint);
     // SmartDashboard.putNumber("fieldRelative setpoint", angle.getDegrees());
     // SmartDashboard.putNumber("chassisfieldangle", chassisToField.getDegrees());
-    m_pidController.setReference(this.setpoint, CANSparkMax.ControlType.kPosition);
+    // double arbFF = Constants.Turret.kFF*Math.signum(rotateMotor.get);
+    double arbFF = Constants.Turret.kFF * Math.signum(rotateEncoder.getVelocity());
+    m_pidController.setReference(setpoint, CANSparkMax.ControlType.kPosition,0,arbFF,ArbFFUnits.kPercentOut);
+    // m_pidController.setReference(this.setpoint, CANSparkMax.ControlType.kPosition);
   }
 
   public void autoAimYaw(double tx, int tid, double joystickInput) {
@@ -171,7 +195,9 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
+    // SmartDashboard.putNumber("Turret Rotate Positon", getRotatePosition());
+    // SmartDashboard.putNumber("Turret angle", encoderUnitsToDegrees(getRotatePosition()));
+    // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
     SmartDashboard.putBoolean("Turret Ready", isReady());

@@ -54,6 +54,8 @@ public class Intake extends SubsystemBase {
     intakeMotor.setInverted(true);
     intakeMotor.setSmartCurrentLimit(39, 0);
 
+    // intakeMotor.burnFlash();
+
     intakeWheelsEncoder = intakeMotor.getEncoder();
 
     // motor 2 controls the tiny roller
@@ -63,6 +65,8 @@ public class Intake extends SubsystemBase {
     intakeMotor2.setInverted(true);
     intakeMotor2.setSmartCurrentLimit(39, 0);
 
+    // intakeMotor2.burnFlash();
+
     intakeWheelsEncoder2 = intakeMotor2.getEncoder();
 
     // motor that deploys + stows the intake
@@ -70,6 +74,8 @@ public class Intake extends SubsystemBase {
     jointMotor.restoreFactoryDefaults();
     jointMotor.setInverted(true);
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
+
+    // jointMotor.burnFlash();
 
     // absolute encoder
     // armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
@@ -108,6 +114,9 @@ public class Intake extends SubsystemBase {
     // intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
     // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
+    intakeMotor.burnFlash();
+    intakeMotor2.burnFlash();
+    jointMotor.burnFlash();
   }
 
   public double getIntakePosition(){
@@ -175,7 +184,7 @@ public class Intake extends SubsystemBase {
 
     // SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
     // SmartDashboard.putNumber("Intake Motor 1 RPM", intakeWheelsEncoder.getVelocity());
 
