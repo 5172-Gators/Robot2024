@@ -8,7 +8,9 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Kicker;
@@ -16,6 +18,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
 public class ShooterCalibrationWithStateEstimation extends Command {
@@ -26,6 +29,7 @@ public class ShooterCalibrationWithStateEstimation extends Command {
   LEDs s_LEDs;
   Limelight s_LL;
   Kicker s_Kicker;
+  Swerve s_Swerve;
 
   double leftRPM;
   double rightRPM;
@@ -44,7 +48,7 @@ public class ShooterCalibrationWithStateEstimation extends Command {
   /** Creates a new ShootSetpointCalibration. */
   public ShooterCalibrationWithStateEstimation(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
           DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, DoubleSupplier pitchAim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker,
-          LEDs m_led, Limelight m_ll, BooleanSupplier incLeftRPM, BooleanSupplier decLeftRPM, BooleanSupplier incRightRPM, BooleanSupplier decRightRPM) {
+          LEDs m_led, Swerve m_swerve, Limelight m_ll, BooleanSupplier incLeftRPM, BooleanSupplier decLeftRPM, BooleanSupplier incRightRPM, BooleanSupplier decRightRPM) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -64,6 +68,7 @@ public class ShooterCalibrationWithStateEstimation extends Command {
     s_LEDs = m_led;
     s_LL = m_ll;
     s_Kicker = m_kicker;
+    s_Swerve = m_swerve;
 
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_LL);
   }
@@ -84,15 +89,13 @@ public class ShooterCalibrationWithStateEstimation extends Command {
 
     s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
     s_Pitch.setPositionRaw(this.pitch);
-    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
+    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), 
+                                    Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
+                                    Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 
-    // if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
-    //   s_LEDs.setColor(0.91);
-      if (this.fire.getAsBoolean())
-        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
-    // } else {
-      s_LEDs.setColor(-0.11);
-    // }
+    if (this.fire.getAsBoolean())
+      s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -100,7 +103,7 @@ public class ShooterCalibrationWithStateEstimation extends Command {
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
-    s_LEDs.setColor(0.99);
+    s_LEDs.setColor(Color.kBlack);
     s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }

@@ -4,7 +4,10 @@
 // For Rev BlinkIn
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Colors;
@@ -14,18 +17,33 @@ import frc.robot.Constants.Colors;
 public class LEDs extends SubsystemBase {
   /** Creates a new LEDs. */
 
-  Spark ledController;
+  AddressableLED leds;
+  AddressableLEDBuffer ledBuffer;
 
   public LEDs() {
 
-    ledController = new Spark(0);
-  
+    leds = new AddressableLED(Constants.LEDs.ledPwmPort);
+    
+    ledBuffer = new AddressableLEDBuffer(Constants.LEDs.kNumLeds);
+    leds.setLength(ledBuffer.getLength());
+
+    leds.setData(ledBuffer);
+    leds.start();
   }
 
-  public void setColor(double color) {
+  public void setColor(int R, int G, int B) {
 
-    ledController.set(color);
+    for (int i = 0; i < ledBuffer.getLength(); i++)
+      ledBuffer.setRGB(i, R, G, B);
     
+    leds.setData(ledBuffer);
+  }
+
+  public void setColor(Color color) {
+    for (int i = 0; i < ledBuffer.getLength(); i++)
+      ledBuffer.setRGB(i, (int) color.red*255, (int) color.green*255, (int) color.blue*255);
+    
+    leds.setData(ledBuffer);
   }
 
   @Override

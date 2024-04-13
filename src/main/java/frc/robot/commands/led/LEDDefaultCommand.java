@@ -5,6 +5,7 @@
 package frc.robot.commands.led;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
@@ -38,11 +39,11 @@ public class LEDDefaultCommand extends Command {
     // s_LED.setColor(0.67);
     if (!s_Shooter.getKickerSensor()){
 
-      s_LED.setColor(0.63);
+      s_LED.setColor(Color.kOrange);
 
     } else {
 
-      s_LED.setColor(0.99);
+      s_LED.setColor(Color.kBlack);
 
     }
 
@@ -52,7 +53,7 @@ public class LEDDefaultCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_LED.setColor(0.99);
+    s_LED.setColor(Color.kBlack);
     
   }
 

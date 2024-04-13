@@ -181,8 +181,9 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
+    // Returns the gyro's current angular velocity in deg/sec
     public double getAngularVelocityGyro() {
-        return gyro.getAngularVelocityXWorld().getValueAsDouble() / 2048.0;
+        return gyro.getRate();
     }
 
     public double getVelocityOdometry() {
@@ -276,7 +277,7 @@ public class Swerve extends SubsystemBase {
         // if(limelightMeasurement.avgTagDist >= 6.5)
         //     return;
         
-        if(this.getAngularVelocityGyro() >= Math.PI / 2)
+        if(Math.abs(this.getAngularVelocityGyro()) >= 135) // 90
             return;
 
         // if(this.getVelocityOdometry() >= 4)
@@ -328,6 +329,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("RobotPose X", swervePoseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("gyroRate", getAngularVelocityGyro());
 
         // SmartDashboard.putNumber("Distance Estimate", getTranslationToSpeaker().getNorm());
         // SmartDashboard.putNumber("Angle Estimate", getTranslationToSpeaker().getAngle().getDegrees());

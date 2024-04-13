@@ -7,10 +7,10 @@ package frc.robot.commands.intake;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.commands.led.LEDTimedCommand;
 import frc.robot.commands.limelight.BlinkLimelight;
 import frc.robot.commands.limelight.HumanPlayerSignal;
 import frc.robot.subsystems.Intake;
@@ -76,7 +76,7 @@ public class RunIntake extends Command {
           s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
           s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
           s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-          s_LEDs.setColor(-0.09);
+          s_LEDs.setColor(Color.kAqua);
         }
 
         s_Intake.setIntakeSpeed(1, 1); // 1
@@ -108,7 +108,7 @@ public class RunIntake extends Command {
       s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
       s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
       s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-      s_LEDs.setColor(-0.09);
+      s_LEDs.setColor(Color.kAqua);
 
       s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
       s_Intake.setIntakeSpeed(1, 1); // 1
@@ -127,11 +127,11 @@ public class RunIntake extends Command {
 
     if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
-      s_LEDs.setColor(0.13);
+      s_LEDs.setColor(Color.kAliceBlue);
 
     } else {
 
-      s_LEDs.setColor(0.99);
+      s_LEDs.setColor(Color.kBlack);
 
     }
 

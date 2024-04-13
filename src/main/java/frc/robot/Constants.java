@@ -23,7 +23,7 @@ public final class Constants {
         public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
     }
 
-    public static class Limelight{
+    public static class Limelight {
 
         // allowable error / deadband
         public static final double allowableError = 0.1;
@@ -34,6 +34,13 @@ public final class Constants {
         public static final double camToShooterFrameAngle = 15;//12.1; // degrees
         public static final double camToPivotAngle = 34.08;//31.9; // degrees
         public static final double floorToPivot = 12.82;//13.875; // inches
+    }
+
+    public static class LEDs {
+
+        public static final int ledPwmPort = 0;
+        public static final int kNumLeds = 150;
+
     }
 
     public static final class Kicker{
@@ -112,7 +119,9 @@ public final class Constants {
         public static final double kP = 0.25;//0.1;//0.15; // 0.5
         public static final double kI = 0;//0.001;
         public static final double kD = 5.0; // 8
-        public static final double kFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
+        public static final double kF = 0.0;
+        public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
+        public static final double kOmegaFF = 0.085;
         public static final double IZone = 0.1;
     
     }

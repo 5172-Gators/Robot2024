@@ -5,18 +5,22 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
 public class SetTurretAngle extends Command {
 
   Turret s_Turret;
+  Swerve s_Swerve;
   Rotation2d angle;
 
   /** Creates a new SetTurretAngle. */
-  public SetTurretAngle(Turret s_Turret, Rotation2d angle) {
+  public SetTurretAngle(Turret s_Turret, Swerve swerve, Rotation2d angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Turret = s_Turret;
+    this.s_Swerve = swerve;
     this.angle = angle;
     addRequirements(s_Turret);
   }
@@ -29,7 +33,7 @@ public class SetTurretAngle extends Command {
   @Override
   public void execute() {
 
-    s_Turret.setAngle(angle);
+    s_Turret.setAngle(angle, Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 
   }
 

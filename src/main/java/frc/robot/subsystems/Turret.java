@@ -66,7 +66,7 @@ public class Turret extends SubsystemBase {
     m_pidController.setP(Constants.Turret.kP);
     m_pidController.setI(Constants.Turret.kI);
     m_pidController.setD(Constants.Turret.kD);
-    m_pidController.setFF(0);
+    m_pidController.setFF(Constants.Turret.kF);
     m_pidController.setOutputRange(-1, 1);
 
     autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
@@ -81,9 +81,7 @@ public class Turret extends SubsystemBase {
   }
 
   public double getRotatePosition() { 
-
     return rotateEncoder.getPosition();
-
   }
 
   private double getAbsolutePosition() {
@@ -95,10 +93,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    m_currentAimMode = AimMode.kSetpoint;
-    // position is in motor rotations
-    this.setpoint = position;
-    m_pidController.setReference(position, CANSparkMax.ControlType.kPosition);
+    setAngle(Rotation2d.fromDegrees(encoderUnitsToDegrees(position)));
   }
 
   private double degreesToEncoderUnits(double degrees) {
@@ -110,15 +105,37 @@ public class Turret extends SubsystemBase {
   }
 
   private double absoluteToRelativePosition(double absPos) {
-    return absPos * 5.0; //5.051348; // This is approximately the gear ratio of the turret's absolute encoder to the relative encoder
+    return absPos * 5.0; // This is approximately the gear ratio of the turret's absolute encoder to the relative encoder
   }
 
   public void setAngle(Rotation2d angle) {
     m_currentAimMode = AimMode.kSetpoint;
     // position is in motor rotations
     this.setpoint = degreesToEncoderUnits(angle.getDegrees());
-    double arbFF = Constants.Turret.kFF * Math.signum(rotateEncoder.getVelocity());
-    m_pidController.setReference(setpoint, CANSparkMax.ControlType.kPosition,0,arbFF,ArbFFUnits.kPercentOut);
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    m_pidController.setReference( setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF,
+                                  ArbFFUnits.kPercentOut);
+  }
+
+  /**
+   * set Turret angle to a Rotation2d angle object with a given robot angular velocity for compensation
+   * @param angle Rotation2d setpoint
+   * @param omegaRadiansPerSecond current robot angular velocity in rad/sec
+   */
+  public void setAngle(Rotation2d angle, double omegaRadiansPerSecond) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // position is in motor rotations
+    this.setpoint = degreesToEncoderUnits(angle.getDegrees());
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
+    m_pidController.setReference(setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF + robotOmegaFF,
+                                  ArbFFUnits.kPercentOut);
   }
 
   public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField) {
@@ -126,8 +143,32 @@ public class Turret extends SubsystemBase {
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
     this.setpoint = test.getDegrees() * 26.0 / 360;
-    double arbFF = Constants.Turret.kFF * Math.signum(rotateEncoder.getVelocity());
-    m_pidController.setReference(setpoint, CANSparkMax.ControlType.kPosition,0,arbFF,ArbFFUnits.kPercentOut);
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    m_pidController.setReference( setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF,
+                                  ArbFFUnits.kPercentOut);
+  }
+
+  /**
+   * Set turret to a field-relative Rotation2d angle object. Provide robot angular velocity for compensation.
+   * @param angle Rotation2d setpoint (field-relative)
+   * @param chassisToField current angle of the chassis to the field (facing red is 0 degrees)
+   * @param omegaRadiansPerSecond current robot angular velocity in rad/sec
+   */
+  public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField, double omegaRadiansPerSecond) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // angle is a rotation2d object relative to the field
+    Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
+    this.setpoint = test.getDegrees() * 26.0 / 360;
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
+    m_pidController.setReference( setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF + robotOmegaFF,
+                                  ArbFFUnits.kPercentOut);
   }
 
   public void autoAimYaw(double tx, int tid, double joystickInput) {

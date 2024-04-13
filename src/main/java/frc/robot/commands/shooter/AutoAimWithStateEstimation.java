@@ -9,6 +9,8 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
 import frc.robot.Constants;
@@ -17,6 +19,7 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
 public class AutoAimWithStateEstimation extends Command {
@@ -26,6 +29,7 @@ public class AutoAimWithStateEstimation extends Command {
   Turret s_Turret;
   LEDs s_LEDs;
   Kicker s_Kicker;
+  Swerve s_Swerve;
 
   BooleanSupplier fire;
   DoubleSupplier dist;
@@ -35,7 +39,7 @@ public class AutoAimWithStateEstimation extends Command {
 
   /** Creates a new AutoAim. */
   public AutoAimWithStateEstimation(BooleanSupplier fire, DoubleSupplier dist, ShootingTables shootingTables, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
-                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
+                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
     this.s_Turret = m_turret;
@@ -46,6 +50,7 @@ public class AutoAimWithStateEstimation extends Command {
     this.shootingTables = shootingTables;
     this.chassisToTargetAngle = chassisToTargetAngle;
     this.chassisToFieldAngle = chassisToFieldAngle;
+    this.s_Swerve = m_swerve;
 
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
   }
@@ -63,14 +68,16 @@ public class AutoAimWithStateEstimation extends Command {
     s_Pitch.setPositionRaw(MathUtil.clamp(aimingParams.getPitchAngle(),
                            Constants.Pitch.minPitchPosition,
                            Constants.Pitch.maxPitchPosition));
-    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
+    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset), 
+                                    Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
+                                    Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 
     if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
-      s_LEDs.setColor(0.91);
+      s_LEDs.setColor(Color.kPurple);
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
-      s_LEDs.setColor(-0.11);
+      s_LEDs.setColor(Color.kRed);
     }
   }
 
@@ -79,7 +86,7 @@ public class AutoAimWithStateEstimation extends Command {
   public void end(boolean interrupted) {
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
-    s_LEDs.setColor(0.99);
+    s_LEDs.setColor(Color.kBlack);
     s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
   }

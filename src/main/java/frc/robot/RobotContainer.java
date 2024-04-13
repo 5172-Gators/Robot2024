@@ -165,20 +165,20 @@ public class RobotContainer {
                                                                 shootingTables,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(() -> false,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
                                                                 shootingTables,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -320,43 +320,14 @@ public class RobotContainer {
                                            shootingTables,
                                            () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                            () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
+                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
                                         shootingTables,
                                        () -> s_Swerve.getTranslationToAmp().getNorm(),
                                        () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
                                        () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
-
-        // shooterSetpointSpeaker.onTrue(new SequentialCommandGroup(
-        //     new ZeroNote(s_Kicker, s_Shooter),
-        //     new ShootSetpoint(1800.0, 1800.0, 
-        //                       Constants.Pitch.speakerSetpoint, 
-        //                       0.0, 
-        //                       fireShooter,
-        //                       () -> operatorStick.getX(), 
-        //                       () -> operatorStick.getY(),
-        //                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
-
-        //shooterSetpointAmp.onTrue(new ShootSetpoint(850.0, 850.0, Constants.Pitch.ampSetpoint, Constants.Turret.ampTurretSetpoint, fireShooter,
-        //                             s_Shooter, s_Pitch, s_Turret, s_LEDs));
-        //USE THIS #10
-        // ampShootSetpoint.onTrue(new ShootSetpoint(850.0, 850.0, 
-        //                                           Constants.Pitch.setpointAmp, 
-        //                                           -12.047677, 
-        //                                           fireShooter, 
-        //                                           () -> operatorStick.getX(), 
-        //                                           () -> operatorStick.getY(),
-        //                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
-
-        // shooterReverse.onTrue(new ShootSetpoint(-500.0, -500.0, 
-        //                                         Constants.Pitch.intakePosition, 
-        //                                         0, 
-        //                                         fireShooter,
-        //                                         () -> operatorStick.getX(), 
-        //                                         () -> operatorStick.getY(), 
-        //                                         s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         shooterEject.onTrue(new SequentialCommandGroup(
             new ZeroNote(s_Kicker, s_Shooter),
@@ -367,12 +338,6 @@ public class RobotContainer {
                               () -> operatorStick.getX(), 
                               () -> operatorStick.getY(), 
                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
-                        
-        // ampScoringSetpoint.onTrue(new AmpScore(900.0, 900.0, 
-        //                                        0.500488, 
-        //                                        fireShooter, 
-        //                                        () -> operatorStick.getY(), 
-        //                                        s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, false));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
@@ -398,7 +363,7 @@ public class RobotContainer {
                                                                                 () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
                                                                                 () -> operatorStick.getY(), 
-                                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight,
+                                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_VisionLimelight,
                                                                                 new JoystickButton(operatorStick, 12),
                                                                                 new JoystickButton(operatorStick, 15),
                                                                                 new JoystickButton(operatorStick, 11),
@@ -413,7 +378,7 @@ public class RobotContainer {
         // SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
 
         // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
-        // testButton1.whileTrue(new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
+        testButton1.whileTrue(new SetTurretFieldRelative(s_Turret, s_Swerve, Rotation2d.fromDegrees(180), () -> s_Swerve.getPose().getRotation().getDegrees()));
 
 
     }
