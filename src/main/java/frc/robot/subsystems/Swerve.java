@@ -242,65 +242,71 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateVisionPoseEstimation(Rotation2d turretToRobot, Shooter s_Shooter) {
+        // Update robot orientation for limelights
+        LimelightHelpers.SetRobotOrientation("limelight-shleft", 
+                                            getPose().getRotation().getDegrees(), 
+                                            gyro.getRate(), 
+                                            0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation("limelight-shright", 
+                                            getPose().getRotation().getDegrees(), 
+                                            gyro.getRate(), 
+                                            0, 0, 0, 0);
+
         // Update using vision selected vision measurements
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-vision");
-        SmartDashboard.putNumber("Vision Xe", limelightMeasurement.pose.getX());
-        SmartDashboard.putNumber("Vision Ye", limelightMeasurement.pose.getY());
+        LimelightHelpers.PoseEstimate leftPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shleft");
+        LimelightHelpers.PoseEstimate rightPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shright");
+        SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
+        SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
+        SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
+        SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
+
+        boolean rejectLeft = false;
+        boolean rejectRight = false;
 
         // Reject faulty vision measurements (pose is outside of the field)
-        if(limelightMeasurement.pose.getX() <= 0.0 || limelightMeasurement.pose.getX() >= 16.46)
-            return;
+        if(leftPoseEst.pose.getX() <= 0.0 || leftPoseEst.pose.getX() >= 16.46
+            || leftPoseEst.pose.getY() <= 0.0 || leftPoseEst.pose.getY() >= 8.23)
+            rejectLeft = true;
 
-        if(limelightMeasurement.pose.getY() <= 0.0 || limelightMeasurement.pose.getY() >= 8.23)
-            return;
+        if(rightPoseEst.pose.getX() <= 0.0 || rightPoseEst.pose.getX() >= 16.46
+            || rightPoseEst.pose.getY() <= 0.0 || rightPoseEst.pose.getY() >= 8.23)
+            rejectRight = true;
+        
 
-        if(limelightMeasurement.avgTagDist >= 6.5)
-            return;
+        // if(limelightMeasurement.avgTagDist >= 6.5)
+        //     return;
         
         if(this.getAngularVelocityGyro() >= Math.PI / 2)
             return;
 
-        if(this.getVelocityOdometry() >= 4)
-            return;
+        // if(this.getVelocityOdometry() >= 4)
+        //     return;
 
         // LimelightHelpers.printPoseEstimate(limelightMeasurement);
 
         // If any targets are in view
-        if (limelightMeasurement.tagCount > 0) {
-            double xyStds = 0.7;
-            double degStds = 75;
-            double poseDifference = swervePoseEstimator.getEstimatedPosition().getTranslation().getDistance(limelightMeasurement.pose.getTranslation());
-
-            // multiple targets detected
-            if (limelightMeasurement.tagCount >= 2) {
-                    xyStds = 0.3;//0.5;//0.7;
-                    degStds = 75;
-            }
-            // 1 target with large area and close to estimated pose
-            else if (limelightMeasurement.tagCount == 1 && (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5)) {
-                    xyStds = 0.4; //0.8//1.0
-                    degStds = 100;
-            }
-            // 1 target farther away and estimated pose is close to estimated pose
-            else if (limelightMeasurement.tagCount == 1 && limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
-                    xyStds = 0.7; //1.5//2.0
-                    degStds = 140;
-            }
-
-            if(s_Shooter.getLeftShooterRPM()+s_Shooter.getRightShooterRPM() >= 4000.0) {
-                        xyStds = xyStds*1;
-                        degStds = degStds*1;
-            }
-
+        if (leftPoseEst.tagCount > 0 && !rejectLeft) {
+            double xyStds = 0.3;
+            double degStds = 200;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             swervePoseEstimator.addVisionMeasurement(
-                new Pose2d(limelightMeasurement.pose.getTranslation(), limelightMeasurement.pose.getRotation().minus(turretToRobot)),
-                limelightMeasurement.timestampSeconds);
+                new Pose2d(leftPoseEst.pose.getTranslation(), leftPoseEst.pose.getRotation()),
+                            leftPoseEst.timestampSeconds);
+        }
+
+        if (rightPoseEst.tagCount > 0 && !rejectRight) {
+            double xyStds = 0.3;
+            double degStds = 200;
+            swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+            swervePoseEstimator.addVisionMeasurement(
+                new Pose2d(rightPoseEst.pose.getTranslation(), rightPoseEst.pose.getRotation()),
+                            rightPoseEst.timestampSeconds);
         }
     }
 
     @Override
     public void periodic(){
+
         // updateOdometry();
         // var alliance = DriverStation.getAlliance();
 
