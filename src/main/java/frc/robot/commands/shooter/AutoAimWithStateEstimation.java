@@ -7,6 +7,7 @@ package frc.robot.commands.shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
@@ -59,7 +60,9 @@ public class AutoAimWithStateEstimation extends Command {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
     s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
-    s_Pitch.setPositionRaw(aimingParams.getPitchAngle());
+    s_Pitch.setPositionRaw(MathUtil.clamp(aimingParams.getPitchAngle(),
+                           Constants.Pitch.minPitchPosition,
+                           Constants.Pitch.maxPitchPosition));
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset), Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()));
 
     if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {

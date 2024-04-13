@@ -27,6 +27,7 @@ public class Turret extends SubsystemBase {
 
   CANSparkMax rotateMotor;
   RelativeEncoder rotateEncoder;
+  CANcoder absoluteEncoder;
   SparkPIDController m_pidController;
   double m_goalPosition;
 
@@ -53,8 +54,10 @@ public class Turret extends SubsystemBase {
     rotateMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     rotateMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
+    absoluteEncoder = new CANcoder(Constants.Turret.absoluteEncoderID, "rio");
     rotateEncoder = rotateMotor.getEncoder();
     rotateEncoder.setPosition(0);
+    // rotateEncoder.setPosition(this.absoluteToRelativePosition(this.getAbsolutePosition()));
 
     // pid controller 
     m_pidController = rotateMotor.getPIDController();
@@ -83,6 +86,10 @@ public class Turret extends SubsystemBase {
 
   }
 
+  private double getAbsolutePosition() {
+    return absoluteEncoder.getAbsolutePosition().getValue();
+  }
+
   public Rotation2d getTurretToChassis() {
     return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0).rotateBy(Rotation2d.fromDegrees(180));
   }
@@ -100,6 +107,10 @@ public class Turret extends SubsystemBase {
 
   private double encoderUnitsToDegrees(double pos) {
     return pos * 360.0 / 26.0;
+  }
+
+  private double absoluteToRelativePosition(double absPos) {
+    return absPos * 5.0; //5.051348; // This is approximately the gear ratio of the turret's absolute encoder to the relative encoder
   }
 
   public void setAngle(Rotation2d angle) {
@@ -187,6 +198,8 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
+    // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
+    // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));
     // SmartDashboard.putNumber("Turret angle", encoderUnitsToDegrees(getRotatePosition()));
     // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());

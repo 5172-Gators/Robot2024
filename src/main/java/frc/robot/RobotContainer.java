@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -37,6 +38,7 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
+import frc.robot.commands.pitch.PitchDefaultCommand;
 import frc.robot.commands.pitch.SetPitchAngle;
 import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.pitch.TeleopPitch;
@@ -262,16 +264,21 @@ public class RobotContainer {
 
         s_Pitch.setDefaultCommand(
         
-            new TeleopPitch(
+            // new TeleopPitch(
+            //     s_Pitch,
+            //     () -> MathUtil.applyDeadband(-operatorStick.getY(), 0.05)
+            // )
+
+            new PitchDefaultCommand(
                 s_Pitch,
-                () -> operatorStick.getY()*0.1
+                Constants.Pitch.minPitchPosition
             )
 
         );
 
-        s_Intake.setDefaultCommand(
-            new IntakeTravel(s_Intake)
-        );
+        // s_Intake.setDefaultCommand(
+        //     new IntakeTravel(s_Intake)
+        // );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)

@@ -141,8 +141,8 @@ public final class Constants {
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.03;//0.02;//0.03;
         public static final double allowableErrorLob = 0.1; //0.05;
-        public static final float minPitchPosition = 0.3f; //0.381f;
-        public static final float maxPitchPosition = 1.77f; //1.6f;
+        public static final float minPitchPosition = 0.65f;//0.3f; //0.381f;
+        public static final float maxPitchPosition = 1.75f;//1.77f; //1.6f;
         public static final double horizontalOffset = 0.022789; //0.195833; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
@@ -164,6 +164,7 @@ public final class Constants {
         public static final double rel_IMax = 0;//0.5;
 
         public static final double arm_cos_kF = 0.016;
+        public static final double teleopControlInputCoefficient = 0.1;
 
     }
 
