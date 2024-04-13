@@ -369,7 +369,7 @@ public final class Constants {
             public static final double driveKS = 0.055821;
             public static final double driveKV = 2.2053;
             public static final double driveKA = 0.45893;
-            public static final Rotation2d FRangleOffset = Rotation2d.fromDegrees(285.732);
+            public static final Rotation2d FRangleOffset = Rotation2d.fromDegrees(285.732); 
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, FRangleOffset);
         }
@@ -382,7 +382,7 @@ public final class Constants {
             public static final double driveKS = 0.089545;
             public static final double driveKV = 2.2042;
             public static final double driveKA = 0.43657;
-            public static final Rotation2d BRangleOffset = Rotation2d.fromDegrees(46.143);
+            public static final Rotation2d BRangleOffset = Rotation2d.fromDegrees(46.143); 
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, BRangleOffset);
         }
