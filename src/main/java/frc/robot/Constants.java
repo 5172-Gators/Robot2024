@@ -202,8 +202,8 @@ public final class Constants {
         /* Positions */
 
         public static final double stowedPosition = 0;
-        public static final double travelPosition = -4.26;//-1.65; //-0.792;//-0.1188;//-0.156; // -0.025
-        public static final double deployedPosition = -8.29;//0.12646484375;
+        public static final double travelPosition = -4.26;
+        public static final double deployedPosition = -10.5;//-8.29;//0.12646484375;
 
         public static final double intakeRPM = 3000; // 5000
 

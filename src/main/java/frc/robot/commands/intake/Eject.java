@@ -32,7 +32,7 @@ public class Eject extends Command {
   @Override
   public void execute() {
     s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
-    s_Intake.setIntakeSpeed(-0.5);
+    s_Intake.setIntakeSpeed(-0.5, -0.5);
     s_Kicker.setKickerRPM(-Constants.Kicker.kicker_intakeRPM);
   }
 

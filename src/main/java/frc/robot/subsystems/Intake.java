@@ -121,11 +121,11 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void setIntakeSpeed(double speed){
+  public void setIntakeSpeed(double speed, double speed2){
     // open loop
 
     intakeMotor.set(speed);
-    intakeMotor2.set(speed);
+    intakeMotor2.set(speed2);
 
   }
 
@@ -179,11 +179,11 @@ public class Intake extends SubsystemBase {
 
     // SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
-    // SmartDashboard.putNumber("Intake Motor 1 RPM", intakeWheelsEncoder.getVelocity());
+    SmartDashboard.putNumber("IntakeMotor1RPM", intakeWheelsEncoder.getVelocity());
 
-    // SmartDashboard.putNumber("Intake Motor 2 RPM", intakeWheelsEncoder2.getVelocity());
+    SmartDashboard.putNumber("IntakeMotor2RPM", intakeWheelsEncoder2.getVelocity());
 
     // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 
