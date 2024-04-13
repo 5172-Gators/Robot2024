@@ -85,6 +85,8 @@ public class Shooter extends SubsystemBase {
     // leftShooterPID.setIZone(Constants.Shooter.left_IZone);
     leftShooterPID.setOutputRange(-1, 1);
 
+    leftShooter.burnFlash();
+    rightShooter.burnFlash();
   }
 
   public void setShooterSpeed(double rightSpeed, double leftSpeed) {

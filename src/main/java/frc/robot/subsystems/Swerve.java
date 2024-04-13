@@ -299,27 +299,6 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    // public boolean DriverStationColour(){
-    //     var alliance = DriverStation.getAlliance();
-
-    //     if (alliance.get() == DriverStation.Alliance.Red){
-
-    //         return false;
-    //     } 
-
-    //     return true;
-
-    // }
-
-    // public boolean AllianceIsPresent(){
-    //     var alliance = DriverStation.getAlliance();
-
-    //     if (alliance.isPresent())
-    //         return true;
-    
-    //     return false;
-    // }
-
     @Override
     public void periodic(){
         // updateOdometry();
@@ -335,10 +314,10 @@ public class Swerve extends SubsystemBase {
         // SmartDashboard.putNumber("RobotAngularVelocityGyro", getAngularVelocityGyro());
         // SmartDashboard.putNumber("RobotVelocityOdometry", getVelocityOdometry());
 
-        SmartDashboard.putNumber("Swerve0 Rotations", mSwerveMods[0].getRotations());
-        SmartDashboard.putNumber("Swerve1 Rotations", mSwerveMods[1].getRotations());
-        SmartDashboard.putNumber("Swerve2 Rotations", mSwerveMods[2].getRotations());
-        SmartDashboard.putNumber("Swerve3 Rotations", mSwerveMods[3].getRotations());
+        // SmartDashboard.putNumber("Swerve0 Rotations", mSwerveMods[0].getRotations());
+        // SmartDashboard.putNumber("Swerve1 Rotations", mSwerveMods[1].getRotations());
+        // SmartDashboard.putNumber("Swerve2 Rotations", mSwerveMods[2].getRotations());
+        // SmartDashboard.putNumber("Swerve3 Rotations", mSwerveMods[3].getRotations());
 
         SmartDashboard.putNumber("RobotPose X", swervePoseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());

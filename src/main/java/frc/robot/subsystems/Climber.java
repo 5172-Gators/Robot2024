@@ -54,6 +54,8 @@ public class Climber extends SubsystemBase {
     winchEncoder1 = winchMotor1.getEncoder();
     winchEncoder2 = winchMotor2.getEncoder();
     
+    winchMotor1.burnFlash();
+    winchMotor2.burnFlash();
   }
 
   public void manualClimberControl (double speed){

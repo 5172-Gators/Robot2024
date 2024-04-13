@@ -27,7 +27,6 @@ import frc.robot.Constants;
 public class Pitch extends SubsystemBase {
   /** Creates a new TurretPitch. */
   
-  // CANcoder absolutePitchEncoder;
   CANSparkFlex pitchMotor;
 
   SparkPIDController relativePID;
@@ -56,14 +55,7 @@ public class Pitch extends SubsystemBase {
     relativePID.setIZone(Constants.Pitch.rel_IZone);
     relativePID.setIMaxAccum(Constants.Pitch.rel_IMax, 0);
     relativePID.setOutputRange(-1, 1);
-    // relativePID.setSmartMotionMaxVelocity(20, 0);
-    // relativePID.setSmartMotionMinOutputVelocity(1, 0);
-    // relativePID.setSmartMotionMaxAccel(10, 0);
-    // relativePID.setSmartMotionAllowedClosedLoopError(Constants.Pitch.allowableErrorLob, 0);
   
-    // define + configure CANcoder
-    // absolutePitchEncoder = new CANcoder(Constants.Pitch.tiltEncoderID, "rio");
-
     // define relative encoder
     relativePitchEncoder = pitchMotor.getEncoder();
     relativePitchEncoder.setPosition(0);
@@ -74,6 +66,7 @@ public class Pitch extends SubsystemBase {
     pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
     pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
 
+    pitchMotor.burnFlash();
   }
 
   public void movePitch(double speed){
@@ -85,19 +78,6 @@ public class Pitch extends SubsystemBase {
     double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
     pitchMotor.set(speed + arbFF);
   }
-
-  // public void disableSoftLimits() {
-
-  //   pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-  //   pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
-  // }
-
-  // public void enableSoftLimits() {
-
-  //   pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-  //   pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-
-  // }
 
   public double getRawPitchPosition(){
 
@@ -130,7 +110,6 @@ public class Pitch extends SubsystemBase {
     double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
 
     relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
-    // relativePID.setReference(setpoint, CANSparkBase.ControlType.kSmartMotion, 0, arbFF, ArbFFUnits.kPercentOut);
   }
 
   public void setPositionRaw(double pos) {
@@ -160,7 +139,7 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // SmartDashboard.putNumber("RelativePitchPosition", this.getRawPitchPosition());
+    SmartDashboard.putNumber("RelPitchPos", this.getRawPitchPosition());
     // SmartDashboard.putNumber("PitchDegrees", getPitchAngle().getDegrees());
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());

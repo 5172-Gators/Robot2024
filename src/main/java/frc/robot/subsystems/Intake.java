@@ -75,17 +75,12 @@ public class Intake extends SubsystemBase {
     jointMotor.setInverted(true);
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
-    // jointMotor.burnFlash();
-
-    // absolute encoder
-    // armEncoder = new CANcoder(Constants.Intake.armAbsoluteEncoder, "rio");
-
     // relative encoder
     relativeArmEncoder = jointMotor.getEncoder();
     relativeArmEncoder.setPosition(0);
 
     // arm PID using absolute encoder
-    intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
+    // intakeArmPID = new PIDController(Constants.Intake.arm_kP, Constants.Intake.arm_kI, Constants.Intake.arm_kD);
 
     // arm PID using relative encoder
     relativeArmPID = jointMotor.getPIDController();
@@ -96,22 +91,22 @@ public class Intake extends SubsystemBase {
     relativeArmPID.setIZone(Constants.Intake.arm_IZone);
     
     // wheels PID
-    intakeWheelsPID = intakeMotor.getPIDController();
+    // intakeWheelsPID = intakeMotor.getPIDController();
 
-    intakeWheelsPID.setP(Constants.Intake.firstWheels_kP);
-    intakeWheelsPID.setI(Constants.Intake.firstWheels_kI);
-    intakeWheelsPID.setD(Constants.Intake.firstWheels_kD);
-    intakeWheelsPID.setFF(Constants.Intake.firstWheels_kFF);
-    // intakeWheelsPID.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    // intakeWheelsPID.setP(Constants.Intake.firstWheels_kP);
+    // intakeWheelsPID.setI(Constants.Intake.firstWheels_kI);
+    // intakeWheelsPID.setD(Constants.Intake.firstWheels_kD);
+    // intakeWheelsPID.setFF(Constants.Intake.firstWheels_kFF);
+    // intakeWheelsPID.setOutputRange(-1, 1);
     // intakeWheelsPID.setIZone(Constants.Intake.firstWheels_IZone);
 
-    intakeWheelsPID2 = intakeMotor2.getPIDController();
+    // intakeWheelsPID2 = intakeMotor2.getPIDController();
 
-    intakeWheelsPID2.setP(Constants.Intake.secondWheels_kP);
-    intakeWheelsPID2.setI(Constants.Intake.secondWheels_kI);
-    intakeWheelsPID2.setD(Constants.Intake.secondWheels_kD);
-    intakeWheelsPID2.setFF(Constants.Intake.secondWheels_kFF);
-    // intakeWheelsPID2.setOutputRange(Constants.Intake.minOutput, Constants.Intake.maxOutput);
+    // intakeWheelsPID2.setP(Constants.Intake.secondWheels_kP);
+    // intakeWheelsPID2.setI(Constants.Intake.secondWheels_kI);
+    // intakeWheelsPID2.setD(Constants.Intake.secondWheels_kD);
+    // intakeWheelsPID2.setFF(Constants.Intake.secondWheels_kFF);
+    // intakeWheelsPID2.setOutputRange(-1, 1);
     // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
     intakeMotor.burnFlash();

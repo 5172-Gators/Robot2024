@@ -88,6 +88,7 @@ public final class Constants {
 
         /* Motor IDs */
         public static final int rotateMotorID = 2;
+        public static final int absoluteEncoderID = 19;
         
         /* Max + Min Positions, Allowable Error */
         
@@ -113,8 +114,6 @@ public final class Constants {
         public static final double kD = 5.0; // 8
         public static final double kFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double IZone = 0.1;
-
-        public static double ampScorePosition;
     
     }
 
