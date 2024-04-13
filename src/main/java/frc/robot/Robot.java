@@ -56,12 +56,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.s_Swerve.resetModulesToAbsolute();
+  }
 
   @Override
   public void disabledPeriodic() {
 
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    // m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
 
   }
@@ -75,6 +77,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    m_robotContainer.s_Swerve.resetModulesToAbsolute();
   }
 
   /** This function is called periodically during autonomous. */
@@ -94,13 +98,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.s_Swerve.resetModulesToAbsolute();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    // m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
   }
 
@@ -113,7 +118,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    // m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
   }
 }

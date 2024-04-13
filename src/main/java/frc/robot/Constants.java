@@ -279,9 +279,10 @@ public final class Constants {
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(20); 
         public static final double wheelBase = Units.inchesToMeters(20); 
-        public static final double wheelCircumference = Units.inchesToMeters(4.0) * Math.PI;//chosenModule.wheelCircumference;
+        public static final double effWheelDiameter = Units.inchesToMeters(4.34); // 4.497734
+        public static final double wheelCircumference = effWheelDiameter * Math.PI;
 
-        public static final double driveBaseRadius = 0.3556;
+        public static final double driveBaseRadius = 0.35921;//0.3556;
         //25 inches = 0.64 meters
         //speed is 5.484 m/s
         /* Swerve Kinematics 
@@ -333,9 +334,9 @@ public final class Constants {
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.32; 
-        public static final double driveKV = 1.51;
-        public static final double driveKA = 0.27;
+        public static final double driveKS = 0.55;//0.32; 
+        public static final double driveKV = 1.9;//1.51;
+        public static final double driveKA = 0.4;//0.27;
 
         /* Swerve Profiling Values */
         /** Meters per Second */

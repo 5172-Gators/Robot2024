@@ -69,8 +69,10 @@ public class Swerve extends SubsystemBase {
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(0.4, 0, .50), // Translation PID constants
-                        new PIDConstants(.750, 0, 0), // Rotation PID constants
+                        // new PIDConstants(0.4, 0, .50), // Translation PID constants
+                        // new PIDConstants(.750, 0, 0), // Rotation PID constants
+                        new PIDConstants(5.0, 0, 0), // Translation PID constants
+                        new PIDConstants(2.5, 0, 0), // Rotation PID constants
                         Constants.Swerve.maxSpeed, // Max module speed, in m/s
                         Constants.Swerve.driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -332,6 +334,12 @@ public class Swerve extends SubsystemBase {
         // SmartDashboard.putNumber("RobotAngularVelocityOdometry", currentSpeeds.omegaRadiansPerSecond);
         // SmartDashboard.putNumber("RobotAngularVelocityGyro", getAngularVelocityGyro());
         // SmartDashboard.putNumber("RobotVelocityOdometry", getVelocityOdometry());
+
+        SmartDashboard.putNumber("Swerve0 Rotations", mSwerveMods[0].getRotations());
+        SmartDashboard.putNumber("Swerve1 Rotations", mSwerveMods[1].getRotations());
+        SmartDashboard.putNumber("Swerve2 Rotations", mSwerveMods[2].getRotations());
+        SmartDashboard.putNumber("Swerve3 Rotations", mSwerveMods[3].getRotations());
+
         SmartDashboard.putNumber("RobotPose X", swervePoseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());

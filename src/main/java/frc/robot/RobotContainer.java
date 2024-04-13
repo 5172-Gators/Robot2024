@@ -269,9 +269,9 @@ public class RobotContainer {
 
         );
 
-        s_Intake.setDefaultCommand(
-            new IntakeTravel(s_Intake)
-        );
+        // s_Intake.setDefaultCommand(
+        //     new IntakeTravel(s_Intake)
+        // );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)

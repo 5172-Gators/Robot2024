@@ -70,6 +70,8 @@ public class Turret extends SubsystemBase {
 
     autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
     autoAimPIDController.setTolerance(Constants.Turret.autoAimAllowableError);
+
+    rotateMotor.burnFlash();
     
   } 
 

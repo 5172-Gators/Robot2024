@@ -211,6 +211,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "auto1",
   "choreoAuto": false
 }

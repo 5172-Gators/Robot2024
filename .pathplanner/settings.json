@@ -3,16 +3,21 @@
   "robotLength": 0.64,
   "holonomicMode": true,
   "pathFolders": [
-    "outsideAuto1",
+    "test",
     "auto1",
     "auto2",
     "auto3",
     "auto4",
-    "insideAuto1"
+    "insideAuto1",
+    "outsideAuto1"
   ],
   "autoFolders": [
-    "outsideAuto",
-    "insideAuto"
+    "test",
+    "auto1",
+    "auto2",
+    "auto3",
+    "insideAuto",
+    "outsideAuto"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
