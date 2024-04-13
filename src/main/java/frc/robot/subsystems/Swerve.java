@@ -331,7 +331,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("gyroRate", getAngularVelocityGyro());
 
-        // SmartDashboard.putNumber("Distance Estimate", getTranslationToSpeaker().getNorm());
+        // SmartDashboard.putNumber("Distance Estimate Inches", Units.metersToInches(getTranslationToSpeaker().getNorm()));
         // SmartDashboard.putNumber("Angle Estimate", getTranslationToSpeaker().getAngle().getDegrees());
 
         for(SwerveModule mod : mSwerveMods){
