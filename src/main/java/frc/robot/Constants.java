@@ -17,8 +17,8 @@ public final class Constants {
     public static double maxModuleSpeed;
 
     public static class Field {
-        public static final Translation2d blueSpeaker = new Translation2d(0, 5.554); //5.3 // 5.554
-        public static final Translation2d redSpeaker = new Translation2d(16.539, 5.554);
+        public static final Translation2d blueSpeaker = new Translation2d(0, 5.41); //5.3 // 5.554
+        public static final Translation2d redSpeaker = new Translation2d(16.539, 5.41);
         public static final Translation2d blueAmp = new Translation2d(0, 6.89); // 7.01
         public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
     }
@@ -68,7 +68,7 @@ public final class Constants {
         public static final int rightMotorID = 17;
 
         // right PID
-        public static final double right_kP = 0.0003;//0.00020;
+        public static final double right_kP = 0.001;//0.0003;//0.00020;
         public static final double right_kI = 0;//0.000001;
         public static final double right_kD = 0;//0.0015;
         public static final double right_kFF = 0.00017;
@@ -78,7 +78,7 @@ public final class Constants {
         public static final double right_allowableErrorLob = 150; //100;
 
         // left PID
-        public static final double left_kP = 0.0003;//0.00046;
+        public static final double left_kP = 0.001;//0.0003;//0.00046;
         public static final double left_kI = 0;//0.000001;
         public static final double left_kD = 0;//0.0015;//0.0015;
         public static final double left_kFF = 0.000165;
@@ -108,7 +108,7 @@ public final class Constants {
         public static final double autoAimAllowableError = 6; 
 
         // This is added to the turret setpoint to counteract the the effect of adding spin to the note while shooting
-        public static final Rotation2d noteSpinOffset = Rotation2d.fromDegrees(1);
+        public static final Rotation2d noteSpinOffset = Rotation2d.fromDegrees(0);
 
         /* Positions */
         public static final double R_intakingPosition = 0;
@@ -150,7 +150,8 @@ public final class Constants {
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.03;//0.02;//0.03;
         public static final double allowableErrorLob = 0.1; //0.05;
-        public static final float minPitchPosition = 0.65f;//0.3f; //0.381f;
+        public static final float minPitchPosition = 0;//0.65f; //0.3f; //0.381f;
+        public static final float minSafePosition = 0.65f;
         public static final float maxPitchPosition = 1.75f;//1.77f; //1.6f;
         public static final double horizontalOffset = 0.022789; //0.195833; // Used for calculating angle of pitch mechanism 
 
@@ -167,7 +168,7 @@ public final class Constants {
         /* Relative Encoder PID Constants */
         public static final double rel_kP = 15;//3.5; //0.16;
         public static final double rel_kI = 0;//0.01;
-        public static final double rel_kD = 0; //0.08;
+        public static final double rel_kD = 0.01; //0.08;
         public static final double rel_kFF = 0;//0.035;
         public static final double rel_IZone = 0;//0.05;
         public static final double rel_IMax = 0;//0.5;

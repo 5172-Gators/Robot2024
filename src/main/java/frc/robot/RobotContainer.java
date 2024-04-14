@@ -271,14 +271,14 @@ public class RobotContainer {
 
             new PitchDefaultCommand(
                 s_Pitch,
-                Constants.Pitch.minPitchPosition
+                Constants.Pitch.minSafePosition
             )
 
         );
 
-        // s_Intake.setDefaultCommand(
-        //     new IntakeTravel(s_Intake)
-        // );
+        s_Intake.setDefaultCommand(
+            new IntakeTravel(s_Intake)
+        );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)
@@ -378,8 +378,8 @@ public class RobotContainer {
         // SmartDashboard.putData("Test Button 3", new SetPitchPosition(s_Pitch, 1.25));
 
         // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
-        testButton1.whileTrue(new SetTurretFieldRelative(s_Turret, s_Swerve, Rotation2d.fromDegrees(180), () -> s_Swerve.getPose().getRotation().getDegrees()));
-
+        // testButton1.whileTrue(new SetTurretFieldRelative(s_Turret, s_Swerve, Rotation2d.fromDegrees(180), () -> s_Swerve.getPose().getRotation().getDegrees()));
+        testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
 
     }
 
@@ -391,6 +391,7 @@ public class RobotContainer {
         autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
         autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
         autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
+        autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));

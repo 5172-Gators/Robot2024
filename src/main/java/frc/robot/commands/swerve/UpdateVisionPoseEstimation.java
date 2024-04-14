@@ -30,7 +30,7 @@ public class UpdateVisionPoseEstimation extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialPose = s_Swerve.getPose();
+    // initialPose = s_Swerve.getPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,7 +44,7 @@ public class UpdateVisionPoseEstimation extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Swerve.setRobotPose(initialPose);
+    // s_Swerve.setRobotPose(initialPose);
   }
 
   // Returns true when the command should end.

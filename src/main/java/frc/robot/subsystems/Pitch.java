@@ -85,11 +85,11 @@ public class Pitch extends SubsystemBase {
 
   }
 
-  private double encoderUnitsToDegrees(double pos) {
+  public double encoderUnitsToDegrees(double pos) {
     return (57.5-19.3)/2.3401*pos+19.3;
   }
 
-  private double Rotation2dToEncoderUnits(Rotation2d angle) {
+  public double Rotation2dToEncoderUnits(Rotation2d angle) {
     return (angle.getDegrees()-19.3)*2.3401/(57.5-19.3);
   }
 
@@ -139,8 +139,8 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("RelPitchPos", this.getRawPitchPosition());
-    // SmartDashboard.putNumber("PitchDegrees", getPitchAngle().getDegrees());
+    // SmartDashboard.putNumber("RelPitchPos", this.getRawPitchPosition());
+    SmartDashboard.putNumber("PitchDegrees", getPitchAngle().getDegrees());
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());
 

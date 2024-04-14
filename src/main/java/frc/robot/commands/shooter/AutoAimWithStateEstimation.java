@@ -37,6 +37,10 @@ public class AutoAimWithStateEstimation extends Command {
   DoubleSupplier chassisToTargetAngle;
   DoubleSupplier chassisToFieldAngle;
 
+  // double pitch_sp_processed;
+  // double turret_sp_processed;
+
+
   /** Creates a new AutoAim. */
   public AutoAimWithStateEstimation(BooleanSupplier fire, DoubleSupplier dist, ShootingTables shootingTables, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
                   Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
@@ -65,10 +69,30 @@ public class AutoAimWithStateEstimation extends Command {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
     s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
-    s_Pitch.setPositionRaw(MathUtil.clamp(aimingParams.getPitchAngle(),
-                           Constants.Pitch.minPitchPosition,
-                           Constants.Pitch.maxPitchPosition));
-    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset), 
+    double pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
+                           s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
+                           s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
+    double turret_sp = Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset).getDegrees();
+
+    // pitch and turret processing to prevent interior collisions while aiming
+    if (pitch_sp < s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minSafePosition)) {
+      if (Math.abs(s_Turret.getRotatePosition()) > 3.0) {
+        pitch_sp = MathUtil.clamp(pitch_sp, 
+                                    s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minSafePosition), 
+                                    s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
+        turret_sp = MathUtil.clamp(turret_sp, s_Turret.encoderUnitsToDegrees(-3+.25),
+                                              s_Turret.encoderUnitsToDegrees(3-0.25));
+      } else {
+        pitch_sp = MathUtil.clamp(pitch_sp, 
+                                    s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition), 
+                                    s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
+        turret_sp = MathUtil.clamp(turret_sp, s_Turret.encoderUnitsToDegrees(-3+.25),
+                                              s_Turret.encoderUnitsToDegrees(3-0.25));
+      }
+    }
+    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
+
+    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(turret_sp), 
                                     Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 

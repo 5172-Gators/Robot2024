@@ -89,19 +89,19 @@ public class Turret extends SubsystemBase {
   }
 
   public Rotation2d getTurretToChassis() {
-    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0).rotateBy(Rotation2d.fromDegrees(180));
+    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 23.333).rotateBy(Rotation2d.fromDegrees(180));
   }
 
   public void setPosition(double position) {
     setAngle(Rotation2d.fromDegrees(encoderUnitsToDegrees(position)));
   }
 
-  private double degreesToEncoderUnits(double degrees) {
-    return degrees * 26.0 / 360;
+  public double degreesToEncoderUnits(double degrees) {
+    return degrees * 23.333 / 360.0;//26.0 / 360;
   }
 
-  private double encoderUnitsToDegrees(double pos) {
-    return pos * 360.0 / 26.0;
+  public double encoderUnitsToDegrees(double pos) {
+    return pos * 360.0 / 23.333;//26.0;
   }
 
   private double absoluteToRelativePosition(double absPos) {
@@ -142,7 +142,7 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
-    this.setpoint = test.getDegrees() * 26.0 / 360;
+    this.setpoint = test.getDegrees() * 23.333 / 360;
     double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
     m_pidController.setReference( setpoint, 
                                   CANSparkMax.ControlType.kPosition,
@@ -161,7 +161,7 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
-    this.setpoint = test.getDegrees() * 26.0 / 360;
+    this.setpoint = test.getDegrees() * 23.333 / 360;
     double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
     double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
     m_pidController.setReference( setpoint, 
@@ -238,10 +238,10 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
+    SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
     // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
     // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));
-    // SmartDashboard.putNumber("Turret angle", encoderUnitsToDegrees(getRotatePosition()));
+    SmartDashboard.putNumber("Turret angle", encoderUnitsToDegrees(getRotatePosition()));
     // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());

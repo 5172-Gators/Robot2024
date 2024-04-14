@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.67504098644561,
-        "y": 4.113976955226638
+        "x": 7.561271849816427,
+        "y": 5.112152769760085
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.285057842842959,
-        "y": 4.169949430807954
+        "x": 6.040686263190707,
+        "y": 3.9833745122035698
       },
       "isLocked": false,
-      "linkedName": "auto1path2end"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.053663380054033,
-        "y": 5.158796499411181
+        "x": 4.3894982335419215,
+        "y": 4.897591613365045
       },
       "prevControl": {
-        "x": 4.843018804918722,
-        "y": 4.408908845789719
+        "x": 5.2664003509825195,
+        "y": 4.141963193017295
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,18 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "shootAuto1Setpoint3",
-      "waypointRelativePos": 0.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -50,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "auto1",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 40.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

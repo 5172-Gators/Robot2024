@@ -7,6 +7,7 @@ package frc.robot.commands.shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
@@ -61,9 +62,12 @@ public class LobShot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
-    s_Shooter.setShooterRPM(3109-200, 2769-200);
-    s_Pitch.setPositionRaw(1.4366607);
+    s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+    s_Pitch.setPosition(Rotation2d.fromDegrees(MathUtil.clamp(aimingParams.getPitchAngle(),
+                           s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
+                           s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition))));
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()), 
                                     Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
