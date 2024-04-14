@@ -21,6 +21,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.LEDs.LEDMode;
 
 public class AutoAimWithStateEstimation extends Command {
 
@@ -97,11 +98,11 @@ public class AutoAimWithStateEstimation extends Command {
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 
     if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
-      s_LEDs.setColor(Color.kPurple);
+      s_LEDs.setColor(new Color(255, 0, 255));
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
-      s_LEDs.setColor(Color.kRed);
+      s_LEDs.setColor(Color.kRed,LEDMode.FLASH);
     }
   }
 

@@ -39,7 +39,7 @@ public class LEDDefaultCommand extends Command {
     // s_LED.setColor(0.67);
     if (!s_Shooter.getKickerSensor()){
 
-      s_LED.setColor(Color.kOrange);
+      // s_LED.setColor(new Color(255, 128, 0));
 
     } else {
 

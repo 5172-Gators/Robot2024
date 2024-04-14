@@ -310,8 +310,6 @@ public class RobotContainer {
         testStabilizer.whileTrue(new DeployStablizer(s_Stabilizer));
 
 
-
-
         /* Operator Buttons */
         autoAim.onTrue(new SequentialCommandGroup(
             new ZeroNote(s_Kicker, s_Shooter),

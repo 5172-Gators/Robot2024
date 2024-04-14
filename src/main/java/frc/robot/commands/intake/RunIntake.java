@@ -20,6 +20,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.LEDs.LEDMode;
 
 public class RunIntake extends Command {
 
@@ -76,7 +77,7 @@ public class RunIntake extends Command {
           s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
           s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
           s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-          s_LEDs.setColor(Color.kAqua);
+          s_LEDs.setColor(Color.kTurquoise, LEDMode.FLASH);
         }
 
         s_Intake.setIntakeSpeed(1, 1); // 1
@@ -108,7 +109,7 @@ public class RunIntake extends Command {
       s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
       s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
       s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-      s_LEDs.setColor(Color.kAqua);
+      s_LEDs.setColor(Color.kTurquoise, LEDMode.FLASH);
 
       s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
       s_Intake.setIntakeSpeed(1, 1); // 1
@@ -127,7 +128,7 @@ public class RunIntake extends Command {
 
     if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
 
-      s_LEDs.setColor(Color.kAliceBlue);
+      s_LEDs.setColorTimed(new Color(25,0,255), LEDMode.SOLID, 1);
 
     } else {
 
