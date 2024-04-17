@@ -7,7 +7,8 @@ public final class LobTables {
 
 
     public LobTables() {
-        tbl = new InterpolatingDoubleTable(3);
+        // The 4 columns are distance, pitch angle, left rpm, and right rpm
+        tbl = new InterpolatingDoubleTable(4);
 
         // First column (reference) is distance to goal (m), followed by pitch angle (deg) and left and right shooter speeds (RPM)
         tbl.addPoint(7.85, 47.4, 2780, 2390);

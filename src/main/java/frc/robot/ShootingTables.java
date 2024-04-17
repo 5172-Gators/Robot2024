@@ -7,7 +7,8 @@ public final class ShootingTables {
 
 
     public ShootingTables() {
-        tbl = new InterpolatingDoubleTable(3);
+        // The 4 columns are distance, pitch angle, left rpm, and right rpm
+        tbl = new InterpolatingDoubleTable(4);
 
         // First column (reference) is distance to goal (m), followed by pitch angle (deg) and left and right shooter speeds (RPM)
         tbl.addPoint(1.77, 47.8, 3110, 2720);

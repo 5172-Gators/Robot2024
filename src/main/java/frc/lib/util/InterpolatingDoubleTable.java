@@ -8,7 +8,7 @@ public final class InterpolatingDoubleTable {
 
     /**
      * Default Constructor of an interpolating double table
-     * @param columns the number of columns needed in the table (including your referenc column)
+     * @param columns the number of columns needed in the table (including your reference column)
      */        
     public InterpolatingDoubleTable(int columns) {
         for (int i = 0; i <= columns - 2; i++) {
