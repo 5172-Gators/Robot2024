@@ -394,6 +394,8 @@ public class RobotContainer {
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
+        autoChooser.addOption("auto5", new PathPlannerAuto("auto5"));
+
     }
 
     /**

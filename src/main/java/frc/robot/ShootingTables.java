@@ -21,7 +21,7 @@ public final class ShootingTables {
         addPoint(m_pitchLUT,2.34, 41.8);
         addPoint(m_pitchLUT,3.01, 35.1);
         addPoint(m_pitchLUT,3.76, 30.8);
-        addPoint(m_pitchLUT,4.65, 27.5);
+        addPoint(m_pitchLUT,4.65, 26.0); //27.5
         addPoint(m_pitchLUT,5.66, 23.7);
         addPoint(m_pitchLUT,7.85, 47.4);
         addPoint(m_pitchLUT,9.36, 46.4);
