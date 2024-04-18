@@ -107,6 +107,7 @@ public class RobotContainer {
     // private final JoystickButton testButton14 = new JoystickButton(operatorStick, 14);
     // private final JoystickButton testButton15 = new JoystickButton(operatorStick, 15);
     private final JoystickButton shooterCalibrationMode = new JoystickButton(operatorStick, 14);
+    private final JoystickButton lobCalibrationMode = new JoystickButton(operatorStick, 13);
     private final JoystickButton climbModeButton = new JoystickButton(operatorStick, 5);
    // private final JoystickButton shooterReverse = new JoystickButton(operatorStick, 15);
     //reverses shooter incase note gets past kicker wheels, currently assinged to thumb left (3) on rotate stick
@@ -137,6 +138,7 @@ public class RobotContainer {
     public final Stabilizer s_Stabilizer;
 
     public final ShootingTables shootingTables;
+    public final LobTables lobTables;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -155,6 +157,7 @@ public class RobotContainer {
         s_Stabilizer = new Stabilizer();
         
         shootingTables = new ShootingTables();
+        lobTables = new LobTables();
 
         autoChooser = new SendableChooser<Command>();
 
@@ -178,7 +181,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, lobTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -321,7 +324,7 @@ public class RobotContainer {
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
-                                        shootingTables,
+                                        lobTables,
                                        () -> s_Swerve.getTranslationToAmp().getNorm(),
                                        () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
                                        () -> s_Swerve.getPose().getRotation().getDegrees(), 
@@ -367,6 +370,21 @@ public class RobotContainer {
                                                                                 new JoystickButton(operatorStick, 11),
                                                                                 new JoystickButton(operatorStick, 16)
                                                                                  ));
+
+        lobCalibrationMode.onTrue(new ShooterCalibrationWithStateEstimation(1700.0, 1700.0, 
+                                                                                .64, 
+                                                                                0, 
+                                                                                fireShooter,
+                                                                                () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(), 
+                                                                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                                                                () -> operatorStick.getY(), 
+                                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_VisionLimelight,
+                                                                                new JoystickButton(operatorStick, 12),
+                                                                                new JoystickButton(operatorStick, 15),
+                                                                                new JoystickButton(operatorStick, 11),
+                                                                                new JoystickButton(operatorStick, 16)
+                                                                                 ));
+
         
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));
         // testButton1.whileTrue(new SetPitchPosition(s_Pitch, 0.75));

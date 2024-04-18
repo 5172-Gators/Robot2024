@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
 import frc.robot.Constants;
+import frc.robot.LobTables;
 import frc.robot.ShootingTables;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
@@ -35,12 +36,12 @@ public class LobShot extends Command {
 
   BooleanSupplier fire;
   DoubleSupplier dist;
-  ShootingTables shootingTables;
+  LobTables lobTables;
   DoubleSupplier chassisToTargetAngle;
   DoubleSupplier chassisToFieldAngle;
 
   /** Creates a new AutoAim. */
-  public LobShot(BooleanSupplier fire, ShootingTables shootingTables, DoubleSupplier dist, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
+  public LobShot(BooleanSupplier fire, LobTables lobTables, DoubleSupplier dist, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
                   Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
@@ -50,7 +51,7 @@ public class LobShot extends Command {
     this.s_Swerve = m_swerve;
     this.fire = fire;
     this.dist = dist;
-    this.shootingTables = shootingTables;
+    this.lobTables = lobTables;
     this.chassisToTargetAngle = chassisToTargetAngle;
     this.chassisToFieldAngle = chassisToFieldAngle;
 
@@ -64,7 +65,7 @@ public class LobShot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
+    AimingParameters aimingParams = lobTables.getAimingParams(dist.getAsDouble());
 
     s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
     s_Pitch.setPosition(Rotation2d.fromDegrees(MathUtil.clamp(aimingParams.getPitchAngle(),
