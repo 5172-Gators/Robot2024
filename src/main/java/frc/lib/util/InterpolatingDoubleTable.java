@@ -25,6 +25,7 @@ public final class InterpolatingDoubleTable {
         int i = 0;
         for (var tbl : tbl_list) {
             tbl.put(new InterpolatingDouble(ref), new InterpolatingDouble(vals[i]));
+            i++;
         }
     }
 

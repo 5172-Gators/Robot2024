@@ -12,7 +12,7 @@ public final class LobTables {
 
         // First column (reference) is distance to goal (m), followed by pitch angle (deg) and left and right shooter speeds (RPM)
         tbl.addPoint(7.85, 47.4, 2780, 2390);
-        tbl.addPoint(9.36, 3122, 2540);
+        tbl.addPoint(9.36, 46.4, 3122, 2540);
         tbl.addPoint(10.22, 43.1, 3560, 2630);
 
     }

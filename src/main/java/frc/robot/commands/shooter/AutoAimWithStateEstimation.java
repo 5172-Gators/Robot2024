@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
@@ -75,6 +76,8 @@ public class AutoAimWithStateEstimation extends Command {
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
     double turret_sp = Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset).getDegrees();
 
+    SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
+    SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
     // pitch and turret processing to prevent interior collisions while aiming
     // if (pitch_sp < s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minSafePosition)) {
     //   if (Math.abs(s_Turret.getRotatePosition()) > 3.0) {

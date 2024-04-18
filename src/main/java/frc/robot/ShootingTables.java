@@ -12,7 +12,7 @@ public final class ShootingTables {
 
         // First column (reference) is distance to goal (m), followed by pitch angle (deg) and left and right shooter speeds (RPM)
         tbl.addPoint(1.77, 47.8, 3110, 2720);
-        tbl.addPoint(2.34, 41.8, 336, 2730);
+        tbl.addPoint(2.34, 41.8, 3360, 2730);
         tbl.addPoint(3.01, 35.1, 3400, 2840);
         tbl.addPoint(3.76, 30.8, 3540, 2940);
         tbl.addPoint(4.65, 27.5, 3830, 3170);
