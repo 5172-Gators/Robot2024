@@ -181,7 +181,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, lobTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -324,7 +324,7 @@ public class RobotContainer {
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
-                                        shootingTables,
+                                        lobTables,
                                        () -> s_Swerve.getTranslationToAmp().getNorm(),
                                        () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
                                        () -> s_Swerve.getPose().getRotation().getDegrees(), 
