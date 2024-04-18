@@ -33,6 +33,7 @@ import frc.robot.commands.climber.StabilizerDefaultCommand;
 import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
+import frc.robot.commands.intake.IntakeAuto;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
@@ -163,12 +164,13 @@ public class RobotContainer {
 
         /* Configure PathPlanner Commands */
 
-        NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true,
+        NamedCommands.registerCommand("stateEstimationShooting", new SequentialCommandGroup(new ZeroNote(s_Kicker, s_Shooter))
+                                                                .andThen(new AutoAimWithStateEstimation(() -> true,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
                                                                 shootingTables,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
 
         NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(() -> false,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
@@ -179,7 +181,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
-        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
+        NamedCommands.registerCommand("intakeAuto", new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
 
         NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, lobTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
