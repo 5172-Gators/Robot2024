@@ -139,7 +139,7 @@ public class Pitch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // SmartDashboard.putNumber("RelPitchPos", this.getRawPitchPosition());
+    SmartDashboard.putNumber("RelPitchPos", this.getRawPitchPosition());
     SmartDashboard.putNumber("PitchDegrees", getPitchAngle().getDegrees());
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());

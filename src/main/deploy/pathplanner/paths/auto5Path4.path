@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.78495393354423,
+        "y": 6.89394324243194
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.169256702149768,
+        "y": 6.25025977324682
+      },
+      "isLocked": false,
+      "linkedName": "auto5Path2End"
+    },
+    {
+      "anchor": {
+        "x": 2.78495393354423,
+        "y": 4.207264414528829
+      },
+      "prevControl": {
+        "x": 1.4322857736624557,
+        "y": 4.431154316854089
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "auto5path4end"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.74488129694218,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "auto5",
+  "previewStartingState": {
+    "rotation": 29.744881296942086,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

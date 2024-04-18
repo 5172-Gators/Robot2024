@@ -183,7 +183,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("intakeAuto", new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, lobTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -326,7 +326,7 @@ public class RobotContainer {
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
-                                        lobTables,
+                                        shootingTables,
                                        () -> s_Swerve.getTranslationToAmp().getNorm(),
                                        () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
                                        () -> s_Swerve.getPose().getRotation().getDegrees(), 
@@ -414,6 +414,8 @@ public class RobotContainer {
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
+        autoChooser.addOption("auto5", new PathPlannerAuto("auto5"));
+
     }
 
     /**

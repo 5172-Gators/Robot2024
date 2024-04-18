@@ -150,9 +150,9 @@ public final class Constants {
         /* Max + Min Positions, Allowable Error */
         public static final double allowableError = 0.03;//0.02;//0.03;
         public static final double allowableErrorLob = 0.1; //0.05;
-        public static final float minPitchPosition = 0.65f;//0.65f; //0.3f; //0.381f; 0
-        public static final float minSafePosition = 0.65f;
-        public static final float maxPitchPosition = 1.75f;//1.77f; //1.6f;
+        public static final float minPitchPosition = 0.27f;//0.65f; //0.3f; //0.381f; 0
+        public static final float minSafePosition = 0.27f; //0.65f
+        public static final float maxPitchPosition =  2.17f; //1.75f;//1.77f; //1.6f;
         public static final double horizontalOffset = 0.022789; //0.195833; // Used for calculating angle of pitch mechanism 
 
         /* Positions */
