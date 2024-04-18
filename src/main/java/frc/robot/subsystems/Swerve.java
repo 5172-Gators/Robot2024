@@ -256,17 +256,29 @@ public class Swerve extends SubsystemBase {
                                             getPose().getRotation().getDegrees(), 
                                             gyro.getRate(), 
                                             0, 0, 0, 0);
+        // LimelightHelpers.SetRobotOrientation("limelight-drive", 
+        //                                     getPose().getRotation().getDegrees(), 
+        //                                     gyro.getRate(), 
+        //                                     0, 0, 0, 0);
+
 
         // Update using vision selected vision measurements
         LimelightHelpers.PoseEstimate leftPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shleft");
         LimelightHelpers.PoseEstimate rightPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shright");
+        // LimelightHelpers.PoseEstimate drivePoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
         SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
         SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
+
         SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
         SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
 
+        // SmartDashboard.putNumber("Drive Xe", driveCamPoseEst.pose.getX());
+        // SmartDashboard.putNumber("Drive Ye", driveCamPoseEst.pose.getY());
+
+
         boolean rejectLeft = false;
         boolean rejectRight = false;
+        // boolean rejectDriveCam = false;
 
         // Reject faulty vision measurements (pose is outside of the field)
         if(leftPoseEst.pose.getX() <= 0.0 || leftPoseEst.pose.getX() >= 16.46
@@ -276,6 +288,10 @@ public class Swerve extends SubsystemBase {
         if(rightPoseEst.pose.getX() <= 0.0 || rightPoseEst.pose.getX() >= 16.46
             || rightPoseEst.pose.getY() <= 0.0 || rightPoseEst.pose.getY() >= 8.23)
             rejectRight = true;
+
+        // if(driveCamPoseEst.pose.getX() <= 0.0 || driveCamPoseEst.pose.getX() >= 16.46
+        //     || driveCamPoseEst.pose.getY() <= 0.0 || driveCamPoseEst.pose.getY() >= 8.23)
+        //     rejectDriveCam = true;
         
 
         // if(limelightMeasurement.avgTagDist >= 6.5)
@@ -307,6 +323,15 @@ public class Swerve extends SubsystemBase {
                 new Pose2d(rightPoseEst.pose.getTranslation(), rightPoseEst.pose.getRotation()),
                             rightPoseEst.timestampSeconds);
         }
+
+        // if (driveCamPoseEst.tagCount > 0 && !rejectDriveCam) {
+        //     double xyStds = 0.3;
+        //     double degStds = 200;
+        //     swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+        //     swervePoseEstimator.addVisionMeasurement(
+        //         new Pose2d(driveCamPoseEst.pose.getTranslation(), driveCamPoseEst.pose.getRotation()),
+        //                     driveCamPoseEst.timestampSeconds);
+        // }
     }
 
     @Override
@@ -327,12 +352,14 @@ public class Swerve extends SubsystemBase {
         // SmartDashboard.putNumber("Swerve0 Rotations", mSwerveMods[0].getRotations());
         // SmartDashboard.putNumber("Swerve1 Rotations", mSwerveMods[1].getRotations());
         // SmartDashboard.putNumber("Swerve2 Rotations", mSwerveMods[2].getRotations());
-        // SmartDashboard.putNumber("Swerve3 Rotations", mSwerveMods[3].getRotations());
+        // SmartDashboard.putNumber("Swerve3 Rotations", mSwerveMods[3].getRotations());f
 
         SmartDashboard.putNumber("RobotPose X", swervePoseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("gyroRate", getAngularVelocityGyro());
+
+        m_field.setRobotPose(this.getPose());
 
         // SmartDashboard.putNumber("Distance Estimate Inches", Units.metersToInches(getTranslationToSpeaker().getNorm()));
         SmartDashboard.putNumber("Distance Estimate", getTranslationToSpeaker().getNorm());
