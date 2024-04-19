@@ -85,6 +85,6 @@ public class AutoAim extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (s_Shooter.getShooterSensor() && s_Shooter.getKickerSensor());
+    return (s_Shooter.getShooterSensorInverted() && s_Shooter.getKickerSensorInverted());
   }
 }

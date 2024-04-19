@@ -21,6 +21,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.LEDs.LEDMode;
+import frc.robot.subsystems.Shooter.NotePossesion;
 
 public class RunIntake extends Command {
 
@@ -73,7 +74,7 @@ public class RunIntake extends Command {
       if (state == 0) {
         s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
 
-        if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
+        if (s_Shooter.getKickerSensorInverted() && s_Shooter.getShooterSensorInverted()) {
           s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
           s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
           s_Turret.setPosition(Constants.Turret.R_intakingPosition);
@@ -83,7 +84,7 @@ public class RunIntake extends Command {
         s_Intake.setIntakeSpeed(1, 1); // 1
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
 
-        if (s_Shooter.getShooterSensor() == false) // shooter sensor
+        if (s_Shooter.getShooterSensorInverted() == false) // shooter sensor
           state = 1;
       }
 
@@ -93,7 +94,7 @@ public class RunIntake extends Command {
         s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
         s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
 
-        if (s_Shooter.getShooterSensor() == true)
+        if (s_Shooter.getShooterSensorInverted() == true)
           state = 2;
 
       }
@@ -102,7 +103,7 @@ public class RunIntake extends Command {
 
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
 
-        if (s_Shooter.getShooterSensor() == false)
+        if (s_Shooter.getShooterSensorInverted() == false)
         state = 3;
       }
     } else {
@@ -126,7 +127,7 @@ public class RunIntake extends Command {
     s_Intake.stopIntake();
     s_Pitch.stopPitch();
 
-    if (state == 3 || s_useBeamBreaks.getAsBoolean() == false){
+    if (s_Shooter.kickerSensorFlag) {
 
       s_LEDs.setColorTimed(new Color(25,0,255), LEDMode.SOLID, 1);
 
@@ -142,8 +143,9 @@ public class RunIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return (state == 3 && s_useBeamBreaks.getAsBoolean());
-
+  //return s_useBeamBreaks.getAsBoolean() == false;
+  //  return (state == 3 && s_useBeamBreaks.getAsBoolean());
+    return (s_Shooter.currentNotePossesion == NotePossesion.FULL);
+   
   }
 }

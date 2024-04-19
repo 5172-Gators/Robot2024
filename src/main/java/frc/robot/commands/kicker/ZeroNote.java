@@ -46,21 +46,21 @@ public class ZeroNote extends Command {
       s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
       s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
 
-      if (s_Shooter.getShooterSensor() == true)
+      if (s_Shooter.getShooterSensorInverted() == true)
         state = 1;
     }
 
     if (state == 1) {
       s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
 
-      if (s_Shooter.getShooterSensor() == false)
+      if (s_Shooter.getShooterSensorInverted() == false)
         state = 2;
     }
 
     if (state == 2) {
       s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
 
-      if (s_Shooter.getShooterSensor() == false)
+      if (s_Shooter.getShooterSensorInverted() == false)
         state = 3;
     }
   }

@@ -64,7 +64,7 @@ public class IntakeAuto extends Command {
 
  
 
-      if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
+      if (s_Shooter.getKickerSensorInverted() && s_Shooter.getShooterSensorInverted()) {
         s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
         s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
         s_Turret.setPosition(Constants.Turret.R_intakingPosition);
@@ -84,7 +84,7 @@ public class IntakeAuto extends Command {
     s_Intake.stopIntake();
     s_Pitch.stopPitch();
 
-    if (s_Shooter.getKickerSensor() == false){
+    if (s_Shooter.getKickerSensorInverted() == false){
 
       s_LEDs.setColorTimed(new Color(25,0,255), LEDMode.SOLID, 1);
 
@@ -100,7 +100,7 @@ public class IntakeAuto extends Command {
   @Override
   public boolean isFinished() {
 
-    return (s_Shooter.getKickerSensor() == false);
+    return (s_Shooter.getKickerSensorInverted() == false);
 
   }
 }

@@ -23,6 +23,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.LEDs.LEDMode;
+import frc.robot.subsystems.Shooter.NotePossesion;
 
 public class AutoAimWithStateEstimation extends Command {
 
@@ -58,7 +59,7 @@ public class AutoAimWithStateEstimation extends Command {
     this.chassisToFieldAngle = chassisToFieldAngle;
     this.s_Swerve = m_swerve;
 
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
+    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs, s_Kicker);
   }
 
   // Called when the command is initially scheduled.
@@ -70,7 +71,20 @@ public class AutoAimWithStateEstimation extends Command {
   public void execute() {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
-    s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+  
+  //   if (s_Shooter.currentNotePossesion == NotePossesion.FULL){
+  //  // s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+
+  //   }
+
+  // if(s_Shooter.currentNotePossesion == NotePossesion.HALF && s_Shooter.shooterSensorFlag){
+  //   s_Kicker.stopKicker();
+  //   //s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+  //     }
+
+
+
+
     double pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
@@ -99,14 +113,30 @@ public class AutoAimWithStateEstimation extends Command {
     s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(turret_sp), 
                                     Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
+    if (s_Shooter.currentNotePossesion == NotePossesion.FULL){
+      s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+    }
+    else if (s_Shooter.currentNotePossesion == NotePossesion.HALF && s_Shooter.shooterSensorFlag){
+    s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
+       if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
       s_LEDs.setColor(new Color(255, 0, 255));
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
     } else {
       s_LEDs.setColor(Color.kRed,LEDMode.FLASH);
+      s_Kicker.stopKicker();
+      
     }
+  }
+  //  else if (s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady()) {
+  //     s_LEDs.setColor(new Color(255, 0, 255));
+  //     if (this.fire.getAsBoolean())
+  //       s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
+  //   } else {
+  //     s_LEDs.setColor(Color.kRed,LEDMode.FLASH);
+  //     s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+  //   }
   }
 
   // Called once the command ends or is interrupted.
@@ -122,6 +152,6 @@ public class AutoAimWithStateEstimation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (s_Shooter.getShooterSensor() && s_Shooter.getKickerSensor());
+    return (s_Shooter.getShooterSensorInverted() && s_Shooter.getKickerSensorInverted());
   }
 }

@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
   RelativeEncoder rightShooterEncoder;
   RelativeEncoder leftShooterEncoder;
 
-  DigitalInput kickerSensor;
-  DigitalInput shooterSensor;
+  DigitalInput kickerSensorInverted;
+  DigitalInput shooterSensorInverted;
 
   SparkPIDController rightShooterPID;
   SparkPIDController leftShooterPID;
@@ -44,6 +44,15 @@ public class Shooter extends SubsystemBase {
   Debouncer kickerBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
   Debouncer shooterBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
   
+  public boolean kickerSensorFlag = false;
+  public boolean shooterSensorFlag = false;
+
+/* Note Possesion */
+  public enum NotePossesion {
+    NONE, HALF, FULL
+  }
+  public NotePossesion currentNotePossesion = NotePossesion.NONE;
+
   public Shooter() {
     
     /* define + configure left shooter motor */
@@ -66,8 +75,10 @@ public class Shooter extends SubsystemBase {
     rightShooter.setInverted(true);
 
     /* Beam Break Sensors */
-    kickerSensor = new DigitalInput(0);
-    shooterSensor = new DigitalInput(1);
+    kickerSensorInverted = new DigitalInput(0);
+    shooterSensorInverted = new DigitalInput(1);
+
+  
 
     /* Right Side PID */
     rightShooterPID.setP(Constants.Shooter.right_kP);
@@ -131,17 +142,51 @@ public class Shooter extends SubsystemBase {
 
   }
 
+  public boolean getKickerSensorInverted(){
+    return kickerSensorInverted.get();
+    // return kickerBeamBreakDebouncer.calculate(kickerSensor.get());
+
+  }
+
+  public boolean getShooterSensorInverted(){
+    return shooterSensorInverted.get();
+    // return shooterBeamBreakDebouncer.calculate(shooterSensor.get());
+
+  }
+
+
+
   public boolean getKickerSensor(){
-    return kickerSensor.get();
+   return !kickerSensorInverted.get();
     // return kickerBeamBreakDebouncer.calculate(kickerSensor.get());
 
   }
 
   public boolean getShooterSensor(){
-    return shooterSensor.get();
+   return !shooterSensorInverted.get();
     // return shooterBeamBreakDebouncer.calculate(shooterSensor.get());
 
   }
+
+  public void updateNotePossesion() {
+
+if (!getKickerSensor() && !getShooterSensor()){
+  currentNotePossesion = NotePossesion.NONE;
+  kickerSensorFlag= false;
+  shooterSensorFlag= false;
+}
+if (getKickerSensor() && !getShooterSensor()){
+  currentNotePossesion = NotePossesion.HALF;
+  kickerSensorFlag= true;
+}
+
+if (getKickerSensor()&&getShooterSensor()){
+  currentNotePossesion= NotePossesion.FULL;
+    kickerSensorFlag= true;
+  shooterSensorFlag= true;
+}
+}
+
 
   public boolean shooterIsReady() {
     double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
@@ -176,14 +221,16 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
-    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
+updateNotePossesion();
+    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensorInverted());
+    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensorInverted());
 
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
-
+    SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
+    SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
+    
     // SmartDashboard.putNumber("RightOutput", rightShooter.getAppliedOutput());
     // SmartDashboard.putNumber("LeftOutput", leftShooter.getAppliedOutput());
     // SmartDashboard.putNumber("Percent Left", leftShooter.getAppliedOutput());

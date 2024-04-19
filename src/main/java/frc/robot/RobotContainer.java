@@ -37,6 +37,7 @@ import frc.robot.commands.intake.IntakeAuto;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
+import frc.robot.commands.kicker.KickerDefaultCommand;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
@@ -292,6 +293,11 @@ public class RobotContainer {
         s_LEDs.setDefaultCommand(
             new LEDDefaultCommand(s_LEDs, s_Shooter)
         );
+
+        s_Kicker.setDefaultCommand(
+            new KickerDefaultCommand(s_Kicker,s_Shooter)
+        );
+
 
         s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
     }
