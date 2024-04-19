@@ -62,7 +62,7 @@ public class Swerve extends SubsystemBase {
             getGyroYaw(), 
             getModulePositions(), 
             new Pose2d(),
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(2.5)),
             VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(60)));
 
         AutoBuilder.configureHolonomic(
@@ -178,11 +178,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroHeading(){
+        gyro.reset();
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
     public Rotation2d getGyroYaw() {
-        return Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        // return Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        return gyro.getRotation2d();
     }
 
     // Returns the gyro's current angular velocity in deg/sec
@@ -243,7 +245,8 @@ public class Swerve extends SubsystemBase {
 
     public void updateOdometryPoseEstimation() {
         // Update using swerve odometry
-        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+        // swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+        swervePoseEstimator.update(getGyroYaw(), getModulePositions());
     }
 
     public void updateVisionPoseEstimation(Rotation2d turretToRobot, Shooter s_Shooter) {
@@ -307,8 +310,8 @@ public class Swerve extends SubsystemBase {
 
         // If any targets are in view
         if (leftPoseEst.tagCount > 0 && !rejectLeft) {
-            double xyStds = 0.3;
-            double degStds = 200;
+            double xyStds = 0.5;
+            double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             swervePoseEstimator.addVisionMeasurement(
                 new Pose2d(leftPoseEst.pose.getTranslation(), leftPoseEst.pose.getRotation()),
@@ -343,7 +346,7 @@ public class Swerve extends SubsystemBase {
 
         m_field.setRobotPose(getPose());
 
-        // SmartDashboard.putNumber("gyro", getGyroYaw().getDegrees());
+        SmartDashboard.putNumber("gyro", getGyroYaw().getDegrees());
         // ChassisSpeeds currentSpeeds = getRobotRelativeSpeeds();
         // SmartDashboard.putNumber("RobotAngularVelocityOdometry", currentSpeeds.omegaRadiansPerSecond);
         // SmartDashboard.putNumber("RobotAngularVelocityGyro", getAngularVelocityGyro());

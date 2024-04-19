@@ -308,7 +308,9 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, beamBreakOverride.negate()));
+        intakeIn.whileTrue(new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
+
+        // intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, beamBreakOverride.negate()));
 
         outtake.whileTrue(new Eject(s_Intake, s_Kicker));
 

@@ -62,16 +62,17 @@ public class IntakeAuto extends Command {
   @Override
   public void execute() {
 
-        if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
+ 
 
-          s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+      if (s_Shooter.getKickerSensor() && s_Shooter.getShooterSensor()) {
+        s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
+        s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
+        s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+        s_LEDs.setColor(Color.kTurquoise, LEDMode.FLASH);
+      }
 
-          s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
-
-          s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-
-          s_LEDs.setColor(Color.kTurquoise, LEDMode.FLASH);
-       }
+      s_Intake.setIntakeSpeed(1, 1); // 1
+      s_Kicker.setKickerRPM(Constants.Kicker.kicker_intakeRPM);
 
   }
 
