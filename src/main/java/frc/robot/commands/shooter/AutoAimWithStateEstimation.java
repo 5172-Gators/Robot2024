@@ -5,10 +5,12 @@
 package frc.robot.commands.shooter;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -35,15 +37,14 @@ public class AutoAimWithStateEstimation extends Command {
   private Swerve s_Swerve;
 
   private BooleanSupplier fire;
-  private DoubleSupplier dist;
+  private Supplier<Translation2d> translationToTargetSupplier;
+  private Translation2d targetTranslation;
   private ShootingTables shootingTables;
-  private DoubleSupplier chassisToTargetAngle;
-  private DoubleSupplier chassisToFieldAngle;
 
   private boolean noteInPlace = false;
 
   /** Creates a new AutoAim. */
-  public AutoAimWithStateEstimation(BooleanSupplier fire, DoubleSupplier dist, ShootingTables shootingTables, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
+  public AutoAimWithStateEstimation(BooleanSupplier fire, Supplier<Translation2d> translationToTargetSupplier, ShootingTables shootingTables, 
                   Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
@@ -51,10 +52,8 @@ public class AutoAimWithStateEstimation extends Command {
     this.s_LEDs = m_led;
     this.s_Kicker = m_kicker;
     this.fire = fire;
-    this.dist = dist;
+    this.translationToTargetSupplier = translationToTargetSupplier;
     this.shootingTables = shootingTables;
-    this.chassisToTargetAngle = chassisToTargetAngle;
-    this.chassisToFieldAngle = chassisToFieldAngle;
     this.s_Swerve = m_swerve;
 
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs, s_Kicker);
@@ -67,20 +66,33 @@ public class AutoAimWithStateEstimation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
+    // Motion compensation
+    targetTranslation = translationToTargetSupplier.get();
+    var targetDistance = targetTranslation.getNorm();
 
-    double pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
+    ChassisSpeeds V = s_Swerve.getRobotRelativeSpeeds();
+    var noteVelocity = Constants.Shooter.kNoteVelocityCoefficient * s_Shooter.getAverageShooterRPM(); // Meters per second
+    var timeOfFlight = targetDistance / noteVelocity;
+    var translationOffset = new Translation2d(V.vxMetersPerSecond, V.vyMetersPerSecond).times(timeOfFlight);
+
+    Translation2d predictedTarget = targetTranslation.minus(translationOffset);
+    var predictedDistance = predictedTarget.getNorm();
+    Rotation2d predictedAngle = predictedTarget.getAngle();
+
+    AimingParameters aimingParams = shootingTables.getAimingParams(predictedDistance);
+
+    var pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
-    double turret_sp = Rotation2d.fromDegrees(chassisToTargetAngle.getAsDouble()).rotateBy(Constants.Turret.noteSpinOffset).getDegrees();
+    var turret_sp = predictedAngle.rotateBy(Constants.Turret.noteSpinOffset);
 
     SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
     SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
    
     s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
 
-    s_Turret.setFieldRelativeAngle(Rotation2d.fromDegrees(turret_sp), 
-                                    Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
+    s_Turret.setFieldRelativeAngle(turret_sp, 
+                                    s_Swerve.getPose().getRotation(),
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
   
     if(!noteInPlace) {

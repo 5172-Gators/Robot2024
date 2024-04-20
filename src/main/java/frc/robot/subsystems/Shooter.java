@@ -125,6 +125,10 @@ public class Shooter extends SubsystemBase {
     return leftShooterEncoder.getVelocity();
   }
 
+  public double getAverageShooterRPM() {
+    return (getRightShooterRPM() + getLeftShooterRPM()) / 2.0;
+  }
+
   public void robotWash() {
     // runs the wheels at a low speed for cleaning purposes
     

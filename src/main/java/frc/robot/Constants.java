@@ -90,6 +90,8 @@ public final class Constants {
         public static final double left_allowableErrorLob  = 150; //100;
 
         public static final double creepRPM = 350;
+
+        public static final double kNoteVelocityCoefficient = 0.00416667;
     }
 
 

@@ -165,17 +165,13 @@ public class RobotContainer {
         /* Configure PathPlanner Commands */
 
         NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true,
-                                                                () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
-                                                                shootingTables,
-                                                                () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
-                                                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                                                () -> s_Swerve.getTranslationToSpeaker(), 
+                                                                shootingTables, 
                                                                 s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(() -> false,
-                                                                () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
-                                                                shootingTables,
-                                                                () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
-                                                                () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                                                () -> s_Swerve.getTranslationToSpeaker(), 
+                                                                shootingTables, 
                                                                 s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
@@ -183,10 +179,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
         NamedCommands.registerCommand("lobShotAuto", new LobShot(() -> true,
-                                        shootingTables,
-                                       () -> s_Swerve.getTranslationToAmp().getNorm(),
-                                       () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
-                                       () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                       () -> s_Swerve.getTranslationToAmp(),
+                                       lobTables,
                                        s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
@@ -225,7 +219,7 @@ public class RobotContainer {
                                                                       () -> 0, 
                                                                       () -> 0, 
                                                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
-                                                                      
+
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
        
@@ -329,17 +323,13 @@ public class RobotContainer {
         /* Operator Buttons */
         autoAim.onTrue(
             new AutoAimWithStateEstimation(fireShooter, 
-                                           () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
-                                           shootingTables,
-                                           () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
-                                           () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                           () -> s_Swerve.getTranslationToSpeaker(), 
+                                           shootingTables, 
                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
-                                        shootingTables,
-                                       () -> s_Swerve.getTranslationToAmp().getNorm(),
-                                       () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
-                                       () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                       () -> s_Swerve.getTranslationToAmp(),
+                                       lobTables,
                                        s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         shooterEject.onTrue(
