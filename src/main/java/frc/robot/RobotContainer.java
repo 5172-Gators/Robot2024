@@ -298,9 +298,9 @@ public class RobotContainer {
             new LEDDefaultCommand(s_LEDs, s_Shooter)
         );
 
-        s_Kicker.setDefaultCommand(
-            new KickerDefaultCommand(s_Kicker,s_Shooter)
-        );
+        // s_Kicker.setDefaultCommand(
+        //     new KickerDefaultCommand(s_Kicker,s_Shooter)
+        // );
 
 
         s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
