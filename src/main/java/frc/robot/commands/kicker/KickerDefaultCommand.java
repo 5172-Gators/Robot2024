@@ -34,7 +34,7 @@ public class KickerDefaultCommand extends Command {
       s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
     }
     if (s_Shooter.currentNotePossession == NotePossession.FULL){
-      s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+      s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepReverse);
     }
     if (s_Shooter.shooterSensorFlag && s_Shooter.currentNotePossession == NotePossession.HALF){
       s_Kicker.stopKicker();

@@ -61,6 +61,7 @@ public final class Constants {
         public static final double kicker_intakeRPM = 3500;
         public static final double kicker_creepRPM = 500;
         public static final double kicker_shoot = 1500;
+        public static final double kicker_creepReverse = 250;
     }
 
     public static final class Shooter{
@@ -91,7 +92,7 @@ public final class Constants {
 
         public static final double creepRPM = 350;
 
-        public static final double kNoteVelocityCoefficient = 0.00416667;
+        public static final double kNoteVelocityCoefficient = 0.00416667 / 2.0;
     }
 
 
@@ -106,7 +107,7 @@ public final class Constants {
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableErrorDegrees = 2; //0.05; // 0.05
+        public static final double allowableErrorDegrees = 3; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
         public static final double autoAimAllowableError = 6; 

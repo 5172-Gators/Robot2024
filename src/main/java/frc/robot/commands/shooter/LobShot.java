@@ -109,7 +109,7 @@ public class LobShot extends Command {
       if(s_Shooter.currentNotePossession == NotePossession.HALF && !s_Shooter.shooterSensorFlag)
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
       if(s_Shooter.currentNotePossession == NotePossession.FULL)
-        s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+        s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepReverse);
       if(s_Shooter.currentNotePossession == NotePossession.HALF && s_Shooter.shooterSensorFlag){
         s_Kicker.stopKicker(); 
         noteInPlace = true;

@@ -38,8 +38,8 @@ public class Turret extends SubsystemBase {
   private AimMode m_currentAimMode = AimMode.kManual;
 
   double setpoint = 0;
-  Debouncer debounce = new Debouncer(0.06, DebounceType.kRising);
-  Debouncer autoAimDebounce = new Debouncer(0.06, DebounceType.kFalling);
+  Debouncer debounce = new Debouncer(0.04, DebounceType.kRising);
+  Debouncer autoAimDebounce = new Debouncer(0.04, DebounceType.kFalling);
 
   public Turret() {
 
@@ -63,7 +63,7 @@ public class Turret extends SubsystemBase {
     // pid controller 
     m_pidController = rotateMotor.getPIDController();
     
-    SmartDashboard.putData("Turret PID", (Sendable) m_pidController);
+   // SmartDashboard.putData("Turret PID", (Sendable) m_pidController);
 
     // config PID
     m_pidController.setP(Constants.Turret.kP);
