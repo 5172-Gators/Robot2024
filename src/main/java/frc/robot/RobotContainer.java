@@ -157,8 +157,9 @@ public class RobotContainer {
         s_Kicker = new Kicker();
         s_Stabilizer = new Stabilizer();
         
-        shootingTables = new ShootingTables();
         lobTables = new LobTables();
+        shootingTables = new ShootingTables();
+        // lobTables = new LobTables();
 
         autoChooser = new SendableChooser<Command>();
 

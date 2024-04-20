@@ -58,8 +58,9 @@ public class LobShot extends Command {
     this.s_Swerve = m_swerve;
     this.fire = fire;
     this.lobTables = lobTables;
+    this.translationToTargetSupplier = translationToTargetSupplier;
 
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs);
+    addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs, s_Kicker);
   }
 
   // Called when the command is initially scheduled.

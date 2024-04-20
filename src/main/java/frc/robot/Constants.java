@@ -92,7 +92,7 @@ public final class Constants {
 
         public static final double creepRPM = 350;
 
-        public static final double kNoteVelocityCoefficient = 0.00416667 / 2.0;
+        public static final double kNoteVelocityCoefficient = 0.0020833; //0.00416667
     }
 
 
