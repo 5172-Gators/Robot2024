@@ -37,8 +37,8 @@ public class Turret extends SubsystemBase {
   private AimMode m_currentAimMode = AimMode.kManual;
 
   double setpoint = 0;
-  Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
-  Debouncer autoAimDebounce = new Debouncer(0.1, DebounceType.kFalling);
+  Debouncer debounce = new Debouncer(0.06, DebounceType.kRising);
+  Debouncer autoAimDebounce = new Debouncer(0.06, DebounceType.kFalling);
 
   public Turret() {
 
@@ -192,7 +192,7 @@ public class Turret extends SubsystemBase {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
 
-      if (debounce.calculate(absError <= Constants.Turret.allowableError)){
+      if (debounce.calculate(absError <= degreesToEncoderUnits(Constants.Turret.allowableErrorDegrees))){
 
         return true;
 

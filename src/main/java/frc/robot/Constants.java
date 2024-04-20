@@ -106,7 +106,7 @@ public final class Constants {
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableError = 0.1; //0.05; // 0.05
+        public static final double allowableErrorDegrees = 2; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
         public static final double autoAimAllowableError = 6; 
