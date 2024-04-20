@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -61,6 +62,8 @@ public class Turret extends SubsystemBase {
 
     // pid controller 
     m_pidController = rotateMotor.getPIDController();
+    
+    SmartDashboard.putData("Turret PID", (Sendable) m_pidController);
 
     // config PID
     m_pidController.setP(Constants.Turret.kP);
@@ -241,7 +244,8 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
     // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
     // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));
-    SmartDashboard.putNumber("Turret angle", encoderUnitsToDegrees(getRotatePosition()));
+    SmartDashboard.putNumber("Turret Angle", encoderUnitsToDegrees(getRotatePosition()));
+    SmartDashboard.putNumber("Turret Setpoint", encoderUnitsToDegrees(setpoint));
     // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
