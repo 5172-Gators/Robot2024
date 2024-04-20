@@ -74,7 +74,8 @@ public class LobShot extends Command {
     var targetDistance = targetTranslation.getNorm();
 
     ChassisSpeeds V = s_Swerve.getRobotRelativeSpeeds();
-    var noteVelocity = Constants.Shooter.kNoteVelocityCoefficient * s_Shooter.getAverageShooterRPM(); // Meters per second
+    var shooterRPMSetpointAverage = (lobTables.getLeftRPM(targetDistance) + lobTables.getRightRPM(targetDistance)) / 2.0;
+    var noteVelocity = Constants.Shooter.kNoteVelocityCoefficient * shooterRPMSetpointAverage; // Meters per second
     var timeOfFlight = targetDistance / noteVelocity;
     var translationOffset = new Translation2d(V.vxMetersPerSecond, V.vyMetersPerSecond).times(timeOfFlight);
 
