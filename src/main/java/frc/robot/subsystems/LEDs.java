@@ -21,7 +21,7 @@ public class LEDs extends SubsystemBase {
   AddressableLED leds;
   AddressableLEDBuffer ledBuffer;
 
-  private double flashPeriod = 0.25;
+  private double flashPeriod = Constants.LEDs.kDefaultFlashPeriodSeconds;
   private double s_deadline = 0;
   private boolean lockModes = false;
 
@@ -81,6 +81,10 @@ public class LEDs extends SubsystemBase {
 
   public void setFlashPeriod(double flashPeriod) {
     this.flashPeriod = flashPeriod;
+  }
+
+  public void resetFlashPeriodToDefault() {
+    this.flashPeriod = Constants.LEDs.kDefaultFlashPeriodSeconds;
   }
 
   public void turnOff() {

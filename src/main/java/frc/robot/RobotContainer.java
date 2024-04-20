@@ -38,7 +38,6 @@ import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.KickerDefaultCommand;
-import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
 import frc.robot.commands.pitch.SetPitchAngle;
@@ -165,13 +164,12 @@ public class RobotContainer {
 
         /* Configure PathPlanner Commands */
 
-        NamedCommands.registerCommand("stateEstimationShooting", new SequentialCommandGroup(new ZeroNote(s_Kicker, s_Shooter))
-                                                                .andThen(new AutoAimWithStateEstimation(() -> true,
+        NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
                                                                 shootingTables,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                                                 () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
+                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(() -> false,
                                                                 () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
@@ -182,9 +180,14 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
-        NamedCommands.registerCommand("intakeAuto", new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
+        NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(fireShooter, shootingTables, null, null, null, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        NamedCommands.registerCommand("lobShotAuto", new LobShot(() -> true,
+                                        shootingTables,
+                                       () -> s_Swerve.getTranslationToAmp().getNorm(),
+                                       () -> s_Swerve.getTranslationToAmp().getAngle().getDegrees(),
+                                       () -> s_Swerve.getPose().getRotation().getDegrees(), 
+                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -222,6 +225,7 @@ public class RobotContainer {
                                                                       () -> 0, 
                                                                       () -> 0, 
                                                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                      
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
        
@@ -314,24 +318,22 @@ public class RobotContainer {
 
         zeroGyroButton.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        intakeIn.whileTrue(new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
+        // intakeIn.whileTrue(new IntakeAuto(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_LEDs));
 
-        // intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, beamBreakOverride.negate()));
+        intakeIn.whileTrue(new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, beamBreakOverride.negate()));
 
         outtake.whileTrue(new Eject(s_Intake, s_Kicker));
 
         testStabilizer.whileTrue(new DeployStablizer(s_Stabilizer));
 
-
         /* Operator Buttons */
-        autoAim.onTrue(new SequentialCommandGroup(
-            new ZeroNote(s_Kicker, s_Shooter),
+        autoAim.onTrue(
             new AutoAimWithStateEstimation(fireShooter, 
                                            () -> s_Swerve.getTranslationToSpeaker().getNorm(), 
                                            shootingTables,
                                            () -> s_Swerve.getTranslationToSpeaker().getAngle().getDegrees(), 
                                            () -> s_Swerve.getPose().getRotation().getDegrees(), 
-                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve)));
+                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         lobShotButton.onTrue(new LobShot(fireShooter,
                                         shootingTables,
@@ -340,15 +342,14 @@ public class RobotContainer {
                                        () -> s_Swerve.getPose().getRotation().getDegrees(), 
                                        s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
-        shooterEject.onTrue(new SequentialCommandGroup(
-            new ZeroNote(s_Kicker, s_Shooter),
+        shooterEject.onTrue(
             new ShootSetpoint(500.0, 500.0, 
                               Constants.Pitch.intakePosition, 
                               0, 
                               fireShooter,
                               () -> operatorStick.getX(), 
                               () -> operatorStick.getY(), 
-                              s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs)));
+                              s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
@@ -405,7 +406,8 @@ public class RobotContainer {
 
         // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
         // testButton1.whileTrue(new SetTurretFieldRelative(s_Turret, s_Swerve, Rotation2d.fromDegrees(180), () -> s_Swerve.getPose().getRotation().getDegrees()));
-        testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
+        
+        // testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
 
     }
 

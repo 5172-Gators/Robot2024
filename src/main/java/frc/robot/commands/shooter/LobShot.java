@@ -20,24 +20,29 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.NotePossession;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.LEDs.LEDMode;
 
 public class LobShot extends Command {
 
-  Shooter s_Shooter;
-  Pitch s_Pitch;
-  Turret s_Turret;
-  LEDs s_LEDs;
-  Kicker s_Kicker;
-  Swerve s_Swerve;
+  private Shooter s_Shooter;
+  private Pitch s_Pitch;
+  private Turret s_Turret;
+  private LEDs s_LEDs;
+  private Kicker s_Kicker;
+  private Swerve s_Swerve;
 
-  BooleanSupplier fire;
-  DoubleSupplier dist;
-  ShootingTables shootingTables;
-  DoubleSupplier chassisToTargetAngle;
-  DoubleSupplier chassisToFieldAngle;
+  private BooleanSupplier fire;
+  private DoubleSupplier dist;
+  private ShootingTables shootingTables;
+  private DoubleSupplier chassisToTargetAngle;
+  private DoubleSupplier chassisToFieldAngle;
+
+  private boolean inLobZone = false;
+  private boolean noteInPlace = false;
+  final DriverStation.Alliance alliance = DriverStation.getAlliance().get();
 
   /** Creates a new AutoAim. */
   public LobShot(BooleanSupplier fire, ShootingTables shootingTables, DoubleSupplier dist, DoubleSupplier chassisToTargetAngle, DoubleSupplier chassisToFieldAngle, 
@@ -66,7 +71,7 @@ public class LobShot extends Command {
   public void execute() {
     AimingParameters aimingParams = shootingTables.getAimingParams(dist.getAsDouble());
 
-    s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+    // s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
     s_Pitch.setPosition(Rotation2d.fromDegrees(MathUtil.clamp(aimingParams.getPitchAngle(),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition))));
@@ -74,24 +79,51 @@ public class LobShot extends Command {
                                     Rotation2d.fromDegrees(chassisToFieldAngle.getAsDouble()),
                                     Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
 
-    boolean inLobZone = false;
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+    // Check if robot is in an allowable position to lob to avoid accruing penalty points
+    if (alliance == DriverStation.Alliance.Blue)
       inLobZone = s_Swerve.getPose().getX() < 10.15;
-    else if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)
+    else if (alliance == DriverStation.Alliance.Red)
       inLobZone = s_Swerve.getPose().getX() > 6.27;
 
-    if (s_Shooter.shooterIsReadyLob() && s_Turret.isReady() && s_Pitch.isReadyLob() && inLobZone) {
-      s_LEDs.setColor(new Color(255, 0, 255));
-      if (this.fire.getAsBoolean())
-        s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
-    } else {
+    if(!noteInPlace) {
       s_LEDs.setColor(Color.kRed, LEDMode.FLASH);
+      if(s_Shooter.currentNotePossession == NotePossession.HALF && !s_Shooter.shooterSensorFlag)
+        s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
+      if(s_Shooter.currentNotePossession == NotePossession.FULL)
+        s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
+      if(s_Shooter.currentNotePossession == NotePossession.HALF && s_Shooter.shooterSensorFlag)
+        s_Kicker.stopKicker(); 
+        noteInPlace = true;
+    }
+
+    if(noteInPlace) {
+      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+
+      if(this.fire.getAsBoolean()) {
+        s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot
+        if(s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady() && inLobZone) {
+          s_LEDs.setColorTimed(Color.kPurple, LEDMode.SOLID, 0.5);
+          s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
+        } else {
+          s_LEDs.setColor(Color.kRed, LEDMode.FLASH);
+        }
+      } else {
+        s_LEDs.setFlashPeriod(0.25);
+        if(s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady() && inLobZone) {
+          s_LEDs.setColor(Color.kPurple);
+          s_Kicker.stopKicker();
+        } else {
+          s_LEDs.setColor(Color.kRed, LEDMode.FLASH);
+          s_Kicker.stopKicker();
+        }
+      }
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    s_LEDs.resetFlashPeriodToDefault(); // Reset flash period to default
     s_Shooter.setShooterRPM(0, 0);
     s_Kicker.stopKicker();
     s_LEDs.setColor(Color.kBlack);
@@ -102,6 +134,6 @@ public class LobShot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (s_Shooter.getShooterSensorInverted() && s_Shooter.getKickerSensorInverted());
+    return (s_Shooter.currentNotePossession == NotePossession.NONE);
   }
 }

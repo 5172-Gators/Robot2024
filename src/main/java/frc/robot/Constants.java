@@ -41,6 +41,8 @@ public final class Constants {
         public static final int ledPwmPort = 0;
         public static final int kNumLeds = 150;
 
+        public static final double kDefaultFlashPeriodSeconds = 0.25;
+
     }
 
     public static final class Kicker{

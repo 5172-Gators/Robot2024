@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkFlex;
@@ -48,10 +47,10 @@ public class Shooter extends SubsystemBase {
   public boolean shooterSensorFlag = false;
 
 /* Note Possesion */
-  public enum NotePossesion {
+  public enum NotePossession {
     NONE, HALF, FULL
   }
-  public NotePossesion currentNotePossesion = NotePossesion.NONE;
+  public NotePossession currentNotePossession = NotePossession.NONE;
 
   public Shooter() {
     
@@ -126,7 +125,7 @@ public class Shooter extends SubsystemBase {
     return leftShooterEncoder.getVelocity();
   }
 
-  public void robotWash(){
+  public void robotWash() {
     // runs the wheels at a low speed for cleaning purposes
     
     leftShooter.set(1 * 0.05);
@@ -142,49 +141,39 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public boolean getKickerSensorInverted(){
+  public boolean getKickerSensorInverted() {
     return kickerSensorInverted.get();
-    // return kickerBeamBreakDebouncer.calculate(kickerSensor.get());
-
   }
 
-  public boolean getShooterSensorInverted(){
+  public boolean getShooterSensorInverted() {
     return shooterSensorInverted.get();
-    // return shooterBeamBreakDebouncer.calculate(shooterSensor.get());
-
   }
 
-
-
-  public boolean getKickerSensor(){
-   return !kickerSensorInverted.get();
-    // return kickerBeamBreakDebouncer.calculate(kickerSensor.get());
-
+  public boolean getKickerSensor() {
+    return !kickerSensorInverted.get();
   }
 
-  public boolean getShooterSensor(){
-   return !shooterSensorInverted.get();
-    // return shooterBeamBreakDebouncer.calculate(shooterSensor.get());
-
+  public boolean getShooterSensor() {
+    return !shooterSensorInverted.get();
   }
 
-  public void updateNotePossesion() {
-
-if (!getKickerSensor() && !getShooterSensor()){
-  currentNotePossesion = NotePossesion.NONE;
-  kickerSensorFlag= false;
-  shooterSensorFlag= false;
-}
-if (getKickerSensor() && !getShooterSensor()){
-  currentNotePossesion = NotePossesion.HALF;
-  kickerSensorFlag= true;
-}
-
-if (getKickerSensor()&&getShooterSensor()){
-  currentNotePossesion= NotePossesion.FULL;
-    kickerSensorFlag= true;
-  shooterSensorFlag= true;
-}
+  public void updateNotePossession() {
+    boolean kicker = getKickerSensor();
+    boolean shooter = getShooterSensor();
+    if (!kicker && !shooter) {
+      currentNotePossession = NotePossession.NONE;
+      kickerSensorFlag = false;
+      shooterSensorFlag = false;
+    }
+    if (kicker && !shooter) {
+      currentNotePossession = NotePossession.HALF;
+      kickerSensorFlag = true;
+    }
+    if (kicker && shooter) {
+      currentNotePossession = NotePossession.FULL;
+      kickerSensorFlag = true;
+      shooterSensorFlag = true;
+    }
 }
 
 
@@ -221,15 +210,17 @@ if (getKickerSensor()&&getShooterSensor()){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-updateNotePossesion();
-    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensorInverted());
-    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensorInverted());
+    updateNotePossession();
+
+    SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
+    SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
+    SmartDashboard.putString("Note Possession", currentNotePossession.name());
 
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
-    SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
-    SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
+    // SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
+    // SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     
     // SmartDashboard.putNumber("RightOutput", rightShooter.getAppliedOutput());
     // SmartDashboard.putNumber("LeftOutput", leftShooter.getAppliedOutput());

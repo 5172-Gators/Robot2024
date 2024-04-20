@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.NotePossesion;
+import frc.robot.subsystems.Shooter.NotePossession;
 
 public class KickerDefaultCommand extends Command {
 
   Kicker s_Kicker;
   Shooter s_Shooter;
 
-  int state = 0;
   /** Creates a new KickerDefaultCommand. */
   public KickerDefaultCommand(Kicker kicker, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,20 +30,16 @@ public class KickerDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (s_Shooter.currentNotePossesion == NotePossesion.HALF && !s_Shooter.shooterSensorFlag) {
-            s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
-
-      
+    if (s_Shooter.currentNotePossession == NotePossession.HALF && !s_Shooter.shooterSensorFlag) {
+      s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
     }
-    if (s_Shooter.currentNotePossesion == NotePossesion.FULL){
+    if (s_Shooter.currentNotePossession == NotePossession.FULL){
       s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
-
     }
-    if (s_Shooter.shooterSensorFlag && s_Shooter.currentNotePossesion == NotePossesion.HALF){
+    if (s_Shooter.shooterSensorFlag && s_Shooter.currentNotePossession == NotePossession.HALF){
       s_Kicker.stopKicker();
-
     }
-    if (s_Shooter.currentNotePossesion == NotePossesion.NONE){
+    if (s_Shooter.currentNotePossession == NotePossession.NONE){
       s_Kicker.stopKicker();
     }
   }

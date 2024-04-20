@@ -21,7 +21,7 @@ import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.LEDs.LEDMode;
-import frc.robot.subsystems.Shooter.NotePossesion;
+import frc.robot.subsystems.Shooter.NotePossession;
 
 public class RunIntake extends Command {
 
@@ -67,14 +67,14 @@ public class RunIntake extends Command {
   @Override
   public void execute() {
     
-    SmartDashboard.putNumber("Intake State", state);
+    // SmartDashboard.putNumber("Intake State", state);
 
     if (s_useBeamBreaks.getAsBoolean()) {
 
       if (state == 0) {
         s_Shooter.setShooterRPM(-Constants.Shooter.creepRPM, -Constants.Shooter.creepRPM);
 
-        if (s_Shooter.getKickerSensorInverted() && s_Shooter.getShooterSensorInverted()) {
+        if (s_Shooter.currentNotePossession == NotePossession.NONE) {
           s_Intake.setIntakeArmPosition(Constants.Intake.deployedPosition);
           s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
           s_Turret.setPosition(Constants.Turret.R_intakingPosition);
@@ -143,9 +143,6 @@ public class RunIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  //return s_useBeamBreaks.getAsBoolean() == false;
-  //  return (state == 3 && s_useBeamBreaks.getAsBoolean());
-    return (s_Shooter.currentNotePossesion == NotePossesion.FULL);
-   
+    return (s_Shooter.currentNotePossession == NotePossession.FULL);
   }
 }
