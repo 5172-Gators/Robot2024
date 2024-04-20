@@ -223,8 +223,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
-    // SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
-    // SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
+    SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
+    SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     
     // SmartDashboard.putNumber("RightOutput", rightShooter.getAppliedOutput());
     // SmartDashboard.putNumber("LeftOutput", leftShooter.getAppliedOutput());

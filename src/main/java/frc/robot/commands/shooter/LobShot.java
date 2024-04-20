@@ -64,7 +64,9 @@ public class LobShot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    noteInPlace = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -108,9 +110,10 @@ public class LobShot extends Command {
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_creepRPM);
       if(s_Shooter.currentNotePossession == NotePossession.FULL)
         s_Kicker.setKickerRPM(-Constants.Kicker.kicker_creepRPM);
-      if(s_Shooter.currentNotePossession == NotePossession.HALF && s_Shooter.shooterSensorFlag)
+      if(s_Shooter.currentNotePossession == NotePossession.HALF && s_Shooter.shooterSensorFlag){
         s_Kicker.stopKicker(); 
         noteInPlace = true;
+      }
     }
 
     if(noteInPlace) {
