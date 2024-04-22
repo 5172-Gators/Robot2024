@@ -21,6 +21,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 public class Turret extends SubsystemBase {
@@ -62,6 +63,7 @@ public class Turret extends SubsystemBase {
 
     // pid controller 
     m_pidController = rotateMotor.getPIDController();
+
     
    // SmartDashboard.putData("Turret PID", (Sendable) m_pidController);
 
@@ -74,6 +76,12 @@ public class Turret extends SubsystemBase {
 
     autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
     autoAimPIDController.setTolerance(Constants.Turret.autoAimAllowableError);
+
+    // Config CAN update periods
+    rotateMotor.setControlFramePeriodMs(Constants.Turret.kControlFrameUpdateMs);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
 
     rotateMotor.burnFlash();
   } 

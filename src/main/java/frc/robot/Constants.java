@@ -93,6 +93,8 @@ public final class Constants {
         public static final double creepRPM = 350;
 
         public static final double kNoteVelocityCoefficient = 0.0020833; //0.00416667
+
+        public static final int kControlFrameUpdateMs = 1;
     }
 
 
@@ -129,6 +131,8 @@ public final class Constants {
         public static final double kOmegaFF = 0.085;
         public static final double kTarget_dThetaFF = 0.3; // TODO tune this
         public static final double IZone = 0.1;
+
+        public static final int kControlFrameUpdateMs = 1;
     
     }
 
@@ -181,6 +185,8 @@ public final class Constants {
 
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
+
+        public static final int kControlFrameUpdateMs = 1;
 
     }
 

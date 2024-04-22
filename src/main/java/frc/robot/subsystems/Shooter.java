@@ -15,6 +15,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.Constants;
 
@@ -38,8 +39,8 @@ public class Shooter extends SubsystemBase {
   double rightSetpoint;
   double kickerSetpoint;
 
-  Debouncer shooterDebounce = new Debouncer(0.1, DebounceType.kRising);
-  Debouncer kickerDebounce = new Debouncer(0.1, DebounceType.kRising);
+  Debouncer shooterDebounce = new Debouncer(0.04, DebounceType.kRising);
+  Debouncer kickerDebounce = new Debouncer(0.04, DebounceType.kRising);
   Debouncer kickerBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
   Debouncer shooterBeamBreakDebouncer = new Debouncer(0.01, DebounceType.kBoth);
   
@@ -77,8 +78,6 @@ public class Shooter extends SubsystemBase {
     kickerSensorInverted = new DigitalInput(0);
     shooterSensorInverted = new DigitalInput(1);
 
-  
-
     /* Right Side PID */
     rightShooterPID.setP(Constants.Shooter.right_kP);
     rightShooterPID.setI(Constants.Shooter.right_kI);
@@ -94,6 +93,15 @@ public class Shooter extends SubsystemBase {
     leftShooterPID.setFF(Constants.Shooter.left_kFF);
     // leftShooterPID.setIZone(Constants.Shooter.left_IZone);
     leftShooterPID.setOutputRange(-1, 1);
+
+    // Config CAN update periods
+    leftShooter.setControlFramePeriodMs(Constants.Shooter.kControlFrameUpdateMs);
+    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
+    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
+
+    rightShooter.setControlFramePeriodMs(Constants.Shooter.kControlFrameUpdateMs);
+    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
+    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
 
     leftShooter.burnFlash();
     rightShooter.burnFlash();

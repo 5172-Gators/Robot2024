@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 //import com.revrobotics.CANSparkMax;
@@ -14,6 +12,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -65,6 +64,11 @@ public class Pitch extends SubsystemBase {
     pitchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     pitchMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Pitch.maxPitchPosition);
     pitchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
+    // Config CAN update periods
+    pitchMotor.setControlFramePeriodMs(Constants.Pitch.kControlFrameUpdateMs);
+    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
+    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
 
     pitchMotor.burnFlash();
   }
