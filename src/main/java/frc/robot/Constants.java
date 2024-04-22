@@ -127,6 +127,7 @@ public final class Constants {
         public static final double kF = 0.0;
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
+        public static final double kTarget_dThetaFF = 0.3; // TODO tune this
         public static final double IZone = 0.1;
     
     }

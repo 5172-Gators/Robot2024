@@ -93,11 +93,18 @@ public class LobShot extends Command {
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
     var turret_sp = predictedAngle.rotateBy(Constants.Turret.noteSpinOffset);
 
+    // Calculate angular velocity (rad/s) of robot to predicted target translation for turret FF
+    var dTheta = (predictedTarget.getX()*V.vyMetersPerSecond - predictedTarget.getY()*V.vxMetersPerSecond) /
+              Math.pow(predictedTarget.getNorm(),2);
+
+    var turretFF = dTheta * Constants.Turret.kTarget_dThetaFF;
+
     s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
 
     s_Turret.setFieldRelativeAngle(turret_sp, 
                                     s_Swerve.getPose().getRotation(),
-                                    Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()));
+                                    Units.degreesToRadians(s_Swerve.getAngularVelocityGyro()),
+                                    turretFF);
 
     // Check if robot is in an allowable position to lob to avoid accruing penalty points
     if (alliance == DriverStation.Alliance.Blue)

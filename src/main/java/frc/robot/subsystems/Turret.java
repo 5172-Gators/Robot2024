@@ -141,6 +141,19 @@ public class Turret extends SubsystemBase {
                                   ArbFFUnits.kPercentOut);
   }
 
+  public void setAngle(Rotation2d angle, double omegaRadiansPerSecond, double arbFF) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // position is in motor rotations
+    this.setpoint = degreesToEncoderUnits(angle.getDegrees());
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
+    m_pidController.setReference(setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF + robotOmegaFF + arbFF,
+                                  ArbFFUnits.kPercentOut);
+  }
+
   public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField) {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
@@ -171,6 +184,20 @@ public class Turret extends SubsystemBase {
                                   CANSparkMax.ControlType.kPosition,
                                   0,
                                   frictionFF + robotOmegaFF,
+                                  ArbFFUnits.kPercentOut);
+  }
+
+  public void setFieldRelativeAngle(Rotation2d angle, Rotation2d chassisToField, double omegaRadiansPerSecond, double arbFF) {
+    m_currentAimMode = AimMode.kSetpoint;
+    // angle is a rotation2d object relative to the field
+    Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
+    this.setpoint = test.getDegrees() * 23.333 / 360;
+    double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
+    double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
+    m_pidController.setReference( setpoint, 
+                                  CANSparkMax.ControlType.kPosition,
+                                  0,
+                                  frictionFF + robotOmegaFF + arbFF,
                                   ArbFFUnits.kPercentOut);
   }
 
