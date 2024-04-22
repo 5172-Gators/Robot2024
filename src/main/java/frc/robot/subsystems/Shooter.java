@@ -46,6 +46,8 @@ public class Shooter extends SubsystemBase {
   
   public boolean kickerSensorFlag = false;
   public boolean shooterSensorFlag = false;
+  private boolean shooterIsReady = false;
+  private boolean shooterIsReadyLob = false;
 
 /* Note Possesion */
   public enum NotePossession {
@@ -170,8 +172,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void updateNotePossession() {
-    boolean kicker = getKickerSensor();
-    boolean shooter = getShooterSensor();
+    boolean kicker = kickerBeamBreakDebouncer.calculate(getKickerSensor());
+    boolean shooter = shooterBeamBreakDebouncer.calculate(getShooterSensor());
     if (!kicker && !shooter) {
       currentNotePossession = NotePossession.NONE;
       kickerSensorFlag = false;
@@ -188,33 +190,40 @@ public class Shooter extends SubsystemBase {
     }
 }
 
-
-  public boolean shooterIsReady() {
+  public void updateShooterIsReady() {
     double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
     double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
     if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableError 
         && absErrorRight <= Constants.Shooter.right_allowableError)) {
 
-      return true;
+      shooterIsReady = true;
 
     } else {
 
-      return false;
+      shooterIsReady = false;
 
     }
   }
 
-  public boolean shooterIsReadyLob() {
+  public boolean getShooterIsReady() {
+    return shooterIsReady;
+  }
+
+  public boolean getShooterIsReadyLob() {
+    return shooterIsReadyLob;
+  }
+
+  public void updateShooterIsReadyLob() {
     double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
     double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
     if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableErrorLob 
         && absErrorRight <= Constants.Shooter.right_allowableErrorLob)) {
 
-      return true;
+      shooterIsReadyLob = true;
 
     } else {
 
-      return false;
+      shooterIsReadyLob = false;
 
     }
   }
@@ -222,7 +231,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updateNotePossession();
+    // updateNotePossession(); Moved this to Robot.java in its own periodic running at a higher speed
 
     SmartDashboard.putBoolean("Kicker Sensor Value", getKickerSensor());
     SmartDashboard.putBoolean("Shooter Sensor Value", getShooterSensor());
@@ -230,7 +239,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
-    SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
+    SmartDashboard.putBoolean("Shooter Ready", getShooterIsReady());
     SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
     SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     

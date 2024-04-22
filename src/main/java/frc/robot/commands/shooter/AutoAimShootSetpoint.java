@@ -66,7 +66,7 @@ public class AutoAimShootSetpoint extends Command {
     s_Pitch.setPositionRaw(this.pitch);
     s_Turret.autoAimYaw(s_LL.getX(), s_LL.currentTarget(), yawAim.getAsDouble());
 
-    if (s_Shooter.shooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.isReady()) {
+    if (s_Shooter.getShooterIsReady() && s_Turret.isAutoAimReady(s_LL.getX(), s_LL.currentTarget()) && s_Pitch.getPitchIsReady()) {
       s_LEDs.setColor(Color.kPurple);
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);

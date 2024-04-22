@@ -28,11 +28,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     // SmartDashboard.putNumber("CalibrationLeftRPM", 550.0);
     // SmartDashboard.putNumber("CalibrationRightRPM", 550.0);
     m_robotContainer = new RobotContainer();
+
+    addPeriodic(() -> {
+      m_robotContainer.s_Shooter.updateNotePossession();
+      m_robotContainer.s_Shooter.updateShooterIsReady();
+      m_robotContainer.s_Pitch.updatePitchIsReady();
+      m_robotContainer.s_Turret.updateTurretIsReady();
+    }, 0.005, 0.0025);
   }
 
   /**  

@@ -29,7 +29,7 @@ public class StopShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (s_Shooter.shooterIsReady())
+    if (s_Shooter.getShooterIsReady())
       s_Shooter.stopShooter();
   }
 

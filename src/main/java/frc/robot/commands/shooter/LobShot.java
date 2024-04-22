@@ -129,7 +129,7 @@ public class LobShot extends Command {
 
       if(this.fire.getAsBoolean()) {
         s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot
-        if(s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady() && inLobZone) {
+        if(s_Shooter.getShooterIsReady() && s_Turret.getTurretIsReady() && s_Pitch.getPitchIsReady() && inLobZone) {
           s_LEDs.setColorTimed(Color.kPurple, LEDMode.SOLID, 0.5);
           s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
         } else {
@@ -137,7 +137,7 @@ public class LobShot extends Command {
         }
       } else {
         s_LEDs.setFlashPeriod(0.25);
-        if(s_Shooter.shooterIsReady() && s_Turret.isReady() && s_Pitch.isReady() && inLobZone) {
+        if(s_Shooter.getShooterIsReady() && s_Turret.getTurretIsReady() && s_Pitch.getPitchIsReady() && inLobZone) {
           s_LEDs.setColor(Color.kPurple);
           s_Kicker.stopKicker();
         } else {

@@ -42,6 +42,8 @@ public class Turret extends SubsystemBase {
   Debouncer debounce = new Debouncer(0.04, DebounceType.kRising);
   Debouncer autoAimDebounce = new Debouncer(0.04, DebounceType.kFalling);
 
+  private boolean turretIsReady = false;
+
   public Turret() {
 
     // define + configure the rotate motor
@@ -267,10 +269,14 @@ public class Turret extends SubsystemBase {
 
   }
 
-  public boolean isReady() {
+  public boolean getTurretIsReady() {
 
-    return isAutoAimReady() || isSetpointAimReady();
+    return turretIsReady;
 
+  }
+
+  public void updateTurretIsReady() {
+    turretIsReady = isAutoAimReady() || isSetpointAimReady();
   }
 
   @Override
@@ -284,7 +290,7 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
-    SmartDashboard.putBoolean("Turret Ready", isReady());
+    SmartDashboard.putBoolean("Turret Ready", getTurretIsReady());
 
   }
 }

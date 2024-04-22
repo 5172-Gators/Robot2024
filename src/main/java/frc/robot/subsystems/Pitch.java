@@ -34,7 +34,10 @@ public class Pitch extends SubsystemBase {
   PIDController pitchPID;
 
   double setpoint = Constants.Pitch.intakePosition;
-  Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
+  Debouncer debounce = new Debouncer(0.04, DebounceType.kRising);
+
+  private boolean pitchIsReady = false;
+  private boolean pitchIsReadyLob = false;
   
   public Pitch() {
 
@@ -129,14 +132,22 @@ public class Pitch extends SubsystemBase {
     pitchMotor.set(0);
   }
 
-  public boolean isReady() {
-    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    return debounce.calculate(absError <= Constants.Pitch.allowableError);
+  public boolean getPitchIsReady() {
+    return pitchIsReady;
   }
 
-  public boolean isReadyLob() {
+  public void updatePitchIsReady() {
     double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    return debounce.calculate(absError <= Constants.Pitch.allowableErrorLob);
+    pitchIsReady = debounce.calculate(absError <= Constants.Pitch.allowableError);
+  }
+
+  public boolean getPitchIsReadyLob() {
+    return pitchIsReadyLob;
+  }
+
+  public void updatePitchIsReadyLob() {
+    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
+    pitchIsReadyLob = debounce.calculate(absError <= Constants.Pitch.allowableErrorLob);
   }
 
   @Override
@@ -148,7 +159,7 @@ public class Pitch extends SubsystemBase {
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());
 
-    SmartDashboard.putBoolean("Pitch Ready", isReady());
+    SmartDashboard.putBoolean("Pitch Ready", getPitchIsReady());
 
   }
 }
