@@ -92,7 +92,7 @@ public final class Constants {
 
         public static final double creepRPM = 350;
 
-        public static final double kNoteVelocityCoefficient = 0.0020833; //0.00416667
+        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25; //0.00416667
     }
 
 
@@ -107,7 +107,7 @@ public final class Constants {
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableErrorDegrees = 3; //0.05; // 0.05
+        public static final double allowableErrorDegrees = 2; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
 
         public static final double autoAimAllowableError = 6; 
@@ -127,7 +127,7 @@ public final class Constants {
         public static final double kF = 0.0;
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
-        public static final double kTarget_dThetaFF = 0.3; // TODO tune this
+        public static final double kTarget_dThetaFF = -0.3 / 4; // TODO tune this
         public static final double IZone = 0.1;
     
     }
@@ -165,7 +165,7 @@ public final class Constants {
         public static final double intakePosition = 0.86; // 34.86 deg
         public static final double stageSetpoint = 0.450459; // 28.55 deg
         public static final double speakerSetpoint = 0.510625; // 29.478 deg
-        public static final double ampSetpoint = 1.7; // 47.829 deg
+        public static final double ampSetpoint = 2.0;//1.7; // 47.829 deg
         public static final double lobSetPoint = 0.61; // 31.01 deg
         public static final double climbPosition = 1.75; // 48.6 deg
         public static final double setpointAmp = 0.49823; // 29.287 deg

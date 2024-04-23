@@ -98,6 +98,7 @@ public class AutoAimWithStateEstimation extends Command {
     SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
     SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
     SmartDashboard.putNumber("turret FF", turretFF);
+    SmartDashboard.putNumber("d theta", dTheta);
    
     s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
 
