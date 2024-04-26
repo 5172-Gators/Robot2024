@@ -91,16 +91,30 @@ public class AutoAimWithStateEstimation extends Command {
 
     // Calculate angular velocity (rad/s) of robot to predicted target translation for turret FF
     var dTheta = (predictedTarget.getX()*V.vyMetersPerSecond - predictedTarget.getY()*V.vxMetersPerSecond) /
-              Math.pow(predictedTarget.getNorm(),2);
+                  Math.pow(predictedTarget.getNorm(),2);
 
-    var turretFF = dTheta * Constants.Turret.kTarget_dThetaFF;
+    // Calculate normal velocity (m/s) of robot to predicted target for flywheel FF
+    var dT = (predictedTarget.getX()*V.vxMetersPerSecond + predictedTarget.getY()*V.vyMetersPerSecond) / 
+              predictedTarget.getNorm();
+
+    // Calculate angular velocity of pitch (rad/s) of robot to predicted target for pitch FF
+    var dPhi = -Constants.Field.speakerHeightMeters * dT / 
+                (Math.pow(predictedTarget.getNorm(),2) + 
+                Math.pow(Constants.Field.speakerHeightMeters,2));
+
+    var turretFF = dTheta * Constants.Turret.kTargeting_dTheta_FF;
+    var shooterFF = dT * Constants.Shooter.kTargeting_dT_FF;
+    var pitchFF = dPhi * Constants.Pitch.kTargeting_dPhi_FF;
 
     SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
     SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
+    SmartDashboard.putNumber("pitch sp", pitch_sp);
     SmartDashboard.putNumber("turret FF", turretFF);
     SmartDashboard.putNumber("d theta", dTheta);
+    SmartDashboard.putNumber("dPhi", dPhi);
+    SmartDashboard.putNumber("dT", dT);
    
-    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
+    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp), pitchFF);
 
     s_Turret.setFieldRelativeAngle(turret_sp, 
                                     s_Swerve.getPose().getRotation(),
@@ -120,7 +134,7 @@ public class AutoAimWithStateEstimation extends Command {
     }
 
     if(noteInPlace) {
-      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft(), shooterFF);
 
       if(this.fire.getAsBoolean()) {
         s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot

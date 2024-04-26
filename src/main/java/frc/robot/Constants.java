@@ -21,6 +21,8 @@ public final class Constants {
         public static final Translation2d redSpeaker = new Translation2d(16.539, 5.41);
         public static final Translation2d blueAmp = new Translation2d(0, 6.89); // 7.01
         public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
+
+        public static final double speakerHeightMeters = 2.10566;
     }
 
     public static class Limelight {
@@ -93,6 +95,7 @@ public final class Constants {
         public static final double creepRPM = 350;
 
         public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25; //0.00416667
+        public static final double kTargeting_dT_FF = 0.0; 
     }
 
 
@@ -127,7 +130,7 @@ public final class Constants {
         public static final double kF = 0.0;
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
-        public static final double kTarget_dThetaFF = -0.3 / 4; // TODO tune this
+        public static final double kTargeting_dTheta_FF = -0.3 / 4; // TODO tune this
         public static final double IZone = 0.1;
     
     }
@@ -181,6 +184,7 @@ public final class Constants {
 
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
+        public static final double kTargeting_dPhi_FF = 0.0;
 
     }
 

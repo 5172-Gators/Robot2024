@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -114,7 +115,21 @@ public class Shooter extends SubsystemBase {
     rightSetpoint = rightRPM;
     rightShooterPID.setReference(rightRPM, CANSparkFlex.ControlType.kVelocity);
     leftShooterPID.setReference(leftRPM, CANSparkFlex.ControlType.kVelocity);
-    
+  }
+
+  public void setShooterRPM(double rightRPM, double leftRPM, double arbFF) {
+    leftSetpoint = leftRPM;
+    rightSetpoint = rightRPM;
+    rightShooterPID.setReference( rightRPM, 
+                                  CANSparkFlex.ControlType.kVelocity,
+                                  0,
+                                  arbFF,
+                                  ArbFFUnits.kPercentOut);
+    leftShooterPID.setReference(leftRPM, 
+                                CANSparkFlex.ControlType.kVelocity,
+                                0,
+                                arbFF,
+                                ArbFFUnits.kPercentOut);
   }
 
   public double getRightShooterRPM() {

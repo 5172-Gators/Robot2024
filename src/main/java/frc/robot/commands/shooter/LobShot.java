@@ -97,9 +97,20 @@ public class LobShot extends Command {
     var dTheta = (predictedTarget.getX()*V.vyMetersPerSecond - predictedTarget.getY()*V.vxMetersPerSecond) /
               Math.pow(predictedTarget.getNorm(),2);
 
-    var turretFF = dTheta * Constants.Turret.kTarget_dThetaFF;
+    // Calculate normal velocity (m/s) of robot to predicted target for flywheel FF
+    var dT = (predictedTarget.getX()*V.vxMetersPerSecond + predictedTarget.getY()*V.vyMetersPerSecond) / 
+              predictedTarget.getNorm();
 
-    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
+    // Calculate angular velocity of pitch (rad/s) of robot to predicted target for pitch FF
+    var dPhi = -Constants.Field.speakerHeightMeters * dT / 
+                (Math.pow(predictedTarget.getNorm(),2) + 
+                Math.pow(Constants.Field.speakerHeightMeters,2));
+
+    var turretFF = dTheta * Constants.Turret.kTargeting_dTheta_FF;
+    var shooterFF = dT * Constants.Shooter.kTargeting_dT_FF;
+    var pitchFF = dPhi * Constants.Pitch.kTargeting_dPhi_FF;
+
+    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp), pitchFF);
 
     s_Turret.setFieldRelativeAngle(turret_sp, 
                                     s_Swerve.getPose().getRotation(),
@@ -125,7 +136,7 @@ public class LobShot extends Command {
     }
 
     if(noteInPlace) {
-      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft(), shooterFF);
 
       if(this.fire.getAsBoolean()) {
         s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot

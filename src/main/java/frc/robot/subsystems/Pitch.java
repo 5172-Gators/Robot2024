@@ -112,6 +112,15 @@ public class Pitch extends SubsystemBase {
     relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
   }
 
+  public void setPosition(Rotation2d position, double arbFF) {
+
+    this.setpoint = Rotation2dToEncoderUnits(position);
+
+    double gravityFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, gravityFF + arbFF, ArbFFUnits.kPercentOut);
+  }
+
   public void setPositionRaw(double pos) {
 
     this.setpoint = pos;
@@ -119,6 +128,15 @@ public class Pitch extends SubsystemBase {
     double arbFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
 
     relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
+  }
+
+  public void setPositionRaw(double pos, double arbFF) {
+
+    this.setpoint = pos;
+
+    double gravityFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, gravityFF + arbFF, ArbFFUnits.kPercentOut);
   }
 
   public void stopPitch() {
