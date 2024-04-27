@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import com.ctre.phoenix6.configs.GyroTrimConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,6 +31,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public Pigeon2Configuration pigeon_config;
     private final Field2d m_field = new Field2d();
 
     // private final DoubleArrayLogEntry m_odometryLog;
@@ -39,7 +41,8 @@ public class Swerve extends SubsystemBase {
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
-        gyro.getConfigurator().apply(new Pigeon2Configuration());
+        pigeon_config = new Pigeon2Configuration().withGyroTrim(new GyroTrimConfigs().withGyroScalarZ(2.35));
+        gyro.getConfigurator().apply(pigeon_config);
         gyro.setYaw(0);
 
         mSwerveMods = new SwerveModule[] {
@@ -302,7 +305,7 @@ public class Swerve extends SubsystemBase {
 
         // If any targets are in view
         if (leftPoseEst.tagCount > 0 && !rejectLeft) {
-            double xyStds = 0.5;
+            double xyStds = 0.9; //0.5
             double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             swervePoseEstimator.addVisionMeasurement(
@@ -311,7 +314,7 @@ public class Swerve extends SubsystemBase {
         }
 
         if (rightPoseEst.tagCount > 0 && !rejectRight) {
-            double xyStds = 0.5;
+            double xyStds = 0.9; //0.5
             double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             swervePoseEstimator.addVisionMeasurement(

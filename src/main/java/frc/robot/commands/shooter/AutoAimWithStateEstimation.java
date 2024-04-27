@@ -19,7 +19,6 @@ import frc.robot.AimingParameters;
 import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 import frc.robot.ShooterInterpolatingDoubleTable;
-import frc.robot.ShootingTables;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;

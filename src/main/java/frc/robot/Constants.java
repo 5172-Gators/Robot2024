@@ -166,7 +166,7 @@ public final class Constants {
 
         // Tolerances 
         public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 75, 75);
-        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.5, 150, 150);
+        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.0, 150, 150);
 
     }
 
