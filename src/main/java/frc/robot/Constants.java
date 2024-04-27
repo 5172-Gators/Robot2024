@@ -135,21 +135,6 @@ public final class Constants {
     
     }
 
-    public static final class Colors {
-            
-        public static final double green = 0.77; //intaking
-        public static final double strobeRed = (-0.11); 
-        public static final double rainbow = (-0.99); 
-        public static final double red = (0.61); //outtaking
-        public static final double darkGreen = (0.75);
-        public static final double lime = (0.73);   
-        public static final double aqua = (0.81);   
-        public static final double blue = (0.87); // ready to shoot
-        public static final double strobeBlue = (-0.09); // looking for target
-
-    }
-
-
     public static final class Pitch {
 
         /* Motor + Encoder IDs */
