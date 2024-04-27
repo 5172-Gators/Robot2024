@@ -95,7 +95,7 @@ public final class Constants {
         public static final double creepRPM = 350;
 
         public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25; //0.00416667
-        public static final double kTargeting_dT_FF = 0.0; 
+        public static final double kTargeting_dT_FF = -0.1 / 5; 
     }
 
 
@@ -184,7 +184,7 @@ public final class Constants {
 
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
-        public static final double kTargeting_dPhi_FF = 0.0;
+        public static final double kTargeting_dPhi_FF = 1;
 
     }
 

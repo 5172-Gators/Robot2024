@@ -348,7 +348,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
-        ampScore.onTrue(new AmpScore(1500.0, 1500.0,
+        ampScore.onTrue(new AmpScore(1550.0, 1550.0, // 1500
                                         fireShooter,
                                         () -> operatorStick.getX(),
                                         () -> operatorStick.getY(),

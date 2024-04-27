@@ -98,18 +98,20 @@ public class AutoAimWithStateEstimation extends Command {
               predictedTarget.getNorm();
 
     // Calculate angular velocity of pitch (rad/s) of robot to predicted target for pitch FF
-    var dPhi = -Constants.Field.speakerHeightMeters * dT / 
+    var dPhi = Constants.Field.speakerHeightMeters * dT / 
                 (Math.pow(predictedTarget.getNorm(),2) + 
                 Math.pow(Constants.Field.speakerHeightMeters,2));
 
     var turretFF = dTheta * Constants.Turret.kTargeting_dTheta_FF;
-    var shooterFF = dT * Constants.Shooter.kTargeting_dT_FF;
+    var shooterFF = Math.max(dT * Constants.Shooter.kTargeting_dT_FF, 0);
     var pitchFF = dPhi * Constants.Pitch.kTargeting_dPhi_FF;
 
     SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
     SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
+    SmartDashboard.putNumber("Pitch Setpoint", aimingParams.getPitchAngle());
     SmartDashboard.putNumber("pitch sp", pitch_sp);
-    SmartDashboard.putNumber("turret FF", turretFF);
+    // SmartDashboard.putNumber("turret FF", turretFF);
+    SmartDashboard.putNumber("pitch FF", pitchFF);
     SmartDashboard.putNumber("d theta", dTheta);
     SmartDashboard.putNumber("dPhi", dPhi);
     SmartDashboard.putNumber("dT", dT);

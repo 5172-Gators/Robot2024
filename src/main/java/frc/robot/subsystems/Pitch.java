@@ -86,7 +86,7 @@ public class Pitch extends SubsystemBase {
   }
 
   public double encoderUnitsToDegrees(double pos) {
-    return (57.5-19.3)/2.3401*pos+19.3;
+    return (57.5 - 19.3) / 2.3401 * pos + 19.3;
   }
 
   public double Rotation2dToEncoderUnits(Rotation2d angle) {

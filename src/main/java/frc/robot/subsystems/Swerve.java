@@ -268,20 +268,20 @@ public class Swerve extends SubsystemBase {
         // Update using vision selected vision measurements
         LimelightHelpers.PoseEstimate leftPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shleft");
         LimelightHelpers.PoseEstimate rightPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shright");
-        // LimelightHelpers.PoseEstimate drivePoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
+        // LimelightHelpers.PoseEstimate frontPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
         SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
         SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
 
         SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
         SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
 
-        // SmartDashboard.putNumber("Drive Xe", driveCamPoseEst.pose.getX());
-        // SmartDashboard.putNumber("Drive Ye", driveCamPoseEst.pose.getY());
+        // SmartDashboard.putNumber("Drive Xe", frontPoseEst.pose.getX());
+        // SmartDashboard.putNumber("Drive Ye", frontPoseEst.pose.getY());
 
 
         boolean rejectLeft = false;
         boolean rejectRight = false;
-        // boolean rejectDriveCam = false;
+        boolean rejectFront = false;
 
         // Reject faulty vision measurements (pose is outside of the field)
         if(leftPoseEst.pose.getX() <= 0.0 || leftPoseEst.pose.getX() >= 16.46
@@ -292,9 +292,9 @@ public class Swerve extends SubsystemBase {
             || rightPoseEst.pose.getY() <= 0.0 || rightPoseEst.pose.getY() >= 8.23)
             rejectRight = true;
 
-        // if(driveCamPoseEst.pose.getX() <= 0.0 || driveCamPoseEst.pose.getX() >= 16.46
-        //     || driveCamPoseEst.pose.getY() <= 0.0 || driveCamPoseEst.pose.getY() >= 8.23)
-        //     rejectDriveCam = true;
+        // if(frontPoseEst.pose.getX() <= 0.0 || frontPoseEst.pose.getX() >= 16.46
+        //     || frontPoseEst.pose.getY() <= 0.0 || frontPoseEst.pose.getY() >= 8.23)
+        //     rejectFront = true;
         
 
         // if(limelightMeasurement.avgTagDist >= 6.5)
@@ -319,21 +319,21 @@ public class Swerve extends SubsystemBase {
         }
 
         if (rightPoseEst.tagCount > 0 && !rejectRight) {
-            double xyStds = 0.3;
-            double degStds = 200;
+            double xyStds = 0.5;
+            double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             swervePoseEstimator.addVisionMeasurement(
                 new Pose2d(rightPoseEst.pose.getTranslation(), rightPoseEst.pose.getRotation()),
                             rightPoseEst.timestampSeconds);
         }
 
-        // if (driveCamPoseEst.tagCount > 0 && !rejectDriveCam) {
-        //     double xyStds = 0.3;
-        //     double degStds = 200;
+        // if (frontPoseEst.tagCount > 0 && !rejectFront) {
+        //     double xyStds = 0.5;
+        //     double degStds = 100000;
         //     swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
         //     swervePoseEstimator.addVisionMeasurement(
-        //         new Pose2d(driveCamPoseEst.pose.getTranslation(), driveCamPoseEst.pose.getRotation()),
-        //                     driveCamPoseEst.timestampSeconds);
+        //         new Pose2d(frontPoseEst.pose.getTranslation(), frontPoseEst.pose.getRotation()),
+        //                     frontPoseEst.timestampSeconds);
         // }
     }
 
