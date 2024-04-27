@@ -12,11 +12,11 @@ public final class ShootingTables extends ShooterInterpolatingDoubleTable {
         tbl = super.tbl;
         
         tbl.addPoint(1.77, 50.0, 3131, 2719);
-        tbl.addPoint(2.34, 46.48, 3353, 2716);
-        tbl.addPoint(3.01, 38.78, 3440, 2815);
+        tbl.addPoint(2.34, 45.48, 3353, 2716);
+        tbl.addPoint(3.00, 37.78, 3440, 2815);
         tbl.addPoint(3.79, 34.28, 3599, 2995);
-        tbl.addPoint(4.60, 30.48, 3868, 3182);
-        tbl.addPoint(5.69, 25.07, 4432, 3134);
+        tbl.addPoint(4.60, 29.48, 3868, 3182);
+        tbl.addPoint(5.69, 24.07, 4432, 3134);
 
     }
 
