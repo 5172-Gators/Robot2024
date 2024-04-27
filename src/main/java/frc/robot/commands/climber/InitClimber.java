@@ -47,7 +47,7 @@ public class InitClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (s_Pitch.isReady(Constants.Targeting.kSpeakerTol.pitchTol) && 
-            s_Turret.isReady(Constants.Targeting.kSpeakerTol.turretTol));
+    return (s_Pitch.getIsReady() && 
+            s_Turret.getIsReady());
   }
 }

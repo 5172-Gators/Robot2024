@@ -86,6 +86,8 @@ public final class Constants {
 
         public static final double creepRPM = 350;
 
+        public static final int kControlFrameUpdateMs = 1;
+
     }
 
     public static final class Turret {
@@ -117,6 +119,8 @@ public final class Constants {
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
         public static final double IZone = 0.1;
+
+        public static final int kControlFrameUpdateMs = 1;
     
     }
 
@@ -152,6 +156,8 @@ public final class Constants {
 
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
+
+        public static final int kControlFrameUpdateMs = 1;
 
     }
 

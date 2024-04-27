@@ -30,7 +30,7 @@ public class StopShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (s_Shooter.isReady(Constants.Targeting.kSpeakerTol.leftTol, Constants.Targeting.kSpeakerTol.rightTol))
+    if (s_Shooter.getIsReady())
       s_Shooter.stopShooter();
   }
 

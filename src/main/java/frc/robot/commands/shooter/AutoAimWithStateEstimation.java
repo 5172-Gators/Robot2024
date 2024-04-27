@@ -148,7 +148,7 @@ public class AutoAimWithStateEstimation extends Command {
 
       if(this.fire.getAsBoolean()) {
         s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot
-        if(s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol) && !ceaseFire.getAsBoolean() || forceFire.getAsBoolean()) {
+        if(s_Shooter.getIsReady() && s_Turret.getIsReady() && s_Pitch.getIsReady() && !ceaseFire.getAsBoolean() || forceFire.getAsBoolean()) {
           s_LEDs.setColorTimed(Color.kPurple, LEDMode.SOLID, 0.5);
           s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
         } else {
@@ -156,7 +156,7 @@ public class AutoAimWithStateEstimation extends Command {
         }
       } else {
         s_LEDs.setFlashPeriod(0.25);
-        if(s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol) && !ceaseFire.getAsBoolean() | forceFire.getAsBoolean()) {
+        if(s_Shooter.getIsReady() && s_Turret.getIsReady() && s_Pitch.getIsReady() && !ceaseFire.getAsBoolean() | forceFire.getAsBoolean()) {
           s_LEDs.setColor(Color.kPurple);
           s_Kicker.stopKicker();
         } else {

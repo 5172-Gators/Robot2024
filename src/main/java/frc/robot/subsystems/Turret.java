@@ -208,11 +208,7 @@ public class Turret extends SubsystemBase {
                                   ArbFFUnits.kPercentOut);
   }
 
-  /**
-   * Returns if the turret subsystem is within a given tolerance in degrees
-   * @param tolerance the tolerance in degrees
-   */
-  public void isReady(double tolerance) {
+  public void updateIsReady(double tolerance) {
     if (m_currentAimMode == AimMode.kSetpoint) {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);

@@ -34,12 +34,12 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("CalibrationLeftRPM", 550.0);
     // SmartDashboard.putNumber("CalibrationRightRPM", 550.0);
     m_robotContainer = new RobotContainer();
-
+    var tolerances = Constants.Targeting.kSpeakerTol;
     addPeriodic(() -> {
       m_robotContainer.s_Shooter.updateNotePossession();
-      m_robotContainer.s_Shooter.updateShooterIsReady();
-      m_robotContainer.s_Pitch.updatePitchIsReady();
-      m_robotContainer.s_Turret.updateTurretIsReady();
+      m_robotContainer.s_Shooter.updateIsReady(tolerances.leftTol, tolerances.rightTol);
+      m_robotContainer.s_Pitch.updateIsReady(tolerances.pitchTol);
+      m_robotContainer.s_Turret.updateIsReady(tolerances.turretTol);
     }, 0.005, 0.0025);
   }
 

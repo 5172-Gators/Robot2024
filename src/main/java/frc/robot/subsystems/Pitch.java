@@ -37,7 +37,6 @@ public class Pitch extends SubsystemBase {
   Debouncer debounce = new Debouncer(0.04, DebounceType.kRising);
 
   private boolean pitchIsReady = false;
-  private boolean pitchIsReadyLob = false;
   
   public Pitch() {
 
@@ -150,13 +149,13 @@ public class Pitch extends SubsystemBase {
     pitchMotor.set(0);
   }
 
-  /**
-   * Returns if the pitch subsystem is within a given tolerance in degrees
-   * @param tolerance the tolerance in degrees
-   */
-  public boolean isReady(double tolerance) {
+  public boolean getIsReady() {
+    return pitchIsReady;
+  }
+
+  public void updateIsReady(double tolerance) {
     double absErrorDeg = Math.abs(this.getPitchDegrees() - encoderUnitsToDegrees(this.setpoint));
-    return debounce.calculate(absErrorDeg <= tolerance);
+    pitchIsReady = debounce.calculate(absErrorDeg <= tolerance);
   }
 
   @Override
@@ -168,7 +167,7 @@ public class Pitch extends SubsystemBase {
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());
 
-    SmartDashboard.putBoolean("Pitch Ready", isReady(Constants.Targeting.kSpeakerTol.pitchTol));
+    SmartDashboard.putBoolean("Pitch Ready", getIsReady());
 
   }
 }
