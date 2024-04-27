@@ -43,8 +43,7 @@ public class SetTurretPosition extends Command {
   @Override
   public boolean isFinished() {
 
-    return s_Turret.getTurretIsReady();
-    // return false;
+    return s_Turret.isReady(Constants.Targeting.kSpeakerTol.turretTol);
 
   }
 }

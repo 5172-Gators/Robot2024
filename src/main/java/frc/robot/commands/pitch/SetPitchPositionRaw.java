@@ -46,7 +46,7 @@ public class SetPitchPositionRaw extends Command {
   @Override
   public boolean isFinished() {
     
-    return s_Pitch.getPitchIsReady();
+    return s_Pitch.isReady(Constants.Targeting.kSpeakerTol.pitchTol);
 
   }
 }

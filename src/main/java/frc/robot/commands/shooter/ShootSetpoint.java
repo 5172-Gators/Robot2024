@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
@@ -33,10 +34,11 @@ public class ShootSetpoint extends Command {
   BooleanSupplier fire;
   DoubleSupplier yaw_aim;
   DoubleSupplier pitch_aim;
+  AimingTolerances tolerances;
   
   /** Creates a new ShootSetpoint. */
   public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
+          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, AimingTolerances tolerances, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -44,12 +46,13 @@ public class ShootSetpoint extends Command {
     this.fire = fire;
     this.yaw_aim = yaw_aim;
     this.pitch_aim = pitch_aim;
+    this.tolerances = tolerances;
 
-    s_Shooter = m_shooter;
-    s_Pitch = m_pitch;
-    s_Turret = m_turret;
-    s_Kicker = m_kicker;
-    s_LEDs = m_led;
+    this.s_Shooter = m_shooter;
+    this.s_Pitch = m_pitch;
+    this.s_Turret = m_turret;
+    this.s_Kicker = m_kicker;
+    this.s_LEDs = m_led;
     
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs);
   }
@@ -70,7 +73,7 @@ public class ShootSetpoint extends Command {
     s_Pitch.setPositionRaw(this.pitch);
     s_Turret.setPosition(this.yaw);
 
-    if (s_Shooter.getShooterIsReady() && s_Turret.isSetpointAimReady() && s_Pitch.getPitchIsReady()){
+    if (s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol)){
       s_LEDs.setColor(Color.kPurple);
       if (this.fire.getAsBoolean())
         s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);

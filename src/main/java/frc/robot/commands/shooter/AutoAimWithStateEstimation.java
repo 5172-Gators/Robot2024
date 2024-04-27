@@ -16,8 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
+import frc.robot.AimingTolerances;
 import frc.robot.Constants;
-import frc.robot.ShootingTables;
+import frc.robot.ShooterInterpolatingDoubleTable;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
@@ -37,14 +38,18 @@ public class AutoAimWithStateEstimation extends Command {
   private Swerve s_Swerve;
 
   private BooleanSupplier fire;
+  private BooleanSupplier ceaseFire;
+  private BooleanSupplier forceFire;
   private Supplier<Translation2d> translationToTargetSupplier;
   private Translation2d targetTranslation;
-  private ShootingTables shootingTables;
+  private ShooterInterpolatingDoubleTable tbl;
+  private AimingTolerances tolerances;
 
   private boolean noteInPlace = false;
 
   /** Creates a new AutoAim. */
-  public AutoAimWithStateEstimation(BooleanSupplier fire, Supplier<Translation2d> translationToTargetSupplier, ShootingTables shootingTables, 
+  public AutoAimWithStateEstimation(BooleanSupplier fire, Supplier<Translation2d> translationToTargetSupplier, ShooterInterpolatingDoubleTable tbl,
+                  AimingTolerances tolerances, BooleanSupplier ceaseFire, BooleanSupplier forceFire, 
                   Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
@@ -53,8 +58,11 @@ public class AutoAimWithStateEstimation extends Command {
     this.s_Kicker = m_kicker;
     this.fire = fire;
     this.translationToTargetSupplier = translationToTargetSupplier;
-    this.shootingTables = shootingTables;
+    this.tbl = tbl;
     this.s_Swerve = m_swerve;
+    this.tolerances = tolerances;
+    this.ceaseFire = ceaseFire;
+    this.forceFire = forceFire;
 
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_LEDs, s_Kicker);
   }
@@ -73,8 +81,8 @@ public class AutoAimWithStateEstimation extends Command {
     var targetDistance = targetTranslation.getNorm();
 
     ChassisSpeeds V = s_Swerve.getRobotRelativeSpeeds();
-    var shooterRPMSetpointAverage = (shootingTables.getLeftRPM(targetDistance) + shootingTables.getRightRPM(targetDistance)) / 2.0;
-    var noteVelocity = Constants.Shooter.kNoteVelocityCoefficient * shooterRPMSetpointAverage; // Meters per second
+    var shooterRPMSetpointAverage = (tbl.getLeftRPM(targetDistance) + tbl.getRightRPM(targetDistance)) / 2.0;
+    var noteVelocity = Constants.Targeting.kNoteVelocityCoefficient * shooterRPMSetpointAverage; // Meters per second
     var timeOfFlight = targetDistance / noteVelocity;
     var translationOffset = new Translation2d(V.vxMetersPerSecond, V.vyMetersPerSecond).times(timeOfFlight);
 
@@ -82,7 +90,7 @@ public class AutoAimWithStateEstimation extends Command {
     var predictedDistance = predictedTarget.getNorm();
     Rotation2d predictedAngle = predictedTarget.getAngle();
 
-    AimingParameters aimingParams = shootingTables.getAimingParams(predictedDistance);
+    AimingParameters aimingParams = tbl.getAimingParams(predictedDistance);
 
     var pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
@@ -91,15 +99,32 @@ public class AutoAimWithStateEstimation extends Command {
 
     // Calculate angular velocity (rad/s) of robot to predicted target translation for turret FF
     var dTheta = (predictedTarget.getX()*V.vyMetersPerSecond - predictedTarget.getY()*V.vxMetersPerSecond) /
-              Math.pow(predictedTarget.getNorm(),2);
+                  Math.pow(predictedTarget.getNorm(),2);
 
-    var turretFF = dTheta * Constants.Turret.kTarget_dThetaFF;
+    // Calculate normal velocity (m/s) of robot to predicted target for flywheel FF
+    var dT = (predictedTarget.getX()*V.vxMetersPerSecond + predictedTarget.getY()*V.vyMetersPerSecond) / 
+              predictedTarget.getNorm();
+
+    // Calculate angular velocity of pitch (rad/s) of robot to predicted target for pitch FF
+    var dPhi = Constants.Field.speakerHeightMeters * dT / 
+                (Math.pow(predictedTarget.getNorm(),2) + 
+                Math.pow(Constants.Field.speakerHeightMeters,2));
+
+    var turretFF = dTheta * Constants.Targeting.kTargeting_dTheta_FF;
+    var shooterFF = Math.max(dT * Constants.Targeting.kTargeting_dT_FF, 0);
+    var pitchFF = dPhi * Constants.Targeting.kTargeting_dPhi_FF;
 
     SmartDashboard.putNumber("Right Desired RPM", aimingParams.getShooterRPMRight());
     SmartDashboard.putNumber("Left Desired RPM", aimingParams.getShooterRPMLeft());
-    SmartDashboard.putNumber("turret FF", turretFF);
+    SmartDashboard.putNumber("Pitch Setpoint", aimingParams.getPitchAngle());
+    SmartDashboard.putNumber("pitch sp", pitch_sp);
+    // SmartDashboard.putNumber("turret FF", turretFF);
+    SmartDashboard.putNumber("pitch FF", pitchFF);
+    SmartDashboard.putNumber("d theta", dTheta);
+    SmartDashboard.putNumber("dPhi", dPhi);
+    SmartDashboard.putNumber("dT", dT);
    
-    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp));
+    s_Pitch.setPosition(Rotation2d.fromDegrees(pitch_sp), pitchFF);
 
     s_Turret.setFieldRelativeAngle(turret_sp, 
                                     s_Swerve.getPose().getRotation(),
@@ -119,11 +144,11 @@ public class AutoAimWithStateEstimation extends Command {
     }
 
     if(noteInPlace) {
-      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft());
+      s_Shooter.setShooterRPM(aimingParams.getShooterRPMRight(), aimingParams.getShooterRPMLeft(), shooterFF);
 
       if(this.fire.getAsBoolean()) {
         s_LEDs.setFlashPeriod(0.15); // Increase flash frequency when attempting to shoot
-        if(s_Shooter.getShooterIsReady() && s_Turret.getTurretIsReady() && s_Pitch.getPitchIsReady()) {
+        if(s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol) && !ceaseFire.getAsBoolean() || forceFire.getAsBoolean()) {
           s_LEDs.setColorTimed(Color.kPurple, LEDMode.SOLID, 0.5);
           s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);
         } else {
@@ -131,7 +156,7 @@ public class AutoAimWithStateEstimation extends Command {
         }
       } else {
         s_LEDs.setFlashPeriod(0.25);
-        if(s_Shooter.getShooterIsReady() && s_Turret.getTurretIsReady() && s_Pitch.getPitchIsReady()) {
+        if(s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol) && !ceaseFire.getAsBoolean() | forceFire.getAsBoolean()) {
           s_LEDs.setColor(Color.kPurple);
           s_Kicker.stopKicker();
         } else {

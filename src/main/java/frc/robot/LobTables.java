@@ -2,13 +2,14 @@ package frc.robot;
 
 import frc.lib.util.InterpolatingDoubleTable;
 
-public final class LobTables {
+public final class LobTables extends ShooterInterpolatingDoubleTable {
     private InterpolatingDoubleTable tbl;
 
 
     public LobTables() {
         // The 4 columns are distance, pitch angle, left rpm, and right rpm
-        tbl = new InterpolatingDoubleTable(4);
+        super();
+        tbl = super.tbl;
 
         // First column (reference) is distance to goal (m), followed by pitch angle (deg) and left and right shooter speeds (RPM)
         tbl.addPoint(7.85, 47.4, 2780, 2390);

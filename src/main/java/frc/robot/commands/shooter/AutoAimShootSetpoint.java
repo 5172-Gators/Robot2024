@@ -91,3 +91,4 @@ public class AutoAimShootSetpoint extends Command {
     return (s_Shooter.getShooterSensorInverted() && s_Shooter.getKickerSensorInverted());
   }
 }
+

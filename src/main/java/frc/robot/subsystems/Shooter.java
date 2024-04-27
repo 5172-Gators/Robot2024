@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -124,7 +126,21 @@ public class Shooter extends SubsystemBase {
     rightSetpoint = rightRPM;
     rightShooterPID.setReference(rightRPM, CANSparkFlex.ControlType.kVelocity);
     leftShooterPID.setReference(leftRPM, CANSparkFlex.ControlType.kVelocity);
-    
+  }
+
+  public void setShooterRPM(double rightRPM, double leftRPM, double arbFF) {
+    leftSetpoint = leftRPM;
+    rightSetpoint = rightRPM;
+    rightShooterPID.setReference( rightRPM, 
+                                  CANSparkFlex.ControlType.kVelocity,
+                                  0,
+                                  arbFF,
+                                  ArbFFUnits.kPercentOut);
+    leftShooterPID.setReference(leftRPM, 
+                                CANSparkFlex.ControlType.kVelocity,
+                                0,
+                                arbFF,
+                                ArbFFUnits.kPercentOut);
   }
 
   public double getRightShooterRPM() {
@@ -188,13 +204,13 @@ public class Shooter extends SubsystemBase {
       kickerSensorFlag = true;
       shooterSensorFlag = true;
     }
-}
+  }
 
-  public void updateShooterIsReady() {
+  public void updateIsReady(double leftTolerance, double rightTolerance) {
     double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
     double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
-    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableError 
-        && absErrorRight <= Constants.Shooter.right_allowableError)) {
+    if (shooterDebounce.calculate(absErrorLeft <= leftTolerance 
+        && absErrorRight <= rightTolerance)) {
 
       shooterIsReady = true;
 
@@ -205,27 +221,8 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public boolean getShooterIsReady() {
+  public boolean getIsReady() {
     return shooterIsReady;
-  }
-
-  public boolean getShooterIsReadyLob() {
-    return shooterIsReadyLob;
-  }
-
-  public void updateShooterIsReadyLob() {
-    double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
-    double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
-    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableErrorLob 
-        && absErrorRight <= Constants.Shooter.right_allowableErrorLob)) {
-
-      shooterIsReadyLob = true;
-
-    } else {
-
-      shooterIsReadyLob = false;
-
-    }
   }
 
   @Override
@@ -239,7 +236,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
-    SmartDashboard.putBoolean("Shooter Ready", getShooterIsReady());
+    SmartDashboard.putBoolean("Shooter Ready", getIsReady());
     SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
     SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     

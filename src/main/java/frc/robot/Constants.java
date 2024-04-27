@@ -21,6 +21,8 @@ public final class Constants {
         public static final Translation2d redSpeaker = new Translation2d(16.539, 5.41);
         public static final Translation2d blueAmp = new Translation2d(0, 6.89); // 7.01
         public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
+
+        public static final double speakerHeightMeters = 2.10566;
     }
 
     public static class Limelight {
@@ -71,32 +73,20 @@ public final class Constants {
         public static final int rightMotorID = 17;
 
         // right PID
-        public static final double right_kP = 0.001;//0.0003;//0.00020;
-        public static final double right_kI = 0;//0.000001;
-        public static final double right_kD = 0;//0.0015;
+        public static final double right_kP = 0.001;
+        public static final double right_kI = 0;
+        public static final double right_kD = 0;
         public static final double right_kFF = 0.00017;
-        public static final double right_IZone = 0;//200;
-
-        public static final double right_allowableError = 75; //35; // 50
-        public static final double right_allowableErrorLob = 150; //100;
 
         // left PID
-        public static final double left_kP = 0.001;//0.0003;//0.00046;
-        public static final double left_kI = 0;//0.000001;
-        public static final double left_kD = 0;//0.0015;//0.0015;
+        public static final double left_kP = 0.001;
+        public static final double left_kI = 0;
+        public static final double left_kD = 0;
         public static final double left_kFF = 0.000165;
-        public static final double left_IZone = 0;//200;
-
-        public static final double left_allowableError = 75; //35; //50
-        public static final double left_allowableErrorLob  = 150; //100;
 
         public static final double creepRPM = 350;
 
-        public static final double kNoteVelocityCoefficient = 0.0020833; //0.00416667
-
-        public static final int kControlFrameUpdateMs = 1;
     }
-
 
     public static final class Turret {
 
@@ -109,10 +99,7 @@ public final class Constants {
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableErrorDegrees = 3; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
-
-        public static final double autoAimAllowableError = 6; 
 
         // This is added to the turret setpoint to counteract the the effect of adding spin to the note while shooting
         public static final Rotation2d noteSpinOffset = Rotation2d.fromDegrees(0);
@@ -129,27 +116,9 @@ public final class Constants {
         public static final double kF = 0.0;
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
-        public static final double kTarget_dThetaFF = 0.3; // TODO tune this
         public static final double IZone = 0.1;
-
-        public static final int kControlFrameUpdateMs = 1;
     
     }
-
-    public static final class Colors {
-            
-        public static final double green = 0.77; //intaking
-        public static final double strobeRed = (-0.11); 
-        public static final double rainbow = (-0.99); 
-        public static final double red = (0.61); //outtaking
-        public static final double darkGreen = (0.75);
-        public static final double lime = (0.73);   
-        public static final double aqua = (0.81);   
-        public static final double blue = (0.87); // ready to shoot
-        public static final double strobeBlue = (-0.09); // looking for target
-
-    }
-
 
     public static final class Pitch {
 
@@ -158,8 +127,6 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.03;//0.02;//0.03;
-        public static final double allowableErrorLob = 0.1; //0.05;
         public static final float minPitchPosition = 0.27f;//0.65f; //0.3f; //0.381f; 0
         public static final float minSafePosition = 0.27f; //0.65f
         public static final float maxPitchPosition =  2.17f; //1.75f;//1.77f; //1.6f;
@@ -169,7 +136,7 @@ public final class Constants {
         public static final double intakePosition = 0.86; // 34.86 deg
         public static final double stageSetpoint = 0.450459; // 28.55 deg
         public static final double speakerSetpoint = 0.510625; // 29.478 deg
-        public static final double ampSetpoint = 1.7; // 47.829 deg
+        public static final double ampSetpoint = 2.0;//1.7; // 47.829 deg
         public static final double lobSetPoint = 0.61; // 31.01 deg
         public static final double climbPosition = 1.75; // 48.6 deg
         public static final double setpointAmp = 0.49823; // 29.287 deg
@@ -186,7 +153,20 @@ public final class Constants {
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
 
-        public static final int kControlFrameUpdateMs = 1;
+    }
+
+    public static final class Targeting {
+        // Used in motion compensation calculation
+        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25;
+
+        // Motion feed forwards
+        public static final double kTargeting_dT_FF = -0.1 / 5; // flywheels
+        public static final double kTargeting_dPhi_FF = 1; // Pitch
+        public static final double kTargeting_dTheta_FF = -0.3 / 4; // Turret
+
+        // Tolerances 
+        public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 75, 75);
+        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.0, 150, 150);
 
     }
 

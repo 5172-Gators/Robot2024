@@ -93,7 +93,7 @@ public class Pitch extends SubsystemBase {
   }
 
   public double encoderUnitsToDegrees(double pos) {
-    return (57.5-19.3)/2.3401*pos+19.3;
+    return (57.5 - 19.3) / 2.3401 * pos + 19.3;
   }
 
   public double Rotation2dToEncoderUnits(Rotation2d angle) {
@@ -119,6 +119,15 @@ public class Pitch extends SubsystemBase {
     relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
   }
 
+  public void setPosition(Rotation2d position, double arbFF) {
+
+    this.setpoint = Rotation2dToEncoderUnits(position);
+
+    double gravityFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, gravityFF + arbFF, ArbFFUnits.kPercentOut);
+  }
+
   public void setPositionRaw(double pos) {
 
     this.setpoint = pos;
@@ -128,26 +137,26 @@ public class Pitch extends SubsystemBase {
     relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, arbFF, ArbFFUnits.kPercentOut);
   }
 
+  public void setPositionRaw(double pos, double arbFF) {
+
+    this.setpoint = pos;
+
+    double gravityFF = Constants.Pitch.arm_cos_kF * getPitchAngle().getCos();
+
+    relativePID.setReference(setpoint, CANSparkBase.ControlType.kPosition, 0, gravityFF + arbFF, ArbFFUnits.kPercentOut);
+  }
+
   public void stopPitch() {
     pitchMotor.set(0);
   }
 
-  public boolean getPitchIsReady() {
-    return pitchIsReady;
-  }
-
-  public void updatePitchIsReady() {
-    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    pitchIsReady = debounce.calculate(absError <= Constants.Pitch.allowableError);
-  }
-
-  public boolean getPitchIsReadyLob() {
-    return pitchIsReadyLob;
-  }
-
-  public void updatePitchIsReadyLob() {
-    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    pitchIsReadyLob = debounce.calculate(absError <= Constants.Pitch.allowableErrorLob);
+  /**
+   * Returns if the pitch subsystem is within a given tolerance in degrees
+   * @param tolerance the tolerance in degrees
+   */
+  public boolean isReady(double tolerance) {
+    double absErrorDeg = Math.abs(this.getPitchDegrees() - encoderUnitsToDegrees(this.setpoint));
+    return debounce.calculate(absErrorDeg <= tolerance);
   }
 
   @Override
@@ -159,7 +168,7 @@ public class Pitch extends SubsystemBase {
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());
 
-    SmartDashboard.putBoolean("Pitch Ready", getPitchIsReady());
+    SmartDashboard.putBoolean("Pitch Ready", isReady(Constants.Targeting.kSpeakerTol.pitchTol));
 
   }
 }

@@ -19,41 +19,23 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.swerve.UpdateVisionPoseEstimation;
-import frc.robot.commands.turret.InitAmpScore;
-import frc.robot.commands.turret.SetTurretAngle;
-import frc.robot.commands.turret.SetTurretFieldRelative;
-import frc.robot.commands.turret.SetTurretPosition;
 import frc.robot.commands.turret.TeleopTurret;
-import frc.robot.commands.climber.ClimbModeRoutine;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.DeployStablizer;
-import frc.robot.commands.climber.JankyClimberPosition;
 import frc.robot.commands.climber.ManualClimbControl;
 import frc.robot.commands.climber.StabilizerDefaultCommand;
-import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
-import frc.robot.commands.intake.IntakeAuto;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
-import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.KickerDefaultCommand;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
-import frc.robot.commands.pitch.SetPitchAngle;
-import frc.robot.commands.pitch.SetPitchPositionRaw;
-import frc.robot.commands.pitch.TeleopPitch;
 import frc.robot.commands.shooter.AmpScore;
-import frc.robot.commands.shooter.AutoAim;
-import frc.robot.commands.shooter.AutoAimShootSetpoint;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
-import frc.robot.commands.shooter.LobShot;
-import frc.robot.commands.shooter.NoShootSetpoint;
 import frc.robot.commands.shooter.ShootSetpoint;
-import frc.robot.commands.shooter.ShootSetpointCalibration;
 import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
 import frc.robot.commands.shooter.StopShooter;
-import frc.robot.commands.shooter.testShooterFlywheels;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Limelight.CamMode;
 
@@ -165,31 +147,44 @@ public class RobotContainer {
 
         /* Configure PathPlanner Commands */
 
-        NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(() -> true,
+        NamedCommands.registerCommand("stateEstimationShooting", new AutoAimWithStateEstimation(
+                                                                () -> true,
                                                                 () -> s_Swerve.getTranslationToSpeaker(), 
-                                                                shootingTables, 
+                                                                shootingTables,
+                                                                Constants.Targeting.kSpeakerTol,
+                                                                () -> false,
+                                                                () -> false,
                                                                 s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
-        NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(() -> false,
+        NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(
+                                                                () -> false,
                                                                 () -> s_Swerve.getTranslationToSpeaker(), 
-                                                                shootingTables, 
+                                                                shootingTables,
+                                                                Constants.Targeting.kSpeakerTol,
+                                                                () -> false,
+                                                                () -> false,
                                                                 s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
 
-        NamedCommands.registerCommand("lobShotAuto", new LobShot(() -> true,
-                                       () -> s_Swerve.getTranslationToAmp(),
-                                       lobTables,
-                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        NamedCommands.registerCommand("lobShotAuto", new AutoAimWithStateEstimation( 
+                                            () -> true, 
+                                            () -> s_Swerve.getTranslationToAmp(), 
+                                            lobTables,
+                                            Constants.Targeting.kLobTol,
+                                            () -> !s_Swerve.getInLobZone(),
+                                            () -> false,
+                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
                                                                                     0.0, 
                                                                                     () -> true,
                                                                                     () -> 0, 
-                                                                                    () -> 0,  
+                                                                                    () -> 0,
+                                                                                    Constants.Targeting.kSpeakerTol,
                                                                                     s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         NamedCommands.registerCommand("shootAuto1Setpoint2", new ShootSetpoint(1800.0, 3000.0, 
@@ -197,7 +192,8 @@ public class RobotContainer {
                                                                                0.0, 
                                                                                () -> true,
                                                                                () -> 0,    
-                                                                               () -> 0,     
+                                                                               () -> 0,
+                                                                               Constants.Targeting.kSpeakerTol,  
                                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         NamedCommands.registerCommand("shootAuto1Setpoint3", new ShootSetpoint(1800.0, 3000.0, 
@@ -205,13 +201,9 @@ public class RobotContainer {
                                                                                     0.9, 
                                                                                     () -> true,
                                                                                     () -> 0, 
-                                                                                    () -> 0, 
+                                                                                    () -> 0,
+                                                                                    Constants.Targeting.kSpeakerTol,
                                                                                     s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
-                                    
-        NamedCommands.registerCommand("shootAutoAim", new AutoAim(() -> true, 
-                                                                   shootingTables,
-                                                                   () -> operatorStick.getX(),
-                                                                   s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_VisionLimelight));
       
         NamedCommands.registerCommand("Eject", new ShootSetpoint(1500.0, 1800.0, 
                                                                       Constants.Pitch.intakePosition, 
@@ -219,6 +211,7 @@ public class RobotContainer {
                                                                       () -> true,
                                                                       () -> 0, 
                                                                       () -> 0, 
+                                                                      Constants.Targeting.kLobTol,
                                                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
@@ -323,23 +316,35 @@ public class RobotContainer {
 
         /* Operator Buttons */
         autoAim.onTrue(
-            new AutoAimWithStateEstimation(fireShooter, 
-                                           () -> s_Swerve.getTranslationToSpeaker(), 
-                                           shootingTables, 
-                                           s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+            new AutoAimWithStateEstimation( fireShooter, 
+                                            () -> s_Swerve.getTranslationToSpeaker(), 
+                                            shootingTables,
+                                            Constants.Targeting.kSpeakerTol,
+                                            () -> false,
+                                            () -> false,
+                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
-        lobShotButton.onTrue(new LobShot(fireShooter,
-                                       () -> s_Swerve.getTranslationToAmp(),
-                                       lobTables,
-                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
+        // lobShotButton.onTrue(new LobShot(fireShooter,
+        //                                () -> s_Swerve.getTranslationToAmp(),
+        //                                lobTables,
+        //                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
+        lobShotButton.onTrue(
+            new AutoAimWithStateEstimation( fireShooter, 
+                                            () -> s_Swerve.getTranslationToAmp(), 
+                                            lobTables,
+                                            Constants.Targeting.kLobTol,
+                                            () -> !s_Swerve.getInLobZone(),
+                                            () -> false,
+                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
         shooterEject.onTrue(
             new ShootSetpoint(500.0, 500.0, 
                               Constants.Pitch.intakePosition, 
                               0, 
                               fireShooter,
                               () -> operatorStick.getX(), 
-                              () -> operatorStick.getY(), 
+                              () -> operatorStick.getY(),
+                              Constants.Targeting.kLobTol,
                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
@@ -348,7 +353,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
-        ampScore.onTrue(new AmpScore(1500.0, 1500.0,
+        ampScore.onTrue(new AmpScore(1550.0, 1550.0, // 1500
                                         fireShooter,
                                         () -> operatorStick.getX(),
                                         () -> operatorStick.getY(),
