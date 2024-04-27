@@ -143,14 +143,13 @@ public class Pitch extends SubsystemBase {
     pitchMotor.set(0);
   }
 
-  public boolean isReady() {
-    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    return debounce.calculate(absError <= Constants.Pitch.allowableError);
-  }
-
-  public boolean isReadyLob() {
-    double absError = Math.abs(this.getRawPitchPosition() - this.setpoint);
-    return debounce.calculate(absError <= Constants.Pitch.allowableErrorLob);
+  /**
+   * Returns if the pitch subsystem is within a given tolerance in degrees
+   * @param tolerance the tolerance in degrees
+   */
+  public boolean isReady(double tolerance) {
+    double absErrorDeg = Math.abs(this.getPitchDegrees() - encoderUnitsToDegrees(this.setpoint));
+    return debounce.calculate(absErrorDeg <= tolerance);
   }
 
   @Override
@@ -162,7 +161,7 @@ public class Pitch extends SubsystemBase {
     // SmartDashboard.putNumber("Pitch Setpoint", this.setpoint);
     // SmartDashboard.putNumber("PitchOutput", pitchMotor.getAppliedOutput());
 
-    SmartDashboard.putBoolean("Pitch Ready", isReady());
+    SmartDashboard.putBoolean("Pitch Ready", isReady(Constants.Targeting.kSpeakerTol.pitchTol));
 
   }
 }

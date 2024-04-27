@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -196,26 +197,16 @@ public class Shooter extends SubsystemBase {
 }
 
 
-  public boolean shooterIsReady() {
+  /**
+   * Returns if the shooter subsystem is within the given tolerances in RPM
+   * @param leftTolerance The tolerance for the left shooter in RPM
+   * @param rightTolerance The tolerance for the right shooter in RPM
+   */
+  public boolean isReady(double leftTolerance, double rightTolerance) {
     double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
     double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
-    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableError 
-        && absErrorRight <= Constants.Shooter.right_allowableError)) {
-
-      return true;
-
-    } else {
-
-      return false;
-
-    }
-  }
-
-  public boolean shooterIsReadyLob() {
-    double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
-    double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
-    if (shooterDebounce.calculate(absErrorLeft <= Constants.Shooter.left_allowableErrorLob 
-        && absErrorRight <= Constants.Shooter.right_allowableErrorLob)) {
+    if (shooterDebounce.calculate(absErrorLeft <= leftTolerance 
+        && absErrorRight <= rightTolerance)) {
 
       return true;
 
@@ -237,7 +228,8 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("RightShooterRPM", rightShooterEncoder.getVelocity());
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
-    SmartDashboard.putBoolean("Shooter Ready", shooterIsReady());
+    var tolerances = Constants.Targeting.kSpeakerTol;
+    SmartDashboard.putBoolean("Shooter Ready", isReady(tolerances.leftTol, tolerances.rightTol));
     SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
     SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     

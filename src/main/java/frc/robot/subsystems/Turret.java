@@ -72,9 +72,6 @@ public class Turret extends SubsystemBase {
     m_pidController.setFF(Constants.Turret.kF);
     m_pidController.setOutputRange(-1, 1);
 
-    autoAimPIDController = new PIDController(0.01, 0.00001, 0.0005);
-    autoAimPIDController.setTolerance(Constants.Turret.autoAimAllowableError);
-
     rotateMotor.burnFlash();
   } 
 
@@ -201,68 +198,22 @@ public class Turret extends SubsystemBase {
                                   ArbFFUnits.kPercentOut);
   }
 
-  public void autoAimYaw(double tx, int tid, double joystickInput) {
-    double control;
-    m_currentAimMode = AimMode.kAuto;
-    var alliance = DriverStation.getAlliance();
-
-    if ((alliance.get() == DriverStation.Alliance.Blue && tid == 7) || (alliance.get() == DriverStation.Alliance.Red && tid == 4))
-
-      control = -autoAimPIDController.calculate(tx, 0);
-
-    else
-    
-      control = joystickInput / 2;
-
-    rotateMotor.set(control);
-  }
-
-  public boolean isSetpointAimReady() {
+  /**
+   * Returns if the turret subsystem is within a given tolerance in degrees
+   * @param tolerance the tolerance in degrees
+   */
+  public boolean isReady(double tolerance) {
     if (m_currentAimMode == AimMode.kSetpoint) {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
 
-      if (debounce.calculate(absError <= degreesToEncoderUnits(Constants.Turret.allowableErrorDegrees))){
+      if (debounce.calculate(absError <= degreesToEncoderUnits(tolerance))){
 
         return true;
 
       }
     }
     return false;
-  }
-
-  public boolean isAutoAimReady(double tx, int tid) {
-
-    if (m_currentAimMode == AimMode.kAuto) {
-
-      var alliance = DriverStation.getAlliance();
-
-      if (autoAimDebounce.calculate((alliance.get() == DriverStation.Alliance.Blue && tid == 7) 
-
-              || (alliance.get() == DriverStation.Alliance.Red && tid == 4)))
-
-        return Math.abs(tx) < Constants.Turret.autoAimAllowableError;
-    }
-
-    return false;
-  }
-
-  public boolean isAutoAimReady() {
-
-    if (m_currentAimMode == AimMode.kAuto) {
-
-      return autoAimPIDController.atSetpoint();
-
-    }
-
-    return false;
-
-  }
-
-  public boolean isReady() {
-
-    return isAutoAimReady() || isSetpointAimReady();
-
   }
 
   @Override
@@ -276,7 +227,7 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("TurretOutput", rotateMotor.getAppliedOutput());
     // SmartDashboard.putNumber("Turret To Chassis", getTurretToChassis().getDegrees());
     // SmartDashboard.putNumber("turret percent", rotateMotor.getAppliedOutput());
-    SmartDashboard.putBoolean("Turret Ready", isReady());
+    SmartDashboard.putBoolean("Turret Ready", isReady(Constants.Targeting.kSpeakerTol.turretTol));
 
   }
 }

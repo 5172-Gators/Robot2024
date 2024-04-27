@@ -73,31 +73,20 @@ public final class Constants {
         public static final int rightMotorID = 17;
 
         // right PID
-        public static final double right_kP = 0.001;//0.0003;//0.00020;
-        public static final double right_kI = 0;//0.000001;
-        public static final double right_kD = 0;//0.0015;
+        public static final double right_kP = 0.001;
+        public static final double right_kI = 0;
+        public static final double right_kD = 0;
         public static final double right_kFF = 0.00017;
-        public static final double right_IZone = 0;//200;
-
-        public static final double right_allowableError = 75; //35; // 50
-        public static final double right_allowableErrorLob = 150; //100;
 
         // left PID
-        public static final double left_kP = 0.001;//0.0003;//0.00046;
-        public static final double left_kI = 0;//0.000001;
-        public static final double left_kD = 0;//0.0015;//0.0015;
+        public static final double left_kP = 0.001;
+        public static final double left_kI = 0;
+        public static final double left_kD = 0;
         public static final double left_kFF = 0.000165;
-        public static final double left_IZone = 0;//200;
-
-        public static final double left_allowableError = 75; //35; //50
-        public static final double left_allowableErrorLob  = 150; //100;
 
         public static final double creepRPM = 350;
 
-        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25; //0.00416667
-        public static final double kTargeting_dT_FF = -0.1 / 5; 
     }
-
 
     public static final class Turret {
 
@@ -110,10 +99,7 @@ public final class Constants {
         public static final double minTurretPosition = -17.0;
         public static final double maxTurretPosition = 17.0;
 
-        public static final double allowableErrorDegrees = 2; //0.05; // 0.05
         public static final double aimCoefficient = 0.03;
-
-        public static final double autoAimAllowableError = 6; 
 
         // This is added to the turret setpoint to counteract the the effect of adding spin to the note while shooting
         public static final Rotation2d noteSpinOffset = Rotation2d.fromDegrees(0);
@@ -130,7 +116,6 @@ public final class Constants {
         public static final double kF = 0.0;
         public static final double kFrictionFF = 0.01;//0.0018;//0.0018;//0.01; //0.015;
         public static final double kOmegaFF = 0.085;
-        public static final double kTargeting_dTheta_FF = -0.3 / 4; // TODO tune this
         public static final double IZone = 0.1;
     
     }
@@ -142,8 +127,6 @@ public final class Constants {
         public static final int tiltEncoderID = 4;
 
         /* Max + Min Positions, Allowable Error */
-        public static final double allowableError = 0.03;//0.02;//0.03;
-        public static final double allowableErrorLob = 0.1; //0.05;
         public static final float minPitchPosition = 0.27f;//0.65f; //0.3f; //0.381f; 0
         public static final float minSafePosition = 0.27f; //0.65f
         public static final float maxPitchPosition =  2.17f; //1.75f;//1.77f; //1.6f;
@@ -169,7 +152,21 @@ public final class Constants {
 
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
-        public static final double kTargeting_dPhi_FF = 1;
+
+    }
+
+    public static final class Targeting {
+        // Used in motion compensation calculation
+        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25;
+
+        // Motion feed forwards
+        public static final double kTargeting_dT_FF = -0.1 / 5; // flywheels
+        public static final double kTargeting_dPhi_FF = 1; // Pitch
+        public static final double kTargeting_dTheta_FF = -0.3 / 4; // Turret
+
+        // Tolerances 
+        public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 75, 75);
+        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.5, 150, 150);
 
     }
 

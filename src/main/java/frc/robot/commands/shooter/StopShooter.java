@@ -5,6 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 
@@ -29,7 +30,7 @@ public class StopShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (s_Shooter.shooterIsReady())
+    if (s_Shooter.isReady(Constants.Targeting.kSpeakerTol.leftTol, Constants.Targeting.kSpeakerTol.rightTol))
       s_Shooter.stopShooter();
   }
 

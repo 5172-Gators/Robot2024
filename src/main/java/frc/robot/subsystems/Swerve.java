@@ -5,31 +5,23 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -92,18 +84,6 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
-
-        // m_odometryLog = new DoubleArrayLogEntry(m_log, "/swerve/odometry");
-        // m_pathLog = new DoubleArrayLogEntry(m_log, "/swerve/path");
-        // m_pathTargetLog = new DoubleArrayLogEntry(m_log, "/swerve/targetPose");
-        // m_pathErrorLog = new DoubleArrayLogEntry(m_log, "/swerve/errorPose");
-
-        // PathPlannerLogging.setLogActivePathCallback(
-
-        // );
-
-        // PathPlannerLogging.setLogCurrentPoseCallback(null);
-        // PathPlannerLogging.setLogTargetPoseCallback(null);
 
         SmartDashboard.putData("Field", m_field);
     }
@@ -237,6 +217,18 @@ public class Swerve extends SubsystemBase {
                 return Constants.Field.blueAmp.minus(getPose().getTranslation());
         }
         return Constants.Field.blueAmp.minus(getPose().getTranslation());
+    }
+
+    public boolean getInLobZone() {
+        // Check if robot is in an allowable position to lob to avoid accruing penalty points
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Blue)
+                return this.getPose().getX() < 10.15;
+            else if (alliance.get() == DriverStation.Alliance.Red)
+                return this.getPose().getX() > 6.27;
+        }
+        return true;
     }
 
     public void setRobotPose(Pose2d pose) {

@@ -64,7 +64,7 @@ public class AmpScore extends SequentialCommandGroup {
     addCommands(new ZeroNote(s_Kicker, s_Shooter),
                 new InitAmpScore(s_Climber, s_Pitch, s_Turret),
                 new ShootSetpoint(leftRPM, rightRPM, 1.77, Constants.Turret.turretAmpPosition, fire, 
-                                  yaw_aim, pitch_aim, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs),
+                                  yaw_aim, pitch_aim, Constants.Targeting.kSpeakerTol, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs),
                 new StowClimber(s_Climber),
                 new ReturnToForward(s_Pitch, s_Turret));
   }
