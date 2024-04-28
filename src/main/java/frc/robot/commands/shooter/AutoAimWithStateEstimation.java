@@ -78,12 +78,13 @@ public class AutoAimWithStateEstimation extends Command {
   public void execute() {
     // Motion compensation
     targetTranslation = translationToTargetSupplier.get();
-    var targetDistance = targetTranslation.getNorm();
+    var targetDistance = targetTranslation.getNorm(); // floor distance, meters
 
     ChassisSpeeds V = s_Swerve.getRobotRelativeSpeeds();
     var shooterRPMSetpointAverage = (tbl.getLeftRPM(targetDistance) + tbl.getRightRPM(targetDistance)) / 2.0;
     var noteVelocity = Constants.Targeting.kNoteVelocityCoefficient * shooterRPMSetpointAverage; // Meters per second
-    var timeOfFlight = targetDistance / noteVelocity;
+    var targetDist3D = Math.sqrt(Math.pow(targetDistance,2) + Math.pow(Constants.Field.speakerHeightMeters,2));
+    var timeOfFlight = targetDist3D / noteVelocity;
     var translationOffset = new Translation2d(V.vxMetersPerSecond, V.vyMetersPerSecond).times(timeOfFlight);
 
     Translation2d predictedTarget = targetTranslation.minus(translationOffset);
@@ -92,7 +93,7 @@ public class AutoAimWithStateEstimation extends Command {
 
     AimingParameters aimingParams = tbl.getAimingParams(predictedDistance);
 
-    var pitch_sp = MathUtil.clamp(aimingParams.getPitchAngle(),
+    var pitch_sp = MathUtil.clamp(tbl.getPitch(predictedDistance),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.minPitchPosition),
                            s_Pitch.encoderUnitsToDegrees(Constants.Pitch.maxPitchPosition));
     var turret_sp = predictedAngle.rotateBy(Constants.Turret.noteSpinOffset);
@@ -105,6 +106,8 @@ public class AutoAimWithStateEstimation extends Command {
     var dT = (predictedTarget.getX()*V.vxMetersPerSecond + predictedTarget.getY()*V.vyMetersPerSecond) / 
               predictedTarget.getNorm();
 
+    var dToriginal = (targetTranslation.getX()*V.vxMetersPerSecond+targetTranslation.getY()*V.vyMetersPerSecond)/
+                      targetTranslation.getNorm();
     // Calculate angular velocity of pitch (rad/s) of robot to predicted target for pitch FF
     var dPhi = Constants.Field.speakerHeightMeters * dT / 
                 (Math.pow(predictedTarget.getNorm(),2) + 

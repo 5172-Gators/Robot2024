@@ -157,11 +157,12 @@ public final class Constants {
 
     public static final class Targeting {
         // Used in motion compensation calculation
-        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25;
+        // public static final double kNoteVelocityCoefficient = 0.0020833 * 1.25;
+        public static final double kNoteVelocityCoefficient = 0.0020833 * 1.75;
 
         // Motion feed forwards
         public static final double kTargeting_dT_FF = -0.1 / 5; // flywheels
-        public static final double kTargeting_dPhi_FF = 1; // Pitch
+        public static final double kTargeting_dPhi_FF = 1.0; // Pitch
         public static final double kTargeting_dTheta_FF = -0.3 / 4; // Turret
 
         // Tolerances 
