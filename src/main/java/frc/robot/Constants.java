@@ -86,7 +86,7 @@ public final class Constants {
 
         public static final double creepRPM = 350;
 
-        public static final int kControlFrameUpdateMs = 1;
+        public static final int kControlFrameUpdateMs = 5;
 
     }
 
@@ -120,7 +120,7 @@ public final class Constants {
         public static final double kOmegaFF = 0.085;
         public static final double IZone = 0.1;
 
-        public static final int kControlFrameUpdateMs = 1;
+        public static final int kControlFrameUpdateMs = 5;
     
     }
 
@@ -157,7 +157,7 @@ public final class Constants {
         public static final double arm_cos_kF = 0.016;
         public static final double teleopControlInputCoefficient = 0.1;
 
-        public static final int kControlFrameUpdateMs = 1;
+        public static final int kControlFrameUpdateMs = 5;
 
     }
 

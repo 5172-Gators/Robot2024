@@ -69,8 +69,8 @@ public class Pitch extends SubsystemBase {
 
     // Config CAN update periods
     pitchMotor.setControlFramePeriodMs(Constants.Pitch.kControlFrameUpdateMs);
-    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
-    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
+    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    pitchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
 
     pitchMotor.burnFlash();
   }

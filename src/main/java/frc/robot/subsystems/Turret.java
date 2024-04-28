@@ -78,9 +78,9 @@ public class Turret extends SubsystemBase {
 
     // Config CAN update periods
     rotateMotor.setControlFramePeriodMs(Constants.Turret.kControlFrameUpdateMs);
-    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
-    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
-    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+    rotateMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
 
     rotateMotor.burnFlash();
   } 

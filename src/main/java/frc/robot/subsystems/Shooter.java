@@ -100,12 +100,12 @@ public class Shooter extends SubsystemBase {
 
     // Config CAN update periods
     leftShooter.setControlFramePeriodMs(Constants.Shooter.kControlFrameUpdateMs);
-    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
-    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
+    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    leftShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 
     rightShooter.setControlFramePeriodMs(Constants.Shooter.kControlFrameUpdateMs);
-    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1);
-    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
+    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    rightShooter.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 
     leftShooter.burnFlash();
     rightShooter.burnFlash();

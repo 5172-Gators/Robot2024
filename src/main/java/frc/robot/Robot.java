@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
     var tolerances = Constants.Targeting.kSpeakerTol;
     addPeriodic(() -> {
       m_robotContainer.s_Shooter.updateNotePossession();
-      m_robotContainer.s_Shooter.updateIsReady(tolerances.leftTol, tolerances.rightTol);
-      m_robotContainer.s_Pitch.updateIsReady(tolerances.pitchTol);
-      m_robotContainer.s_Turret.updateIsReady(tolerances.turretTol);
+      // m_robotContainer.s_Shooter.updateIsReady(tolerances.leftTol, tolerances.rightTol);
+      // m_robotContainer.s_Pitch.updateIsReady(tolerances.pitchTol);
+      // m_robotContainer.s_Turret.updateIsReady(tolerances.turretTol);
     }, 0.005, 0.0025);
   }
 
