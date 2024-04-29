@@ -28,6 +28,12 @@ public class Climber extends SubsystemBase {
   RelativeEncoder winchEncoder1;
   RelativeEncoder winchEncoder2;
 
+  double setpoint = 0;
+
+  public enum ClimbMode { DEFAULT, STOW, AMPSCORE, JOYSTICKCONTROL };
+
+  public ClimbMode currentClimbMode = ClimbMode.DEFAULT;
+
   public Climber() {
 
     /* define + configure the winch motors for the climber */
@@ -56,6 +62,7 @@ public class Climber extends SubsystemBase {
     
     winchMotor1.burnFlash();
     winchMotor2.burnFlash();
+
   }
 
   public void manualClimberControl (double speed){
@@ -99,14 +106,48 @@ public class Climber extends SubsystemBase {
     
   }
 
+  public void setClimbMode (ClimbMode climbMode){
+
+    currentClimbMode = climbMode;
+
+  }
+
+  public void setClimberPositionRaw(double pos){
+
+    this.setpoint = pos;
+
+    if (setpoint < getClimberPosition()){
+      this.manualClimberControl(-1);
+      if (this.getClimberPosition() <= setpoint)
+      this.manualClimberControl(0);
+    } else if (setpoint > getClimberPosition()){
+      this.manualClimberControl(1);
+      if (this.getClimberPosition() >= setpoint)
+      this.manualClimberControl(0);
+    }
+
+    if (ClimberIsReady()){
+      this.manualClimberControl(0);
+    }
+
+  }
+
+  public boolean ClimberIsReady(){
+
+    if (Math.abs(setpoint - this.getClimberPosition()) <= 10){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
-    // SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
-    // SmartDashboard.putBoolean("Climb Lim Switch", getLimSwitch());
-    // SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
+    SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
+    SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }

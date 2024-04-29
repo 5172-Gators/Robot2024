@@ -19,12 +19,14 @@ import frc.robot.AimingParameters;
 import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 import frc.robot.ShooterInterpolatingDoubleTable;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Climber.ClimbMode;
 import frc.robot.subsystems.LEDs.LEDMode;
 import frc.robot.subsystems.Shooter.NotePossession;
 
@@ -36,6 +38,7 @@ public class AutoAimWithStateEstimation extends Command {
   private LEDs s_LEDs;
   private Kicker s_Kicker;
   private Swerve s_Swerve;
+  private Climber s_Climber;
 
   private BooleanSupplier fire;
   private BooleanSupplier ceaseFire;
@@ -44,18 +47,20 @@ public class AutoAimWithStateEstimation extends Command {
   private Translation2d targetTranslation;
   private ShooterInterpolatingDoubleTable tbl;
   private AimingTolerances tolerances;
+  private ClimbMode climbMode;
 
   private boolean noteInPlace = false;
 
   /** Creates a new AutoAim. */
   public AutoAimWithStateEstimation(BooleanSupplier fire, Supplier<Translation2d> translationToTargetSupplier, ShooterInterpolatingDoubleTable tbl,
                   AimingTolerances tolerances, BooleanSupplier ceaseFire, BooleanSupplier forceFire, 
-                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve) {
+                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve, Climber m_climber) {
     this.s_Shooter = m_shooter;
     this.s_Pitch = m_pitch;
     this.s_Turret = m_turret;
     this.s_LEDs = m_led;
     this.s_Kicker = m_kicker;
+    this.s_Climber = m_climber;
     this.fire = fire;
     this.translationToTargetSupplier = translationToTargetSupplier;
     this.tbl = tbl;
@@ -71,6 +76,7 @@ public class AutoAimWithStateEstimation extends Command {
   @Override
   public void initialize() {
     noteInPlace = false;
+    s_Climber.setClimbMode(ClimbMode.STOW);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -179,6 +185,7 @@ public class AutoAimWithStateEstimation extends Command {
     s_LEDs.setColor(Color.kBlack);
     s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
+    s_Climber.setClimbMode(ClimbMode.DEFAULT);
   }
 
   // Returns true when the command should end.

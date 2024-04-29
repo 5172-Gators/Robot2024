@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Stabilizer;
 import frc.robot.subsystems.Turret;
@@ -18,10 +19,10 @@ import frc.robot.subsystems.Turret;
 public class ClimbModeRoutine extends SequentialCommandGroup {
   DoubleSupplier control;
   /** Creates a new ClimbModeRoutine. */
-  public ClimbModeRoutine(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret, Stabilizer stabilizer) {
+  public ClimbModeRoutine(DoubleSupplier control, Climber climber, Pitch pitch, Turret turret, Stabilizer stabilizer, Intake intake) {
     addCommands(
       new InitClimber(climber, pitch, turret),
-      new ManualClimbControl(control, climber, pitch, turret, stabilizer)
+      new ManualClimbControl(control, climber, pitch, turret, stabilizer, intake)
     );
   }
 }

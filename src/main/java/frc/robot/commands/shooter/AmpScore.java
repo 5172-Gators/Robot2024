@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Climber.ClimbMode;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -57,15 +59,14 @@ public class AmpScore extends SequentialCommandGroup {
     this.leftRPM = leftRPM;
     this.rightRPM = rightRPM;
 
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_Climber, s_Kicker, s_LEDs);
+    addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ZeroNote(s_Kicker, s_Shooter),
-                new InitAmpScore(s_Climber, s_Pitch, s_Turret),
+    addCommands(new InitAmpScore(s_Pitch, s_Turret),
+                new SetClimbMode(ClimbMode.AMPSCORE, s_Climber),
                 new ShootSetpoint(leftRPM, rightRPM, 1.77, Constants.Turret.turretAmpPosition, fire, 
                                   yaw_aim, pitch_aim, Constants.Targeting.kSpeakerTol, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs),
-                new StowClimber(s_Climber),
                 new ReturnToForward(s_Pitch, s_Turret));
   }
 }

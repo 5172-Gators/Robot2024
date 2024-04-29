@@ -9,8 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Stabilizer extends SubsystemBase {
   /** Creates a new Stabilizer. */
-
+  
   Servo climberServo;
+ 
   public Stabilizer() {
 
     climberServo = new Servo(2);
