@@ -11,6 +11,7 @@ import frc.robot.subsystems.Climber.ClimbMode;
 public class JankyClimberPosition extends Command {
   /** Creates a new JankyClimberPosition. */
   Climber s_Climber;
+
   double setpoint;
 
   public JankyClimberPosition(double setpoint, Climber climber) {
@@ -34,7 +35,7 @@ public class JankyClimberPosition extends Command {
   @Override
   public void execute() {
 
-    s_Climber.manualClimberControl(1);
+    s_Climber.setClimberPositionRaw(setpoint);
 
   }
 
@@ -42,15 +43,13 @@ public class JankyClimberPosition extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    s_Climber.setClimbMode(ClimbMode.STOP);
+    // s_Climber.setClimbMode(ClimbMode.STOP);
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return s_Climber.isReady();
-
+    return false;
   }
 }

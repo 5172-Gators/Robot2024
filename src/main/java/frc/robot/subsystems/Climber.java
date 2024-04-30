@@ -49,8 +49,10 @@ public class Climber extends SubsystemBase {
 
     winchMotor2 = new CANSparkFlex(Constants.Climber.winchMotor2ID, MotorType.kBrushless);
     winchMotor2.restoreFactoryDefaults();
-    winchMotor2.setIdleMode(IdleMode.kBrake);
-    winchMotor2.setInverted(true);
+    winchMotor2.follow(winchMotor1);
+    // winchMotor2.setIdleMode(IdleMode.kBrake);
+    // winchMotor2.setInverted(true);
+
 
     //soft limits
     winchMotor1.setSoftLimit(SoftLimitDirection.kForward, Constants.Climber.maxSoftLimit);
@@ -63,17 +65,20 @@ public class Climber extends SubsystemBase {
     winchEncoder1 = winchMotor1.getEncoder();
     winchEncoder2 = winchMotor2.getEncoder();
 
-    winch1PID.setP(0);
+    winch1PID = winchMotor1.getPIDController();
+    // winch2PID = winchMotor2.getPIDController();
+
+    winch1PID.setP(12800);
     winch1PID.setI(0);
     winch1PID.setD(0);
-    winch1PID.setFF(0.1);
+    winch1PID.setFF(0);
     winch1PID.setOutputRange(-1, 1);
 
-    winch2PID.setP(0);
-    winch2PID.setI(0);
-    winch2PID.setD(0);
-    winch2PID.setFF(0.1);
-    winch2PID.setOutputRange(-1, 1);
+    // winch2PID.setP(0);
+    // winch2PID.setI(0);
+    // winch2PID.setD(0);
+    // winch2PID.setFF(200);
+    // winch2PID.setOutputRange(-1, 1);
     
     winchMotor1.burnFlash();
     winchMotor2.burnFlash();
@@ -129,8 +134,6 @@ public class Climber extends SubsystemBase {
 
   public void setClimberPositionRaw(double pos){
 
-    this.setpoint = pos;
-
     // if (setpoint < getClimberPosition()){
     //   this.manualClimberControl(-1);
     // } else if (setpoint > getClimberPosition()){
@@ -142,7 +145,7 @@ public class Climber extends SubsystemBase {
     // }
 
     winch1PID.setReference(pos, ControlType.kPosition);
-    winch2PID.setReference(pos, ControlType.kPosition);
+    // winch2PID.setReference(pos, ControlType.kPosition);
 
   }
 
@@ -161,7 +164,8 @@ public class Climber extends SubsystemBase {
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
 
     SmartDashboard.putNumber("Winch Motor 1 Position", winchEncoder1.getPosition());
-    SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
+    SmartDashboard.putNumber("Winch Motor One Percent Output", winchMotor1.getAppliedOutput());
+    // SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 
   }

@@ -23,6 +23,7 @@ import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimberDefaultCommand;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.DeployStablizer;
+import frc.robot.commands.climber.JankyClimberPosition;
 import frc.robot.commands.climber.ManualClimbControl;
 import frc.robot.commands.climber.StabilizerDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
@@ -353,7 +354,8 @@ public class RobotContainer {
                               Constants.Targeting.kLobTol,
                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
-        stopShooter.onTrue(new StopShooter(s_Shooter));
+        // stopShooter.onTrue(new StopShooter(s_Shooter));
+        stopShooter.onTrue(new JankyClimberPosition(170, s_Climber));
 
         // climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake)); // Climb Mode Routine
         climbModeButton.onTrue(new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.JOYSTICKCONTROL)));
@@ -413,7 +415,7 @@ public class RobotContainer {
         // testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
 
     }
-    
+
     private void buildAutoRoutines() {
 
         autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
