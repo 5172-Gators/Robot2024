@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingTolerances;
 import frc.robot.Constants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pitch;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Climber.ClimbMode;
 
 public class ShootSetpoint extends Command {
 
@@ -26,6 +28,7 @@ public class ShootSetpoint extends Command {
   Turret s_Turret;
   Kicker s_Kicker;
   LEDs s_LEDs;
+  Climber s_Climber;
 
   double leftRPM;
   double rightRPM;
@@ -38,7 +41,7 @@ public class ShootSetpoint extends Command {
   
   /** Creates a new ShootSetpoint. */
   public ShootSetpoint(double leftRPM, double rightRPM, double pitch, double yaw, BooleanSupplier fire, 
-          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, AimingTolerances tolerances, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led) {
+          DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, AimingTolerances tolerances, Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Climber climber) {
     this.rightRPM = rightRPM;
     this.leftRPM = leftRPM;
     this.pitch = pitch;
@@ -53,13 +56,16 @@ public class ShootSetpoint extends Command {
     this.s_Turret = m_turret;
     this.s_Kicker = m_kicker;
     this.s_LEDs = m_led;
+    this.s_Climber = climber;
     
     addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    s_Climber.setClimbMode(ClimbMode.AMPSCORE);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -30,7 +30,7 @@ public class ClimberDefaultCommand extends Command {
   public ClimberDefaultCommand(DoubleSupplier control, Climber climber) {
 
     this.s_Climber = climber;
-    this.s_Intake = s_Intake;
+    // this.s_Intake = s_Intake;
     this.joystickControl = control;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,16 +49,18 @@ public class ClimberDefaultCommand extends Command {
 
     switch (climbMode) {
 
-      case DEFAULT :
+      case STOP :
         s_Climber.manualClimberControl(0);
         break;
 
       case STOW :
         s_Climber.setClimberPositionRaw(0);
+        // new StowClimber(s_Climber);
         break;
 
       case AMPSCORE :
-        new JankyClimberPosition(176, s_Climber);
+        s_Climber.setClimberPosition(170);
+        // new JankyClimberPosition(170, s_Climber);
         break;
 
       case JOYSTICKCONTROL :

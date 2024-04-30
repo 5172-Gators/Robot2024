@@ -185,7 +185,7 @@ public class AutoAimWithStateEstimation extends Command {
     s_LEDs.setColor(Color.kBlack);
     s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-    s_Climber.setClimbMode(ClimbMode.DEFAULT);
+    s_Climber.setClimbMode(ClimbMode.STOP);
   }
 
   // Returns true when the command should end.

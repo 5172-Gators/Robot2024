@@ -124,8 +124,6 @@ public class RobotContainer {
 
     public final ShootingTables shootingTables;
     public final LobTables lobTables;
-
-    public ClimbMode climbMode = ClimbMode.STOW;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -189,7 +187,7 @@ public class RobotContainer {
                                                                                     () -> 0, 
                                                                                     () -> 0,
                                                                                     Constants.Targeting.kSpeakerTol,
-                                                                                    s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                                    s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
         NamedCommands.registerCommand("shootAuto1Setpoint2", new ShootSetpoint(1800.0, 3000.0, 
                                                                                Constants.Pitch.stageSetpoint,  
@@ -198,7 +196,7 @@ public class RobotContainer {
                                                                                () -> 0,    
                                                                                () -> 0,
                                                                                Constants.Targeting.kSpeakerTol,  
-                                                                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
         NamedCommands.registerCommand("shootAuto1Setpoint3", new ShootSetpoint(1800.0, 3000.0, 
                                                                                     0.42047, 
@@ -207,7 +205,7 @@ public class RobotContainer {
                                                                                     () -> 0, 
                                                                                     () -> 0,
                                                                                     Constants.Targeting.kSpeakerTol,
-                                                                                    s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                                    s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
       
         NamedCommands.registerCommand("Eject", new ShootSetpoint(1500.0, 1800.0, 
                                                                       Constants.Pitch.intakePosition, 
@@ -216,7 +214,7 @@ public class RobotContainer {
                                                                       () -> 0, 
                                                                       () -> 0, 
                                                                       Constants.Targeting.kLobTol,
-                                                                      s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                                                                      s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
@@ -353,7 +351,7 @@ public class RobotContainer {
                               () -> operatorStick.getX(), 
                               () -> operatorStick.getY(),
                               Constants.Targeting.kLobTol,
-                              s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+                              s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
         stopShooter.onTrue(new StopShooter(s_Shooter));
 
@@ -415,7 +413,7 @@ public class RobotContainer {
         // testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
 
     }
-
+    
     private void buildAutoRoutines() {
 
         autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));

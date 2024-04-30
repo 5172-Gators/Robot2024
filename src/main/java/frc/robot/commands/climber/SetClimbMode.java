@@ -13,6 +13,7 @@ public class SetClimbMode extends Command {
 
   Climber s_Climber;
   ClimbMode climbMode;
+  
   public SetClimbMode(ClimbMode desiredClimbMode, Climber climber) {
     this.s_Climber = climber;
     this.climbMode = desiredClimbMode;
@@ -34,11 +35,15 @@ public class SetClimbMode extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    s_Climber.setClimbMode(ClimbMode.STOP);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return s_Climber.ClimberIsReady();
+    return s_Climber.isReady();
   }
 }

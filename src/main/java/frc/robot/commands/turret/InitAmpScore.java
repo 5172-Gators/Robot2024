@@ -7,6 +7,7 @@ package frc.robot.commands.turret;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.climber.JankyClimberPosition;
+import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pitch;
@@ -22,7 +23,6 @@ public class InitAmpScore extends SequentialCommandGroup {
   Pitch s_Pitch;
   Turret s_Turret;
   Climber s_Climber;
-  ClimbMode climbMode;
 
   public InitAmpScore(Pitch pitch, Turret turret) {
 
@@ -31,6 +31,7 @@ public class InitAmpScore extends SequentialCommandGroup {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
                 new SetTurretPosition(s_Turret, Constants.Turret.turretAmpPosition));
   }

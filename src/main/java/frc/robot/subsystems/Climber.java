@@ -28,11 +28,14 @@ public class Climber extends SubsystemBase {
   RelativeEncoder winchEncoder1;
   RelativeEncoder winchEncoder2;
 
+  SparkPIDController winch1PID;
+  SparkPIDController winch2PID;
+
   double setpoint = 0;
 
-  public enum ClimbMode { DEFAULT, STOW, AMPSCORE, JOYSTICKCONTROL };
+  public enum ClimbMode { STOP, STOW, AMPSCORE, JOYSTICKCONTROL };
 
-  public ClimbMode currentClimbMode = ClimbMode.DEFAULT;
+  public ClimbMode currentClimbMode = ClimbMode.STOP;
 
   public Climber() {
 
@@ -59,6 +62,18 @@ public class Climber extends SubsystemBase {
     /* create intstance of the climb + winch motors built-in encoders */
     winchEncoder1 = winchMotor1.getEncoder();
     winchEncoder2 = winchMotor2.getEncoder();
+
+    winch1PID.setP(0);
+    winch1PID.setI(0);
+    winch1PID.setD(0);
+    winch1PID.setFF(0.1);
+    winch1PID.setOutputRange(-1, 1);
+
+    winch2PID.setP(0);
+    winch2PID.setI(0);
+    winch2PID.setD(0);
+    winch2PID.setFF(0.1);
+    winch2PID.setOutputRange(-1, 1);
     
     winchMotor1.burnFlash();
     winchMotor2.burnFlash();
@@ -116,25 +131,24 @@ public class Climber extends SubsystemBase {
 
     this.setpoint = pos;
 
-    if (setpoint < getClimberPosition()){
-      this.manualClimberControl(-1);
-      if (this.getClimberPosition() <= setpoint)
-      this.manualClimberControl(0);
-    } else if (setpoint > getClimberPosition()){
-      this.manualClimberControl(1);
-      if (this.getClimberPosition() >= setpoint)
-      this.manualClimberControl(0);
-    }
+    // if (setpoint < getClimberPosition()){
+    //   this.manualClimberControl(-1);
+    // } else if (setpoint > getClimberPosition()){
+    //   this.manualClimberControl(1);
+    // }
 
-    if (ClimberIsReady()){
-      this.manualClimberControl(0);
-    }
+    // if (this.isReady()){
+    //   this.manualClimberControl(0);
+    // }
+
+    winch1PID.setReference(pos, ControlType.kPosition);
+    winch2PID.setReference(pos, ControlType.kPosition);
 
   }
 
-  public boolean ClimberIsReady(){
+  public boolean isReady(){
 
-    if (Math.abs(setpoint - this.getClimberPosition()) <= 10){
+    if (Math.abs(setpoint - this.getClimberPosition()) <= 20){
       return true;
     } else {
       return false;
