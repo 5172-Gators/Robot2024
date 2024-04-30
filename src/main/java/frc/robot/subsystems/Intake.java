@@ -73,6 +73,7 @@ public class Intake extends SubsystemBase {
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
     jointMotor.setInverted(true);
+    jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
     // relative encoder
