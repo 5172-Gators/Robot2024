@@ -17,7 +17,6 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -207,6 +206,21 @@ public class Shooter extends SubsystemBase {
     double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
     if (shooterDebounce.calculate(absErrorLeft <= leftTolerance 
         && absErrorRight <= rightTolerance)) {
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+  }
+
+  public boolean isReady() {
+    double absErrorLeft = Math.abs(this.getLeftShooterRPM() - this.leftSetpoint);
+    double absErrorRight = Math.abs(this.getRightShooterRPM() - this.rightSetpoint);
+    if (shooterDebounce.calculate(absErrorLeft <= Constants.Targeting.kSpeakerTol.leftTol 
+        && absErrorRight <= Constants.Targeting.kSpeakerTol.rightTol)) {
 
       return true;
 

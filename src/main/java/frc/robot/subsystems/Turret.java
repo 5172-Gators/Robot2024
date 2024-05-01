@@ -8,8 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -214,6 +212,25 @@ public class Turret extends SubsystemBase {
       }
     }
     return false;
+  }
+
+  public boolean isReady() {
+    if (m_currentAimMode == AimMode.kSetpoint) {
+
+      double absError = Math.abs(this.getRotatePosition() - this.setpoint);
+
+      if (debounce.calculate(absError <= degreesToEncoderUnits(Constants.Targeting.kSpeakerTol.turretTol))){
+
+        return true;
+
+      }
+    }
+    return false;
+  }
+
+  public boolean isAt(Rotation2d setpoint) {
+    double absError = Math.abs(this.getTurretToChassis().minus(setpoint).getDegrees());
+    return debounce.calculate(absError <= Constants.Targeting.kSpeakerTol.turretTol); 
   }
 
   @Override

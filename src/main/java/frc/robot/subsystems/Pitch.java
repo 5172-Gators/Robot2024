@@ -152,6 +152,11 @@ public class Pitch extends SubsystemBase {
     return debounce.calculate(absErrorDeg <= tolerance);
   }
 
+  public boolean isReady() {
+    double absErrorDeg = Math.abs(this.getPitchDegrees() - encoderUnitsToDegrees(this.setpoint));
+    return debounce.calculate(absErrorDeg <= Constants.Targeting.kSpeakerTol.pitchTol);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pitch;
@@ -18,23 +19,18 @@ import frc.robot.subsystems.Climber.ClimbMode;
 public class ClimberDefaultCommand extends Command {
   /** Creates a new ClimberDefaultCommand. */
 
-  public Climber s_Climber;
-  public Pitch s_Pitch;
-  public Turret s_Turret;
-  public Intake s_Intake;
-  public Stabilizer s_Stabilizer;
+  private RobotContainer rc;
 
   ClimbMode climbMode;
   DoubleSupplier joystickControl;
 
-  public ClimberDefaultCommand(DoubleSupplier control, Climber climber) {
+  public ClimberDefaultCommand(DoubleSupplier control, RobotContainer rc) {
 
-    this.s_Climber = climber;
-    // this.s_Intake = s_Intake;
+    this.rc = rc;
     this.joystickControl = control;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Climber);
+    addRequirements(rc.s_Climber);
   }
 
   // Called when the command is initially scheduled.
@@ -45,25 +41,28 @@ public class ClimberDefaultCommand extends Command {
   @Override
   public void execute() {
 
-    climbMode = s_Climber.currentClimbMode;
+    climbMode = rc.s_Climber.currentClimbMode;
 
     switch (climbMode) {
 
       case STOP :
-        s_Climber.manualClimberControl(0);
+        rc.s_Climber.stopClimber();
         break;
 
       case STOW :
-        s_Climber.setClimberPositionRaw(Constants.Climber.ampScorePosition);
+        if(rc.s_Turret.isAt(Constants.Turret.intakePosition))
+          rc.s_Climber.setClimberPositionRaw(Constants.Climber.stowedPosition);
+        else
+          rc.s_Climber.stopClimber();
         break;
 
       case AMPSCORE :
-        s_Climber.setClimberPositionRaw(175);
+        // s_Climber.setClimberPositionRaw(175);
         break;
 
       case JOYSTICKCONTROL :
         // new ManualClimbControl(joystickControl, s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake);
-        s_Climber.manualClimberControl(joystickControl.getAsDouble());
+        rc.s_Climber.manualClimberControl(joystickControl.getAsDouble());
         // s_Intake.setIntakeArmPosition(Constants.Intake.stowedPosition);
         break;
 

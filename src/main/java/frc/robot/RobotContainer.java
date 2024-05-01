@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -33,11 +34,13 @@ import frc.robot.commands.kicker.KickerDefaultCommand;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
 import frc.robot.commands.shooter.OLDAmpScore;
+import frc.robot.commands.shooter.AmpScore2;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber.ClimbMode;
 import frc.robot.subsystems.Limelight.CamMode;
 
 /**
@@ -292,7 +295,7 @@ public class RobotContainer {
         );
 
         s_Climber.setDefaultCommand(
-            new ClimberDefaultCommand(() -> operatorStick.getY(), s_Climber)
+            new ClimberDefaultCommand(() -> operatorStick.getY(), this)
         );
 
         s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
@@ -351,7 +354,10 @@ public class RobotContainer {
                               Constants.Targeting.kLobTol,
                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
-        stopShooter.onTrue(new StopShooter(s_Shooter));
+        stopShooter.onTrue(new ParallelCommandGroup(
+            new StopShooter(s_Shooter),
+            new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW))
+        ));
         // stopShooter.onTrue(new JankyClimberPosition(50, s_Climber)); 
 
         // climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake)); // Climb Mode Routine
@@ -359,11 +365,7 @@ public class RobotContainer {
         
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
-        ampScore.onTrue(new OLDAmpScore(1550.0, 1550.0, // 1500
-                                        fireShooter,
-                                        () -> operatorStick.getX(),
-                                        () -> operatorStick.getY(),
-                                        s_Shooter, s_Pitch, s_Turret, s_Climber, s_Kicker, s_LEDs));
+        ampScore.onTrue(new AmpScore2(fireShooter, this));
 
         /* Test Buttons */
 

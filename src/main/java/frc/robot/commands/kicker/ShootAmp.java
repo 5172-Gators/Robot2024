@@ -9,34 +9,34 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Climber.ClimbMode;
+import frc.robot.subsystems.Shooter.NotePossession;
 
 public class ShootAmp extends Command {
   /** Creates a new ShootAmp. */
 
-  Kicker s_Kicker;
-  LEDs s_LEDs;
-  Climber s_Climber;
+  RobotContainer rc;
 
-  boolean turretIsReady;
-  boolean pitchIsReady;
-  boolean shooterIsReady;
-  boolean climberIsReady;
+  BooleanSupplier turretIsReady;
+  BooleanSupplier pitchIsReady;
+  BooleanSupplier shooterIsReady;
+  BooleanSupplier climberIsReady;
 
-  boolean fire;
+  BooleanSupplier fire;
   
-  public ShootAmp(BooleanSupplier fire, boolean turretIsReady, boolean pitchIsReady, boolean climberIsReady, boolean shooterIsReady, Kicker kicker, LEDs leds, Climber climber) {
+  public ShootAmp(BooleanSupplier fire, RobotContainer rc) {
 
-    this.s_Kicker = kicker;
-    this.s_Climber = climber;
-    this.s_LEDs = leds;
+    this.rc = rc;
+    this.fire = fire;
    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Kicker);
+    addRequirements(rc.s_Kicker);
   }
 
   // Called when the command is initially scheduled.
@@ -47,23 +47,25 @@ public class ShootAmp extends Command {
   @Override
   public void execute() {
 
-    if (turretIsReady == true && pitchIsReady == true  && s_Climber.getClimberPosition() == 1.70 && shooterIsReady == true){
-      s_LEDs.setColor(Color.kPurple);
-      if (fire == true)
-      s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);  
+    if (rc.s_Turret.isReady() && rc.s_Pitch.isReady()  && rc.s_Climber.isReady() && rc.s_Climber.currentClimbMode == ClimbMode.AMPSCORE && rc.s_Shooter.isReady()) {
+      rc.s_LEDs.setColor(Color.kPurple);
+      if (fire.getAsBoolean() == true)
+        rc.s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);  
     } else {
-      s_LEDs.setColor(Color.kRed);
+      rc.s_LEDs.setColor(Color.kRed);
     }
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    rc.s_Kicker.stopKicker();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return rc.s_Shooter.currentNotePossession == NotePossession.NONE;
   }
 }

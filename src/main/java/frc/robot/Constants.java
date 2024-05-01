@@ -107,6 +107,8 @@ public final class Constants {
         /* Positions */
         public static final double R_intakingPosition = 0;
         public static final double turretAmpPosition = -12.8333711; //counter
+        public static final Rotation2d ampPosition = Rotation2d.fromDegrees(180);
+        public static final Rotation2d intakePosition = new Rotation2d();
         public static final double clockwiseTurretAmpPosition = 11.809578895568848; //clockwise
         
         /* PID */

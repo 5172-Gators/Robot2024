@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Shooter;
 import frc.robot.AimingTolerances;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.kicker.ShootAmp;
@@ -28,32 +29,15 @@ import frc.robot.subsystems.Climber.ClimbMode;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AmpScore extends SequentialCommandGroup {
   /** Creates a new ImprovedAmpScore. */
-  Pitch s_Pitch;
-  Turret s_Turret;
-  Climber s_Climber;
-  Shooter s_Shooter;
-  Kicker s_Kicker;
-  LEDs s_LEDs;
 
-  BooleanSupplier fire;
-
-  AimingTolerances tolerances;
-
-  public AmpScore() {
+  public AmpScore(BooleanSupplier fire, RobotContainer rc) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InitAmpScore(s_Pitch, s_Turret),
-                new ParallelCommandGroup(new SetClimbMode(ClimbMode.AMPSCORE, s_Climber),
-                                         new SetPitchPositionRaw(s_Pitch, 1.77),
-                                         new SetShooterRPMs(1550.0, 1550.0, s_Shooter)),
-                                         new ShootAmp(fire, 
-                                                      s_Turret.isReady(tolerances.turretTol), 
-                                                      s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol),
-                                                      s_Pitch.isReady(tolerances.pitchTol), 
-                                                      s_Climber.isReady(),
-                                                      s_Kicker,
-                                                      s_LEDs,
-                                                      s_Climber));
+    addCommands(new InitAmpScore(rc.s_Pitch, rc.s_Turret),
+                new ParallelCommandGroup(new SetClimbMode(ClimbMode.AMPSCORE, rc.s_Climber),
+                                         new SetPitchPositionRaw(rc.s_Pitch, 1.77),
+                                         new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter)),
+                                         new ShootAmp(fire, rc));
                 
   }
 }

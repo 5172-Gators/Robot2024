@@ -50,7 +50,7 @@ public class ClimberSoftLimitOverride extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Climber.setClimberPosition(0);
+    s_Climber.setClimberSensorPosition(0);
     s_Climber.enableSoftLimits();
   }
 

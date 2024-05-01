@@ -17,8 +17,6 @@ public class SetClimbMode extends Command {
   public SetClimbMode(ClimbMode desiredClimbMode, Climber climber) {
     this.s_Climber = climber;
     this.climbMode = desiredClimbMode;
-
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
