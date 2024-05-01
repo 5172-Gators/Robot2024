@@ -25,7 +25,7 @@ public class ReturnToForward extends SequentialCommandGroup {
     this.s_Turret = turret;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
+    addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition), // ampscorepostion
                 new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition));
   }
 }

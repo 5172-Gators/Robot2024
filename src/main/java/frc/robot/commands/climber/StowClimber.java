@@ -40,7 +40,7 @@ public class StowClimber extends Command {
   @Override
   public boolean isFinished() {
 
-    return s_Climber.isReady();
+    return true;
 
   }
 }

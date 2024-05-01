@@ -24,15 +24,17 @@ public class InitAmpScore extends SequentialCommandGroup {
   Turret s_Turret;
   Climber s_Climber;
 
-  public InitAmpScore(Pitch pitch, Turret turret) {
+  public InitAmpScore(Pitch pitch, Turret turret, Climber climber) {
 
     this.s_Pitch = pitch;
     this.s_Turret = turret;
+    this.s_Climber = climber;
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
     addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
-                new SetTurretPosition(s_Turret, Constants.Turret.turretAmpPosition));
+                new SetTurretPosition(s_Turret, Constants.Turret.turretAmpPosition),
+                new SetClimbMode(ClimbMode.AMPSCORE, s_Climber));
   }
 }

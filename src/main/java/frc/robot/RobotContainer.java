@@ -277,9 +277,9 @@ public class RobotContainer {
 
         );
 
-        // s_Intake.setDefaultCommand(
-        //     new IntakeTravel(s_Intake)
-        // );
+        s_Intake.setDefaultCommand(
+            new IntakeTravel(s_Intake)
+        );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)
@@ -296,7 +296,6 @@ public class RobotContainer {
         s_Climber.setDefaultCommand(
             new ClimberDefaultCommand(() -> operatorStick.getY(), s_Climber)
         );
-
 
         s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
     }
@@ -354,11 +353,11 @@ public class RobotContainer {
                               Constants.Targeting.kLobTol,
                               s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber));
 
-        // stopShooter.onTrue(new StopShooter(s_Shooter));
-        stopShooter.onTrue(new JankyClimberPosition(170, s_Climber));
+        stopShooter.onTrue(new StopShooter(s_Shooter));
+        // stopShooter.onTrue(new JankyClimberPosition(50, s_Climber)); 
 
         // climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake)); // Climb Mode Routine
-        climbModeButton.onTrue(new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.JOYSTICKCONTROL)));
+        climbModeButton.onTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake));
         
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 

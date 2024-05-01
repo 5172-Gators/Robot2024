@@ -10,7 +10,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.climber.SetClimbMode;
-import frc.robot.commands.climber.StowClimber;
 import frc.robot.commands.intake.StowIntake;
 import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.turret.InitAmpScore;
@@ -63,7 +62,7 @@ public class AmpScore extends SequentialCommandGroup {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InitAmpScore(s_Pitch, s_Turret),
+    addCommands(new InitAmpScore(s_Pitch, s_Turret, s_Climber),
                 new ShootSetpoint(leftRPM, rightRPM, 1.77, Constants.Turret.turretAmpPosition, fire, 
                                   yaw_aim, pitch_aim, Constants.Targeting.kSpeakerTol, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber),
                 new ReturnToForward(s_Pitch, s_Turret));

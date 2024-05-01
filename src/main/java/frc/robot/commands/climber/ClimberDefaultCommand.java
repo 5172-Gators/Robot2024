@@ -55,12 +55,10 @@ public class ClimberDefaultCommand extends Command {
 
       case STOW :
         s_Climber.setClimberPositionRaw(0);
-        // new StowClimber(s_Climber);
         break;
 
       case AMPSCORE :
-        s_Climber.setClimberPosition(170);
-        // new JankyClimberPosition(170, s_Climber);
+        s_Climber.setClimberPositionRaw(175);
         break;
 
       case JOYSTICKCONTROL :

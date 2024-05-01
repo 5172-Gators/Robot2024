@@ -217,6 +217,6 @@
       ]
     }
   },
-  "folder": "outsideAuto",
+  "folder": null,
   "choreoAuto": false
 }

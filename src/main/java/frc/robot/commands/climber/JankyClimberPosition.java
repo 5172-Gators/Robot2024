@@ -20,6 +20,7 @@ public class JankyClimberPosition extends Command {
     this.s_Climber = climber;
 
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(s_Climber);
 
   }
 
@@ -43,13 +44,17 @@ public class JankyClimberPosition extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    // s_Climber.setClimbMode(ClimbMode.STOP);
+    s_Climber.setClimbMode(ClimbMode.STOP);
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (Math.abs(setpoint - s_Climber.getClimberPosition()) <= 0.5){
+      return true;
+    } else {
+      return false;
+    }
   }
 }

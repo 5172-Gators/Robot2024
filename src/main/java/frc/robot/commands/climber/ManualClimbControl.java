@@ -57,7 +57,7 @@ public class ManualClimbControl extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Pitch.setPositionRaw(Constants.Pitch.climbPosition);
+    s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
     if(s_Climber.getClimberPosition() >= 0.5*Constants.Climber.maxSoftLimit)
       s_Stabilizer.stabilizerControl(0.5);

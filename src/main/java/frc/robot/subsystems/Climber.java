@@ -31,11 +31,11 @@ public class Climber extends SubsystemBase {
   SparkPIDController winch1PID;
   SparkPIDController winch2PID;
 
-  double setpoint = 0;
-
   public enum ClimbMode { STOP, STOW, AMPSCORE, JOYSTICKCONTROL };
 
   public ClimbMode currentClimbMode = ClimbMode.STOP;
+
+  public double setpoint = Constants.Climber.stowedPosition;
 
   public Climber() {
 
@@ -43,18 +43,16 @@ public class Climber extends SubsystemBase {
     winchMotor1 = new CANSparkFlex(Constants.Climber.winchMotorID, MotorType.kBrushless);
     winchMotor1.restoreFactoryDefaults();
     winchMotor1.setIdleMode(IdleMode.kBrake);
-    winchMotor1.setSmartCurrentLimit(38);
+    winchMotor1.setSmartCurrentLimit(39);
     winchMotor1.setOpenLoopRampRate(1);
     winchMotor1.setInverted(false);
 
     winchMotor2 = new CANSparkFlex(Constants.Climber.winchMotor2ID, MotorType.kBrushless);
     winchMotor2.restoreFactoryDefaults();
-    winchMotor2.follow(winchMotor1);
-    // winchMotor2.setIdleMode(IdleMode.kBrake);
-    // winchMotor2.setInverted(true);
+    winchMotor2.setIdleMode(IdleMode.kBrake);
+    winchMotor2.follow(winchMotor1, true);
 
-
-    //soft limits
+    // soft limits
     winchMotor1.setSoftLimit(SoftLimitDirection.kForward, Constants.Climber.maxSoftLimit);
     winchMotor1.setSoftLimit(SoftLimitDirection.kReverse, Constants.Climber.minSoftLimit);
   
@@ -66,19 +64,19 @@ public class Climber extends SubsystemBase {
     winchEncoder2 = winchMotor2.getEncoder();
 
     winch1PID = winchMotor1.getPIDController();
-    // winch2PID = winchMotor2.getPIDController();
+    winch2PID = winchMotor2.getPIDController();
 
-    winch1PID.setP(12800);
+    winch1PID.setP(1.3); //25000
     winch1PID.setI(0);
     winch1PID.setD(0);
     winch1PID.setFF(0);
     winch1PID.setOutputRange(-1, 1);
 
-    // winch2PID.setP(0);
-    // winch2PID.setI(0);
-    // winch2PID.setD(0);
-    // winch2PID.setFF(200);
-    // winch2PID.setOutputRange(-1, 1);
+    winch2PID.setP(1.3);
+    winch2PID.setI(0);
+    winch2PID.setD(0);
+    winch2PID.setFF(0);
+    winch2PID.setOutputRange(-1, 1);
     
     winchMotor1.burnFlash();
     winchMotor2.burnFlash();
@@ -90,6 +88,7 @@ public class Climber extends SubsystemBase {
 
       winchMotor1.set(speed);
       winchMotor2.set(speed);
+
     
   }
 
@@ -134,24 +133,19 @@ public class Climber extends SubsystemBase {
 
   public void setClimberPositionRaw(double pos){
 
-    // if (setpoint < getClimberPosition()){
-    //   this.manualClimberControl(-1);
-    // } else if (setpoint > getClimberPosition()){
-    //   this.manualClimberControl(1);
-    // }
-
-    // if (this.isReady()){
-    //   this.manualClimberControl(0);
-    // }
+    this.enableSoftLimits();
+    setpoint = pos;
 
     winch1PID.setReference(pos, ControlType.kPosition);
-    // winch2PID.setReference(pos, ControlType.kPosition);
+    winch2PID.setReference(pos, ControlType.kPosition);
 
   }
 
   public boolean isReady(){
 
-    if (Math.abs(setpoint - this.getClimberPosition()) <= 20){
+    double absError = Math.abs(setpoint - getClimberPosition());
+
+    if (absError <= 0.5){
       return true;
     } else {
       return false;

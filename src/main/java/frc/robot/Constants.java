@@ -140,7 +140,7 @@ public final class Constants {
         public static final double lobSetPoint = 0.61; // 31.01 deg
         public static final double climbPosition = 1.75; // 48.6 deg
         public static final double setpointAmp = 0.49823; // 29.287 deg
-        public static final double ampScoreTravelPosition = 0.9031; // 35.534
+        public static final double ampScoreTravelPosition = 0.277; // 35.534
         
         /* Relative Encoder PID Constants */
         public static final double rel_kP = 15;//3.5; //0.16;
@@ -183,7 +183,7 @@ public final class Constants {
 
         /* Soft Limits */
         public static final float minSoftLimit = 0f;
-        public static final float maxSoftLimit = 191.0f;
+        public static final float maxSoftLimit = 181.0f;
 
         /* Positions */
         public static final double stowedPosition = 0;

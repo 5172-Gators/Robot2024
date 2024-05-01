@@ -132,6 +132,6 @@
       ]
     }
   },
-  "folder": "test",
+  "folder": null,
   "choreoAuto": false
 }
