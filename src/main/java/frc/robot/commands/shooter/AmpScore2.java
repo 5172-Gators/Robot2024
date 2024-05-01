@@ -22,21 +22,26 @@ import frc.robot.commands.turret.SetTurretAngle;
 import frc.robot.subsystems.Climber.ClimbMode;
 
 
-public class AmpScore2 extends ParallelDeadlineGroup {
+public class AmpScore2 extends SequentialCommandGroup {
   /** Creates a new AmpScore2. */
   public AmpScore2(BooleanSupplier fire, RobotContainer rc) {
     
-    super(new SequentialCommandGroup(
-        new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Rotation2d.fromDegrees(180)),
-        new InstantCommand(() -> rc.s_Climber.setClimbMode(ClimbMode.AMPSCORE)),
-        new ParallelDeadlineGroup(
-          new ShootAmp(fire, rc),
-          new SetClimberPosition(Constants.Climber.ampScorePosition, rc.s_Climber, rc.s_Turret, true)),
-        new ReturnToForward(rc.s_Pitch, rc.s_Turret)
-        ));
-  
     addCommands(
-      new ParallelCommandGroup( new SetPitchPositionRaw(rc.s_Pitch, 1.77),
-                                new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter)));
+      new ParallelDeadlineGroup(
+        new SequentialCommandGroup(
+          new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Rotation2d.fromDegrees(180)),
+          new InstantCommand(() -> rc.s_Climber.setClimbMode(ClimbMode.AMPSCORE)),
+          new ParallelDeadlineGroup(
+            new ShootAmp(fire, rc),
+            new SetClimberPosition(Constants.Climber.ampScorePosition, rc.s_Climber, rc.s_Turret, true))
+          ),
+
+          new ParallelCommandGroup( new SetPitchPositionRaw(rc.s_Pitch, 1.77),
+                                    new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter))),
+
+      new ReturnToForward(rc.s_Pitch, rc.s_Turret)
+    );
+
+
   }
 }
