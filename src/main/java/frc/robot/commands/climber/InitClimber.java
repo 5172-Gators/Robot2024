@@ -18,9 +18,9 @@ public class InitClimber extends Command {
   
   /** Creates a new InitClimber. */
   public InitClimber(Climber climber, Pitch pitch, Turret turret) {
-    s_Climber = climber;
-    s_Pitch = pitch;
-    s_Turret = turret;
+    this.s_Climber = climber;
+    this.s_Pitch = pitch;
+    this.s_Turret = turret;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Climber,s_Pitch,s_Turret);

@@ -76,7 +76,6 @@ public class AutoAimWithStateEstimation extends Command {
   @Override
   public void initialize() {
     noteInPlace = false;
-    s_Climber.setClimbMode(ClimbMode.STOW);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

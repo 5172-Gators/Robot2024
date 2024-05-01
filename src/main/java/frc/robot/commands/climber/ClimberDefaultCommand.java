@@ -54,7 +54,7 @@ public class ClimberDefaultCommand extends Command {
         break;
 
       case STOW :
-        s_Climber.setClimberPositionRaw(0);
+        s_Climber.setClimberPositionRaw(Constants.Climber.ampScorePosition);
         break;
 
       case AMPSCORE :

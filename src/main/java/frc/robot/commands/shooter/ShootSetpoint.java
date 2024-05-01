@@ -75,11 +75,9 @@ public class ShootSetpoint extends Command {
     this.yaw += this.yaw_aim.getAsDouble()*Constants.Turret.aimCoefficient;
     // this.pitch += this.pitch_aim.getAsDouble()*0.0001;
 
-    if (s_Climber.isReady() == true){
       s_Shooter.setShooterRPM(this.rightRPM, this.leftRPM);
       s_Pitch.setPositionRaw(this.pitch);
       s_Turret.setPosition(this.yaw);
-    }
 
     if (s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol) && s_Turret.isReady(tolerances.turretTol) && s_Pitch.isReady(tolerances.pitchTol)){
       s_LEDs.setColor(Color.kPurple);

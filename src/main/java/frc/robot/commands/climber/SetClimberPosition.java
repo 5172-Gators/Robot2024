@@ -6,21 +6,24 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Climber.ClimbMode;
 
-public class JankyClimberPosition extends Command {
+public class SetClimberPosition extends Command {
   /** Creates a new JankyClimberPosition. */
   Climber s_Climber;
+  Turret s_Turret;
 
   double setpoint;
 
-  public JankyClimberPosition(double setpoint, Climber climber) {
+  public SetClimberPosition(double setpoint, Climber climber, Turret turret) {
 
     this.setpoint = setpoint;
     this.s_Climber = climber;
+    this.s_Turret = turret;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Climber);
+    addRequirements(s_Climber, s_Turret);
 
   }
 
@@ -42,19 +45,11 @@ public class JankyClimberPosition extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    s_Climber.setClimbMode(ClimbMode.STOP);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(setpoint - s_Climber.getClimberPosition()) <= 0.5){
-      return true;
-    } else {
-      return false;
-    }
+    return s_Climber.isReady();
   }
 }

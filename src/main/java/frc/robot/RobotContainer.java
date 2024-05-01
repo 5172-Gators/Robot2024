@@ -23,7 +23,6 @@ import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimberDefaultCommand;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.DeployStablizer;
-import frc.robot.commands.climber.JankyClimberPosition;
 import frc.robot.commands.climber.ManualClimbControl;
 import frc.robot.commands.climber.StabilizerDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
@@ -33,13 +32,12 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.kicker.KickerDefaultCommand;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
-import frc.robot.commands.shooter.AmpScore;
+import frc.robot.commands.shooter.OLDAmpScore;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
 import frc.robot.commands.shooter.ShootSetpoint;
 import frc.robot.commands.shooter.ShooterCalibrationWithStateEstimation;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimbMode;
 import frc.robot.subsystems.Limelight.CamMode;
 
 /**
@@ -361,7 +359,7 @@ public class RobotContainer {
         
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
-        ampScore.onTrue(new AmpScore(1550.0, 1550.0, // 1500
+        ampScore.onTrue(new OLDAmpScore(1550.0, 1550.0, // 1500
                                         fireShooter,
                                         () -> operatorStick.getX(),
                                         () -> operatorStick.getY(),

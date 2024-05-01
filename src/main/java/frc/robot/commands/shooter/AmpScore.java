@@ -5,16 +5,17 @@
 package frc.robot.commands.shooter;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Shooter;
+import frc.robot.AimingTolerances;
 import frc.robot.Constants;
 import frc.robot.commands.climber.SetClimbMode;
-import frc.robot.commands.intake.StowIntake;
-import frc.robot.commands.kicker.ZeroNote;
+import frc.robot.commands.climber.SetClimberPosition;
+import frc.robot.commands.kicker.ShootAmp;
+import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.turret.InitAmpScore;
-import frc.robot.commands.turret.ReturnToForward;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.LEDs;
@@ -26,8 +27,7 @@ import frc.robot.subsystems.Climber.ClimbMode;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AmpScore extends SequentialCommandGroup {
-  /** Creates a new AmpScore. */
-
+  /** Creates a new ImprovedAmpScore. */
   Pitch s_Pitch;
   Turret s_Turret;
   Climber s_Climber;
@@ -35,36 +35,25 @@ public class AmpScore extends SequentialCommandGroup {
   Kicker s_Kicker;
   LEDs s_LEDs;
 
-  BooleanSupplier fireShooter;
-  double leftRPM;
-  double rightRPM;
   BooleanSupplier fire;
-  DoubleSupplier yaw_aim;
-  DoubleSupplier pitch_aim;
 
-  
-  public AmpScore(double leftRPM, double rightRPM, BooleanSupplier fire, DoubleSupplier yaw_aim, DoubleSupplier pitch_aim, Shooter shooter, Pitch pitch, Turret turret, Climber climber, Kicker kicker, LEDs leds) {
+  AimingTolerances tolerances;
 
-    s_Pitch = pitch;
-    s_Turret = turret;
-    s_Climber = climber;
-    s_Kicker =  kicker;
-    s_Shooter = shooter;
-    s_LEDs = leds;
-    
-    this.fire = fire; 
-    this.yaw_aim = yaw_aim;
-    this.pitch_aim = pitch_aim;
-    this.leftRPM = leftRPM;
-    this.rightRPM = rightRPM;
-
-    addRequirements(s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs);
-
+  public AmpScore() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InitAmpScore(s_Pitch, s_Turret, s_Climber),
-                new ShootSetpoint(leftRPM, rightRPM, 1.77, Constants.Turret.turretAmpPosition, fire, 
-                                  yaw_aim, pitch_aim, Constants.Targeting.kSpeakerTol, s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Climber),
-                new ReturnToForward(s_Pitch, s_Turret));
+    addCommands(new InitAmpScore(s_Pitch, s_Turret),
+                new ParallelCommandGroup(new SetClimbMode(ClimbMode.AMPSCORE, s_Climber),
+                                         new SetPitchPositionRaw(s_Pitch, 1.77),
+                                         new SetShooterRPMs(1550.0, 1550.0, s_Shooter)),
+                                         new ShootAmp(fire, 
+                                                      s_Turret.isReady(tolerances.turretTol), 
+                                                      s_Shooter.isReady(tolerances.leftTol, tolerances.rightTol),
+                                                      s_Pitch.isReady(tolerances.pitchTol), 
+                                                      s_Climber.isReady(),
+                                                      s_Kicker,
+                                                      s_LEDs,
+                                                      s_Climber));
+                
   }
 }
