@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -27,21 +26,23 @@ public class AmpScore2 extends SequentialCommandGroup {
   public AmpScore2(BooleanSupplier fire, RobotContainer rc) {
     
     addCommands(
+      new SetPitchPositionRaw(rc.s_Pitch, 1.77),
+
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Rotation2d.fromDegrees(180)),
+          new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Constants.Turret.ampPosition),
           new InstantCommand(() -> rc.s_Climber.setClimbMode(ClimbMode.AMPSCORE)),
           new ParallelDeadlineGroup(
             new ShootAmp(fire, rc),
             new SetClimberPosition(Constants.Climber.ampScorePosition, rc.s_Climber, rc.s_Turret, true))
           ),
 
-          new ParallelCommandGroup( new SetPitchPositionRaw(rc.s_Pitch, 1.77),
-                                    new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter))),
+          new ParallelCommandGroup( new SetPitchPositionRaw(rc.s_Pitch, 1.77, true),
+                                    new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter, true))),
 
-      new ReturnToForward(rc.s_Pitch, rc.s_Turret)
+      new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Constants.Turret.intakePosition),
+      new SetPitchPositionRaw(rc.s_Pitch, Constants.Pitch.intakePosition)
     );
-
 
   }
 }

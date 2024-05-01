@@ -14,14 +14,21 @@ public class SetPitchPositionRaw extends Command {
   Pitch s_Pitch;
   double position;
 
-  public SetPitchPositionRaw(Pitch s_Pitch, double position) {
+  boolean dontFinish = false;
+
+  public SetPitchPositionRaw(Pitch s_Pitch, double position, boolean dontFinish) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.s_Pitch = s_Pitch;
     this.position = position;
+    this.dontFinish = dontFinish;
 
     addRequirements(s_Pitch);
 
+  }
+
+  public SetPitchPositionRaw(Pitch s_Pitch, double position) {
+    this(s_Pitch, position, false);
   }
 
   // Called when the command is initially scheduled.
@@ -46,7 +53,7 @@ public class SetPitchPositionRaw extends Command {
   @Override
   public boolean isFinished() {
     
-    return s_Pitch.isReady(Constants.Targeting.kSpeakerTol.pitchTol);
+    return s_Pitch.isReady(Constants.Targeting.kSpeakerTol.pitchTol) && !dontFinish;
 
   }
 }

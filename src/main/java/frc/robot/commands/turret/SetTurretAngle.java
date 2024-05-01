@@ -16,13 +16,20 @@ public class SetTurretAngle extends Command {
   Swerve s_Swerve;
   Rotation2d angle;
 
+  boolean dontFinish = false;
+
   /** Creates a new SetTurretAngle. */
-  public SetTurretAngle(Turret s_Turret, Swerve swerve, Rotation2d angle) {
+  public SetTurretAngle(Turret s_Turret, Swerve swerve, Rotation2d angle, boolean dontFinish) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Turret = s_Turret;
     this.s_Swerve = swerve;
     this.angle = angle;
+    this.dontFinish = dontFinish;
     addRequirements(s_Turret);
+  }
+
+  public SetTurretAngle(Turret s_Turret, Swerve swerve, Rotation2d angle) {
+    this(s_Turret, swerve, angle, false);
   }
 
   // Called when the command is initially scheduled.
@@ -44,6 +51,6 @@ public class SetTurretAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return s_Turret.isAt(angle) && !dontFinish;
   }
 }

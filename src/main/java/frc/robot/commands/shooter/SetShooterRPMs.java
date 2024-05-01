@@ -14,12 +14,19 @@ public class SetShooterRPMs extends Command {
   double leftRPM;
   double rightRPM;
 
-  public SetShooterRPMs(double leftRPM, double rightRPM, Shooter shooter) {
+  boolean dontFinish = false;
+
+  public SetShooterRPMs(double leftRPM, double rightRPM, Shooter shooter, boolean dontFinish) {
     this.s_Shooter = shooter;
     this.leftRPM = leftRPM;
     this.rightRPM = rightRPM;
+    this.dontFinish = dontFinish;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Shooter);
+  }
+
+  public SetShooterRPMs(double leftRPM, double rightRPM, Shooter shooter) {
+    this(leftRPM, rightRPM, shooter, false);
   }
 
   // Called when the command is initially scheduled.
@@ -40,6 +47,6 @@ public class SetShooterRPMs extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return s_Shooter.isReady() && !dontFinish;
   }
 }
