@@ -29,6 +29,7 @@ import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.kicker.KickerDefaultCommand;
+import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
 import frc.robot.commands.shooter.AmpScore;
@@ -213,6 +214,17 @@ public class RobotContainer {
                                                                       () -> 0, 
                                                                       Constants.Targeting.kLobTol,
                                                                       s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
+
+        NamedCommands.registerCommand("ZeroNote", new ZeroNote(s_Kicker, s_Shooter));
+
+        NamedCommands.registerCommand("AgainstSpeakerShot", new ShootSetpoint(3130, 2170, 
+                                                                                   1.9, 
+                                                                                   0,
+                                                                                   () -> true,
+                                                                                   () -> 0,
+                                                                                   () -> 0,
+                                                                                   Constants.Targeting.kSpeakerTol, 
+                                                                                   s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs));
 
         // NamedCommands.registerCommand("shootAuto2Setpoint1", new NoShootSetpoint(0, 0, .4862, 2.38,
      //   ()-> 0, ()-> 0, s_Pitch, s_Turret, s_LEDs));
@@ -421,6 +433,7 @@ public class RobotContainer {
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
         autoChooser.addOption("auto5QP", new PathPlannerAuto("auto5QP"));
+        // autoChooser.addOption("auto5JP", new PathPlannerAuto("auto5JP"));
 
     }
 

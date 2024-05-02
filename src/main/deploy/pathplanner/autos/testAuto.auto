@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4474177279310322,
-      "y": 7.2
+      "x": 1.2177246172674163,
+      "y": 5.569261320340823
     },
     "rotation": 0
   },
@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "testHard"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 30.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AgainstSpeakerShot"
+                }
+              }
+            ]
           }
         }
       ]

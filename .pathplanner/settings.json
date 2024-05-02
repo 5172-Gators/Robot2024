@@ -3,11 +3,12 @@
   "robotLength": 0.64,
   "holonomicMode": true,
   "pathFolders": [
-    "auto5",
+    "New Folder",
     "auto1",
     "auto2",
     "auto3",
     "auto4",
+    "auto5",
     "insideAuto1",
     "outsideAuto1",
     "test"

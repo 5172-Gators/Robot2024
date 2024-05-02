@@ -32,6 +32,6 @@ public class InitAmpScore extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetPitchPositionRaw(s_Pitch, Constants.Pitch.ampScoreTravelPosition),
                 new SetTurretPosition(s_Turret, Constants.Turret.turretAmpPosition),
-                new JankyClimberPosition(180, s_Climber));
+                new JankyClimberPosition(170, s_Climber));
   }
 }
