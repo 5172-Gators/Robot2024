@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AimingParameters;
 import frc.robot.AimingTolerances;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.ShooterInterpolatingDoubleTable;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Kicker;
@@ -38,7 +39,6 @@ public class AutoAimWithStateEstimation extends Command {
   private LEDs s_LEDs;
   private Kicker s_Kicker;
   private Swerve s_Swerve;
-  private Climber s_Climber;
 
   private BooleanSupplier fire;
   private BooleanSupplier ceaseFire;
@@ -47,24 +47,21 @@ public class AutoAimWithStateEstimation extends Command {
   private Translation2d targetTranslation;
   private ShooterInterpolatingDoubleTable tbl;
   private AimingTolerances tolerances;
-  private ClimbMode climbMode;
 
   private boolean noteInPlace = false;
 
   /** Creates a new AutoAim. */
   public AutoAimWithStateEstimation(BooleanSupplier fire, Supplier<Translation2d> translationToTargetSupplier, ShooterInterpolatingDoubleTable tbl,
-                  AimingTolerances tolerances, BooleanSupplier ceaseFire, BooleanSupplier forceFire, 
-                  Shooter m_shooter, Pitch m_pitch, Turret m_turret, Kicker m_kicker, LEDs m_led, Swerve m_swerve, Climber m_climber) {
-    this.s_Shooter = m_shooter;
-    this.s_Pitch = m_pitch;
-    this.s_Turret = m_turret;
-    this.s_LEDs = m_led;
-    this.s_Kicker = m_kicker;
-    this.s_Climber = m_climber;
+                  AimingTolerances tolerances, BooleanSupplier ceaseFire, BooleanSupplier forceFire, RobotContainer rc) {
+    this.s_Shooter = rc.s_Shooter;
+    this.s_Pitch = rc.s_Pitch;
+    this.s_Turret = rc.s_Turret;
+    this.s_LEDs = rc.s_LEDs;
+    this.s_Kicker = rc.s_Kicker;
     this.fire = fire;
     this.translationToTargetSupplier = translationToTargetSupplier;
     this.tbl = tbl;
-    this.s_Swerve = m_swerve;
+    this.s_Swerve = rc.s_Swerve;
     this.tolerances = tolerances;
     this.ceaseFire = ceaseFire;
     this.forceFire = forceFire;
@@ -184,7 +181,6 @@ public class AutoAimWithStateEstimation extends Command {
     s_LEDs.setColor(Color.kBlack);
     s_Pitch.setPositionRaw(Constants.Pitch.intakePosition);
     s_Turret.setPosition(Constants.Turret.R_intakingPosition);
-    s_Climber.setClimbMode(ClimbMode.STOP);
   }
 
   // Returns true when the command should end.

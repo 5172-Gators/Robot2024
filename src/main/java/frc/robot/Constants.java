@@ -189,7 +189,7 @@ public final class Constants {
 
         /* Positions */
         public static final double stowedPosition = 0;
-        public static final double ampScorePosition = 170;
+        public static final double ampScorePosition = 166.61;
         public static final double climbPosition = 147.41;
         public static final double maxPosition = 191.0;
 

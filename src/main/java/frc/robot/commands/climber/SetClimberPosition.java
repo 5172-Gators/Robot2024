@@ -26,7 +26,7 @@ public class SetClimberPosition extends Command {
     this.dontFinish = dontFinish;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Climber, s_Turret);
+    addRequirements(s_Climber/*, s_Turret*/);
 
   }
 
@@ -44,10 +44,10 @@ public class SetClimberPosition extends Command {
   @Override
   public void execute() {
 
-    if(s_Climber.currentClimbMode == ClimbMode.AMPSCORE)
-      s_Turret.setAngle(Constants.Turret.ampPosition);
-    if(s_Climber.currentClimbMode == ClimbMode.STOW);
-      s_Turret.setAngle(Constants.Turret.intakePosition);
+    // if(s_Climber.currentClimbMode == ClimbMode.AMPSCORE)
+    //   s_Turret.setAngle(Constants.Turret.ampPosition);
+    // if(s_Climber.currentClimbMode == ClimbMode.STOW);
+    //   s_Turret.setAngle(Constants.Turret.intakePosition);
 
     s_Climber.setClimberPositionRaw(setpoint);
 
@@ -55,7 +55,9 @@ public class SetClimberPosition extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    s_Climber.setClimbMode(ClimbMode.STOP);
+  }
 
   // Returns true when the command should end.
   @Override

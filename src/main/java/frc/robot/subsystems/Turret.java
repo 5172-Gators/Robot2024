@@ -91,7 +91,7 @@ public class Turret extends SubsystemBase {
   }
 
   public Rotation2d getTurretAngle() {
-    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 23.333);
+    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0);
   }
 
   public void setPosition(double position) {
@@ -99,11 +99,11 @@ public class Turret extends SubsystemBase {
   }
 
   public double degreesToEncoderUnits(double degrees) {
-    return degrees * 23.333 / 360.0;//26.0 / 360;
+    return degrees * 26.0 / 360.0;//26.0 / 360;
   }
 
   public double encoderUnitsToDegrees(double pos) {
-    return pos * 360.0 / 23.333;//26.0;
+    return pos * 360.0 / 26.0;//26.0;
   }
 
   private double absoluteToRelativePosition(double absPos) {
@@ -157,7 +157,7 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
-    this.setpoint = test.getDegrees() * 23.333 / 360;
+    this.setpoint = degreesToEncoderUnits(test.getDegrees());
     double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
     m_pidController.setReference( setpoint, 
                                   CANSparkMax.ControlType.kPosition,
@@ -176,7 +176,7 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
-    this.setpoint = test.getDegrees() * 23.333 / 360;
+    this.setpoint = degreesToEncoderUnits(test.getDegrees());
     double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
     double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
     m_pidController.setReference( setpoint, 
@@ -190,7 +190,7 @@ public class Turret extends SubsystemBase {
     m_currentAimMode = AimMode.kSetpoint;
     // angle is a rotation2d object relative to the field
     Rotation2d test = angle.minus(chassisToField).minus(Rotation2d.fromDegrees(180));
-    this.setpoint = test.getDegrees() * 23.333 / 360;
+    this.setpoint = degreesToEncoderUnits(test.getDegrees());
     double frictionFF = Constants.Turret.kFrictionFF * Math.signum(rotateEncoder.getVelocity());
     double robotOmegaFF = Constants.Turret.kOmegaFF * omegaRadiansPerSecond;
     m_pidController.setReference( setpoint, 
@@ -222,7 +222,7 @@ public class Turret extends SubsystemBase {
     if (m_currentAimMode == AimMode.kSetpoint) {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
-
+      SmartDashboard.putNumber("TurretError", encoderUnitsToDegrees(absError));
       if (debounce.calculate(absError <= degreesToEncoderUnits(Constants.Targeting.kSpeakerTol.turretTol))){
 
         return true;
@@ -235,13 +235,14 @@ public class Turret extends SubsystemBase {
   public boolean isAt(Rotation2d setpoint) { 
     // double absError = Math.abs(this.getTurretToChassis().minus(Rotation2d.fromDegrees(180)).minus(setpoint).getDegrees());
     double absError = Math.abs(this.getTurretAngle().getDegrees() - setpoint.getDegrees());
+    // SmartDashboard.putNumber("absTurretError", absError);
     return debounce.calculate(absError <= Constants.Targeting.kSpeakerTol.turretTol); 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("absError", Math.abs(this.getTurretAngle().getDegrees() - Constants.Turret.ampPosition.getDegrees()));
+    // SmartDashboard.putNumber("absError", Math.abs(this.getTurretAngle().getDegrees() - Constants.Turret.ampPosition.getDegrees()));
     SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
     // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
     // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));

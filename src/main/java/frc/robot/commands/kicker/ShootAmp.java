@@ -10,11 +10,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Climber.ClimbMode;
 import frc.robot.subsystems.Shooter.NotePossession;
 
@@ -22,11 +17,6 @@ public class ShootAmp extends Command {
   /** Creates a new ShootAmp. */
 
   RobotContainer rc;
-
-  BooleanSupplier turretIsReady;
-  BooleanSupplier pitchIsReady;
-  BooleanSupplier shooterIsReady;
-  BooleanSupplier climberIsReady;
 
   BooleanSupplier fire;
   
@@ -36,7 +26,7 @@ public class ShootAmp extends Command {
     this.fire = fire;
    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(rc.s_Kicker);
+    addRequirements(rc.s_Kicker, rc.s_LEDs);
   }
 
   // Called when the command is initially scheduled.
@@ -49,7 +39,7 @@ public class ShootAmp extends Command {
 
     if (rc.s_Turret.isReady() && rc.s_Pitch.isReady()  && rc.s_Climber.isReady() && rc.s_Climber.currentClimbMode == ClimbMode.AMPSCORE && rc.s_Shooter.isReady()) {
       rc.s_LEDs.setColor(Color.kPurple);
-      if (fire.getAsBoolean() == true)
+      if (fire.getAsBoolean())
         rc.s_Kicker.setKickerRPM(Constants.Kicker.kicker_shoot);  
     } else {
       rc.s_LEDs.setColor(Color.kRed);

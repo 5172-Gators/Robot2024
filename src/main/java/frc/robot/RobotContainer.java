@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -20,20 +21,26 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import frc.robot.commands.swerve.TeleopSwerve;
 import frc.robot.commands.swerve.UpdateVisionPoseEstimation;
+import frc.robot.commands.turret.SetTurretAngle;
 import frc.robot.commands.turret.TeleopTurret;
 import frc.robot.commands.climber.ClimberDefaultCommand;
 import frc.robot.commands.climber.ClimberSoftLimitOverride;
 import frc.robot.commands.climber.DeployStablizer;
 import frc.robot.commands.climber.ManualClimbControl;
+import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.climber.StabilizerDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.IntakeTravel;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.kicker.KickerDefaultCommand;
+import frc.robot.commands.kicker.ShootAmp;
 import frc.robot.commands.led.LEDDefaultCommand;
 import frc.robot.commands.pitch.PitchDefaultCommand;
+import frc.robot.commands.pitch.SetPitchAngle;
+import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.shooter.OLDAmpScore;
+import frc.robot.commands.shooter.SetShooterRPMs;
 import frc.robot.commands.shooter.AmpScore2;
 import frc.robot.commands.shooter.AutoAimWithStateEstimation;
 import frc.robot.commands.shooter.ShootSetpoint;
@@ -158,7 +165,7 @@ public class RobotContainer {
                                                                 Constants.Targeting.kSpeakerTol,
                                                                 () -> false,
                                                                 () -> false,
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_Climber));
+                                                                this));
 
         NamedCommands.registerCommand("stateEstimationAiming", new AutoAimWithStateEstimation(
                                                                 () -> false,
@@ -167,7 +174,7 @@ public class RobotContainer {
                                                                 Constants.Targeting.kSpeakerTol,
                                                                 () -> false,
                                                                 () -> false,
-                                                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_Climber));
+                                                                this));
 
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
@@ -180,7 +187,7 @@ public class RobotContainer {
                                             Constants.Targeting.kLobTol,
                                             () -> !s_Swerve.getInLobZone(),
                                             () -> false,
-                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_Climber));
+                                            this));
         
         NamedCommands.registerCommand("shootAuto1Setpoint1", new ShootSetpoint(1800.0, 1800.0,
                                                                                     Constants.Pitch.speakerSetpoint,   
@@ -278,9 +285,9 @@ public class RobotContainer {
 
         );
 
-        s_Intake.setDefaultCommand(
-            new IntakeTravel(s_Intake)
-        );
+        // s_Intake.setDefaultCommand(
+        //     new IntakeTravel(s_Intake)
+        // );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)
@@ -323,13 +330,15 @@ public class RobotContainer {
 
         /* Operator Buttons */
         autoAim.onTrue(
-            new AutoAimWithStateEstimation( fireShooter, 
-                                            () -> s_Swerve.getTranslationToSpeaker(), 
-                                            shootingTables,
-                                            Constants.Targeting.kSpeakerTol,
-                                            () -> false,
-                                            () -> false,
-                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_Climber));
+            new ParallelDeadlineGroup(
+                new AutoAimWithStateEstimation( fireShooter, 
+                                                () -> s_Swerve.getTranslationToSpeaker(), 
+                                                shootingTables,
+                                                Constants.Targeting.kSpeakerTol,
+                                                () -> false,
+                                                () -> false,
+                                                this),
+                new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW))));
 
         // lobShotButton.onTrue(new LobShot(fireShooter,
         //                                () -> s_Swerve.getTranslationToAmp(),
@@ -337,13 +346,16 @@ public class RobotContainer {
         //                                s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve));
 
         lobShotButton.onTrue(
-            new AutoAimWithStateEstimation( fireShooter, 
-                                            () -> s_Swerve.getTranslationToAmp(), 
-                                            lobTables,
-                                            Constants.Targeting.kLobTol,
-                                            () -> !s_Swerve.getInLobZone(),
-                                            () -> false,
-                                            s_Shooter, s_Pitch, s_Turret, s_Kicker, s_LEDs, s_Swerve, s_Climber));
+            new ParallelDeadlineGroup(
+                new AutoAimWithStateEstimation( fireShooter, 
+                                                () -> s_Swerve.getTranslationToAmp(), 
+                                                lobTables,
+                                                Constants.Targeting.kLobTol,
+                                                () -> !s_Swerve.getInLobZone(),
+                                                () -> false,
+                                                this),
+                new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW))));
+
         shooterEject.onTrue(
             new ShootSetpoint(500.0, 500.0, 
                               Constants.Pitch.intakePosition, 
@@ -356,12 +368,14 @@ public class RobotContainer {
 
         stopShooter.onTrue(new ParallelCommandGroup(
             new StopShooter(s_Shooter),
-            new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW))
+            new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW)),
+            new SetTurretAngle(s_Turret, s_Swerve, Constants.Turret.intakePosition),
+            new SetPitchPositionRaw(s_Pitch, Constants.Pitch.intakePosition)
         ));
         // stopShooter.onTrue(new JankyClimberPosition(50, s_Climber)); 
 
-        // climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake)); // Climb Mode Routine
-        climbModeButton.onTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake));
+        climbModeButton.whileTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake)); // Climb Mode Routine
+        // climbModeButton.onTrue(new ManualClimbControl(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret, s_Stabilizer, s_Intake));
         
         SmartDashboard.putData("ClimberOverride", new ClimberSoftLimitOverride(() -> operatorStick.getY(), s_Climber, s_Pitch, s_Turret));
 
@@ -411,7 +425,20 @@ public class RobotContainer {
         // new JoystickButton(operatorStick, 15).whileTrue(new SetTurretFieldRelative(s_Turret, Rotation2d.fromDegrees(90), () -> s_Swerve.getPose().getRotation().getDegrees()));
         // testButton1.whileTrue(new SetTurretFieldRelative(s_Turret, s_Swerve, Rotation2d.fromDegrees(180), () -> s_Swerve.getPose().getRotation().getDegrees()));
         
-        // testButton1.whileTrue(new testShooterFlywheels(s_Shooter, 4000, 4000));
+        // testButton1.whileTrue(new SequentialCommandGroup(
+        //     new SetTurretAngle(s_Turret, s_Swerve, Constants.Turret.ampPosition),
+        //     new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.AMPSCORE)),
+        //     new ParallelDeadlineGroup(
+        //         new SetClimberPosition(50, s_Climber, s_Turret, true),
+        //         new SetTurretAngle(s_Turret, s_Swerve, Constants.Turret.ampPosition, true)
+        //     )
+        // ));
+
+        // testButton1.whileTrue(new ParallelDeadlineGroup(
+        //     new ShootAmp(fireShooter, this),
+        //     new SetPitchPositionRaw(s_Pitch, 1.77, true),
+        //     new SetShooterRPMs(1550.0, 1550.0, s_Shooter, true)
+        // ));
 
     }
 

@@ -44,6 +44,7 @@ public class Climber extends SubsystemBase {
     winchMotor1.setIdleMode(IdleMode.kBrake);
     winchMotor1.setSmartCurrentLimit(39);
     winchMotor1.setOpenLoopRampRate(1);
+    winchMotor1.setClosedLoopRampRate(0.05);
     winchMotor1.setInverted(false);
 
     winchMotor2 = new CANSparkFlex(Constants.Climber.winchMotor2ID, MotorType.kBrushless);
@@ -64,7 +65,7 @@ public class Climber extends SubsystemBase {
 
     winch1PID = winchMotor1.getPIDController();
 
-    winch1PID.setP(1.3); //25000
+    winch1PID.setP(0.5); // 1.3
     winch1PID.setI(0);
     winch1PID.setD(0);
     winch1PID.setFF(0);
@@ -150,7 +151,7 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
-
+    SmartDashboard.putString("ClimbMode", currentClimbMode.name());
     SmartDashboard.putNumber("Climber Position", getClimberPosition());
     SmartDashboard.putNumber("Winch1 Percent Output", winchMotor1.getAppliedOutput());
     SmartDashboard.putNumber("Winch2 Applied Output", winchMotor2.getAppliedOutput());
