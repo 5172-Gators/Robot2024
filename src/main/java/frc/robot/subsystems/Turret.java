@@ -228,8 +228,8 @@ public class Turret extends SubsystemBase {
     return false;
   }
 
-  public boolean isAt(Rotation2d setpoint) {
-    double absError = Math.abs(this.getTurretToChassis().minus(setpoint).getDegrees());
+  public boolean isAt(Rotation2d setpoint) { 
+    double absError = Math.abs(this.getTurretToChassis().minus(Rotation2d.fromDegrees(180)).minus(setpoint).getDegrees());
     return debounce.calculate(absError <= Constants.Targeting.kSpeakerTol.turretTol); 
   }
 

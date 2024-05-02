@@ -6,7 +6,6 @@ package frc.robot.commands.shooter;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -16,7 +15,6 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.kicker.ShootAmp;
 import frc.robot.commands.pitch.SetPitchPositionRaw;
-import frc.robot.commands.turret.ReturnToForward;
 import frc.robot.commands.turret.SetTurretAngle;
 import frc.robot.subsystems.Climber.ClimbMode;
 
@@ -27,7 +25,7 @@ public class AmpScore2 extends SequentialCommandGroup {
     
     addCommands(
       new SetPitchPositionRaw(rc.s_Pitch, 1.77),
-
+ 
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Constants.Turret.ampPosition),
