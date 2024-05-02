@@ -91,7 +91,7 @@ public class Turret extends SubsystemBase {
   }
 
   public Rotation2d getTurretAngle() {
-    return Rotation2d.fromDegrees(rotateEncoder.getPosition() * 360.0 / 26.0);
+    return Rotation2d.fromDegrees(encoderUnitsToDegrees(rotateEncoder.getPosition()));
   }
 
   public void setPosition(double position) {
@@ -208,6 +208,7 @@ public class Turret extends SubsystemBase {
     if (m_currentAimMode == AimMode.kSetpoint) {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
+      SmartDashboard.putNumber("TurretErrorDegrees", encoderUnitsToDegrees(absError));
 
       if (debounce.calculate(absError <= degreesToEncoderUnits(tolerance))){
 
@@ -219,17 +220,7 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean isReady() {
-    if (m_currentAimMode == AimMode.kSetpoint) {
-
-      double absError = Math.abs(this.getRotatePosition() - this.setpoint);
-      SmartDashboard.putNumber("TurretError", encoderUnitsToDegrees(absError));
-      if (debounce.calculate(absError <= degreesToEncoderUnits(Constants.Targeting.kSpeakerTol.turretTol))){
-
-        return true;
-
-      }
-    }
-    return false;
+    return isReady(Constants.Targeting.kSpeakerTol.turretTol);
   }
 
   public boolean isAt(Rotation2d setpoint) { 
