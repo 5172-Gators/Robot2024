@@ -241,6 +241,7 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("absError", Math.abs(this.getTurretAngle().getDegrees() - Constants.Turret.ampPosition.getDegrees()));
     SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
     // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
     // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));
