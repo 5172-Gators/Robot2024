@@ -37,6 +37,7 @@ public class Turret extends SubsystemBase {
 
   double setpoint = 0;
   Debouncer debounce = new Debouncer(0.04, DebounceType.kRising);
+  Debouncer debounceAiming = new Debouncer(0.04, DebounceType.kRising);
   Debouncer autoAimDebounce = new Debouncer(0.04, DebounceType.kFalling);
 
   public Turret() {
@@ -210,7 +211,7 @@ public class Turret extends SubsystemBase {
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
       SmartDashboard.putNumber("TurretErrorDegrees", encoderUnitsToDegrees(absError));
 
-      if (debounce.calculate(absError <= degreesToEncoderUnits(tolerance))){
+      if (debounceAiming.calculate(absError <= degreesToEncoderUnits(tolerance))){
 
         return true;
 
