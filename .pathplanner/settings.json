@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "MiddleAuto",
+    "auto5motion",
     "SourceAuto",
     "auto1",
     "auto2",

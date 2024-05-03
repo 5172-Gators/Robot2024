@@ -14,12 +14,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SourceAutoPath1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "SourceAutoPath2"
           }
         },

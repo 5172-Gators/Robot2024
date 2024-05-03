@@ -264,11 +264,11 @@ public class Swerve extends SubsystemBase {
         LimelightHelpers.PoseEstimate leftPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shleft");
         LimelightHelpers.PoseEstimate rightPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shright");
         // LimelightHelpers.PoseEstimate frontPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
-        SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
-        SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
+        // SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
+        // SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
 
-        SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
-        SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
+        // SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
+        // SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
 
         // SmartDashboard.putNumber("Drive Xe", frontPoseEst.pose.getX());
         // SmartDashboard.putNumber("Drive Ye", frontPoseEst.pose.getY());
@@ -355,7 +355,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("RobotPose X", swervePoseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("RobotPose Y", swervePoseEstimator.getEstimatedPosition().getY());
         SmartDashboard.putNumber("RobotPose angle", getPose().getRotation().getDegrees());
-        SmartDashboard.putNumber("gyroRate", getAngularVelocityGyro());
+        // SmartDashboard.putNumber("gyroRate", getAngularVelocityGyro());
 
         m_field.setRobotPose(this.getPose());
 

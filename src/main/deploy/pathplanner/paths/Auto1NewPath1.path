@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.8533049373791073,
-        "y": 5.505754088431254
+        "x": 2.458447825986561,
+        "y": 5.550936522700434
       },
       "prevControl": {
-        "x": 2.64871323885595,
-        "y": 5.505754088431254
+        "x": 2.2538561274634037,
+        "y": 5.550936522700434
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
     {
       "name": "New Constraints Zone",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.5,
+      "maxWaypointRelativePos": 0.9,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 0.5,
@@ -81,13 +81,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0.5,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "forceShoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeAuto"
               }
             }
           ]

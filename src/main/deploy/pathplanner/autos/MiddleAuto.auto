@@ -12,9 +12,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "intakeAuto"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
           }
         },
         {
