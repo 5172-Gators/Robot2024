@@ -185,13 +185,13 @@ public final class Constants {
 
         /* Soft Limits */
         public static final float minSoftLimit = 0f;
-        public static final float maxSoftLimit = 181.0f;
+        public static final float maxSoftLimit = 175.0f;
 
         /* Positions */
         public static final double stowedPosition = 0;
-        public static final double ampScorePosition = 180.3;
-        public static final double climbPosition = 147.41;
-        public static final double maxPosition = 191.0;
+        public static final double ampScorePosition = 174.2;
+        public static final double climbPosition = 147.41; // unused
+        public static final double maxPosition = 175.0; // unused
 
         
     }

@@ -453,6 +453,7 @@ public class RobotContainer {
 
     private void buildAutoRoutines() {
 
+<<<<<<< Updated upstream
         autoChooser.addOption("Middle Auto", new PathPlannerAuto("MiddleAuto"));
         autoChooser.addOption("Source Side Auto", new PathPlannerAuto("SourceSideAuto"));
 
@@ -463,13 +464,26 @@ public class RobotContainer {
         // autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
         // autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
         // autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
+=======
+        // autoChooser.addOption("auto1", new PathPlannerAuto("auto1")); 
+        autoChooser.addOption("Middle Auto BLUE", new PathPlannerAuto("auto1new"));  
+        autoChooser.addOption("Amp Side Auto BLUE", new PathPlannerAuto("outsideAuto1"));
+        autoChooser.addOption("Source Side Auto BLUE", new PathPlannerAuto("insideAuto1"));
+
+>>>>>>> Stashed changes
         // autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         // autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
         // autoChooser.addOption("auto5QP", new PathPlannerAuto("auto5QP"));
+<<<<<<< Updated upstream
 
+=======
+        // autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
+        // autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
+        // autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
+>>>>>>> Stashed changes
     }
 
     /**
