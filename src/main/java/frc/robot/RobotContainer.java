@@ -176,6 +176,15 @@ public class RobotContainer {
                                                                 () -> false,
                                                                 this));
 
+        NamedCommands.registerCommand("forceShoot", new AutoAimWithStateEstimation(
+                                                                () -> true,
+                                                                () -> s_Swerve.getTranslationToSpeaker(), 
+                                                                shootingTables,
+                                                                Constants.Targeting.kSpeakerTol,
+                                                                () -> false,
+                                                                () -> true,
+                                                                this));
+
         NamedCommands.registerCommand("updateStateEstimation", new UpdateVisionPoseEstimation(s_Swerve, s_Turret, s_Shooter));
 
         NamedCommands.registerCommand("intakeAuto", new RunIntake(s_Intake, s_Pitch, s_Turret, s_Shooter, s_Kicker, s_VisionLimelight, s_DriveLimelight, s_LEDs, () -> true));
@@ -285,9 +294,9 @@ public class RobotContainer {
 
         );
 
-        // s_Intake.setDefaultCommand(
-        //     new IntakeTravel(s_Intake)
-        // );
+        s_Intake.setDefaultCommand(
+            new IntakeTravel(s_Intake)
+        );
 
         s_Shooter.setDefaultCommand(
             new StopShooter(s_Shooter)
@@ -445,11 +454,14 @@ public class RobotContainer {
     private void buildAutoRoutines() {
 
         autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
-        autoChooser.addOption("auto1", new PathPlannerAuto("auto1"));  
+        autoChooser.addOption("auto1", new PathPlannerAuto("auto1")); 
+        autoChooser.addOption("auto1 new", new PathPlannerAuto("auto 1 new")); 
+
         autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
         autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
         autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
         autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
+
         autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));

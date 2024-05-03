@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.kicker.ShootAmp;
+import frc.robot.commands.kicker.ZeroNote;
 import frc.robot.commands.pitch.SetPitchPositionRaw;
 import frc.robot.commands.turret.SetTurretAngle;
 import frc.robot.subsystems.Climber.ClimbMode;
@@ -24,6 +25,8 @@ public class AmpScore2 extends SequentialCommandGroup {
   public AmpScore2(BooleanSupplier fire, RobotContainer rc) {
     
     addCommands(
+      
+      new ZeroNote(rc.s_Kicker, rc.s_Shooter),
       new SetPitchPositionRaw(rc.s_Pitch, 1.0),
 
       new ParallelDeadlineGroup(
@@ -38,7 +41,7 @@ public class AmpScore2 extends SequentialCommandGroup {
             new SetPitchPositionRaw(rc.s_Pitch, 1.77, true))
           ),
 
-          new ParallelCommandGroup(new SetShooterRPMs(1550.0, 1550.0, rc.s_Shooter, true))),
+          new ParallelCommandGroup(new SetShooterRPMs(1900.0, 1900.0, rc.s_Shooter, true))),
 
       new SetPitchPositionRaw(rc.s_Pitch, 1.0),
       new SetTurretAngle(rc.s_Turret, rc.s_Swerve, Constants.Turret.intakePosition),

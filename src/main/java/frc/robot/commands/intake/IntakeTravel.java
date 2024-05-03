@@ -33,16 +33,12 @@ public class IntakeTravel extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    s_Intake.moveArm(0);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
 
-    return s_Intake.isReady();
+    return false;
   }
 }

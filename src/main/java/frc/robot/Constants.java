@@ -168,7 +168,7 @@ public final class Constants {
         public static final double kTargeting_dTheta_FF = -0.3 / 4; // Turret
 
         // Tolerances 
-        public static final AimingTolerances kSpeakerTol = new AimingTolerances(30, 0.5, 75, 75);
+        public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 75, 75);
         public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.0, 150, 150);
 
     }
@@ -189,7 +189,7 @@ public final class Constants {
 
         /* Positions */
         public static final double stowedPosition = 0;
-        public static final double ampScorePosition = 166.61;
+        public static final double ampScorePosition = 180.3;
         public static final double climbPosition = 147.41;
         public static final double maxPosition = 191.0;
 
@@ -209,7 +209,7 @@ public final class Constants {
 
         public static final double stowedPosition = 0;
         public static final double travelPosition = -4.26;
-        public static final double deployedPosition = -10.5;//-8.29;//0.12646484375;
+        public static final double deployedPosition = -9.5;//-10.5;//-8.29;//0.12646484375;
 
         public static final double intakeRPM = 3000; // 5000
 

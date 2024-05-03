@@ -69,7 +69,7 @@ public class Intake extends SubsystemBase {
 
     intakeWheelsEncoder2 = intakeMotor2.getEncoder();
 
-    // motor that deploys + stows the intake
+    // motor that deploys + stows the intake3
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
     jointMotor.setInverted(true);
@@ -179,13 +179,13 @@ public class Intake extends SubsystemBase {
 
     // SmartDashboard.putNumber("Intake Wheels Current", intakeMotor.getOutputCurrent());
 
-    // SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
+    SmartDashboard.putNumber("Intake Arm Position", getIntakePosition());
 
     // SmartDashboard.putNumber("IntakeMotor1RPM", intakeWheelsEncoder.getVelocity());
 
     // SmartDashboard.putNumber("IntakeMotor2RPM", intakeWheelsEncoder2.getVelocity());
 
-    // SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
+    SmartDashboard.putNumber("Intake Arm Setpoint", this.setpoint);
 
     //  SmartDashboard.putBoolean("IntakeIsReady", this.isReady());
 
