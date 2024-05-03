@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -63,7 +60,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
 
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
 
   }
@@ -105,7 +102,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
   }
 
@@ -118,7 +115,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer.s_Turret.getTurretToChassis(), m_robotContainer.s_Shooter);
+    m_robotContainer.s_Swerve.updateVisionPoseEstimation(m_robotContainer);
     m_robotContainer.s_Swerve.updateOdometryPoseEstimation();
   }
 }

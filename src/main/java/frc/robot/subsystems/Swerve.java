@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -18,7 +19,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -244,7 +248,7 @@ public class Swerve extends SubsystemBase {
         swervePoseEstimator.update(getGyroYaw(), getModulePositions());
     }
 
-    public void updateVisionPoseEstimation(Rotation2d turretToRobot, Shooter s_Shooter) {
+    public void updateVisionPoseEstimation(RobotContainer rc) {
         // Update robot orientation for limelights
         LimelightHelpers.SetRobotOrientation("limelight-shleft", 
                                             getPose().getRotation().getDegrees(), 
@@ -254,24 +258,24 @@ public class Swerve extends SubsystemBase {
                                             getPose().getRotation().getDegrees(), 
                                             gyro.getRate(), 
                                             0, 0, 0, 0);
-        // LimelightHelpers.SetRobotOrientation("limelight-drive", 
-        //                                     getPose().getRotation().getDegrees(), 
-        //                                     gyro.getRate(), 
-        //                                     0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation("limelight-drive", 
+                                            getPose().getRotation().getDegrees(), 
+                                            gyro.getRate(), 
+                                            0, 0, 0, 0);
 
 
         // Update using vision selected vision measurements
         LimelightHelpers.PoseEstimate leftPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shleft");
         LimelightHelpers.PoseEstimate rightPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shright");
-        // LimelightHelpers.PoseEstimate frontPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
+        LimelightHelpers.PoseEstimate frontPoseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-drive");
         SmartDashboard.putNumber("Shleft Xe", leftPoseEst.pose.getX());
         SmartDashboard.putNumber("Shleft Ye", leftPoseEst.pose.getY());
 
         SmartDashboard.putNumber("Shright Xe", rightPoseEst.pose.getX());
         SmartDashboard.putNumber("Shright Ye", rightPoseEst.pose.getY());
 
-        // SmartDashboard.putNumber("Drive Xe", frontPoseEst.pose.getX());
-        // SmartDashboard.putNumber("Drive Ye", frontPoseEst.pose.getY());
+        SmartDashboard.putNumber("Drive Xe", frontPoseEst.pose.getX());
+        SmartDashboard.putNumber("Drive Ye", frontPoseEst.pose.getY());
 
 
         boolean rejectLeft = false;
@@ -287,9 +291,9 @@ public class Swerve extends SubsystemBase {
             || rightPoseEst.pose.getY() <= 0.0 || rightPoseEst.pose.getY() >= 8.23)
             rejectRight = true;
 
-        // if(frontPoseEst.pose.getX() <= 0.0 || frontPoseEst.pose.getX() >= 16.46
-        //     || frontPoseEst.pose.getY() <= 0.0 || frontPoseEst.pose.getY() >= 8.23)
-        //     rejectFront = true;
+        if(frontPoseEst.pose.getX() <= 0.0 || frontPoseEst.pose.getX() >= 16.46
+            || frontPoseEst.pose.getY() <= 0.0 || frontPoseEst.pose.getY() >= 8.23)
+            rejectFront = true;
         
 
         // if(limelightMeasurement.avgTagDist >= 6.5)
@@ -308,28 +312,45 @@ public class Swerve extends SubsystemBase {
             double xyStds = 0.9; //0.5
             double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-            swervePoseEstimator.addVisionMeasurement(
-                new Pose2d(leftPoseEst.pose.getTranslation(), leftPoseEst.pose.getRotation()),
-                            leftPoseEst.timestampSeconds);
+            // swervePoseEstimator.addVisionMeasurement(
+            //     new Pose2d(leftPoseEst.pose.getTranslation(), leftPoseEst.pose.getRotation()),
+            //                 leftPoseEst.timestampSeconds);
         }
 
         if (rightPoseEst.tagCount > 0 && !rejectRight) {
             double xyStds = 0.9; //0.5
             double degStds = 100000;
             swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-            swervePoseEstimator.addVisionMeasurement(
-                new Pose2d(rightPoseEst.pose.getTranslation(), rightPoseEst.pose.getRotation()),
-                            rightPoseEst.timestampSeconds);
+            // swervePoseEstimator.addVisionMeasurement(
+            //     new Pose2d(rightPoseEst.pose.getTranslation(), rightPoseEst.pose.getRotation()),
+            //                 rightPoseEst.timestampSeconds);
         }
 
-        // if (frontPoseEst.tagCount > 0 && !rejectFront) {
-        //     double xyStds = 0.5;
-        //     double degStds = 100000;
-        //     swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-        //     swervePoseEstimator.addVisionMeasurement(
-        //         new Pose2d(frontPoseEst.pose.getTranslation(), frontPoseEst.pose.getRotation()),
-        //                     frontPoseEst.timestampSeconds);
-        // }
+        if (frontPoseEst.tagCount > 0 && !rejectFront) {
+            double xyStds = 0.9;
+            double degStds = 100000;
+            swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+
+            Pose3d visionPose3d = new Pose3d(frontPoseEst.pose);
+            var r = Units.inchesToMeters(Constants.Limelight.limelightRadius);
+            var z1 = Units.inchesToMeters(Constants.Limelight.pivotZOffset);
+            var z2 = r * rc.s_Pitch.getPitchAngle().getCos();
+            var rxy = r * rc.s_Pitch.getPitchAngle().getSin();
+            var x = rxy * rc.s_Turret.getTurretAngle().getCos();
+            var y = rxy * rc.s_Turret.getTurretAngle().getSin();
+            Rotation3d camMountDerotation = new Rotation3d(0, -Units.degreesToRadians(Constants.Limelight.camToShooterFrameAngle) - rc.s_Pitch.getPitchAngle().getRadians(), -rc.s_Turret.getTurretToChassis().getRadians());
+            Transform3d camToTurretFrame = new Transform3d(x, -y, -(z1 + z2), camMountDerotation);
+            Transform3d turretToBotFrame = new Transform3d(Constants.Limelight.turretToRobotCenter.getX(), Constants.Limelight.turretToRobotCenter.getY(), -Constants.Limelight.floorToTurret, new Rotation3d());
+            Transform3d botToFieldFrame = new Transform3d(0, 0, 0, new Rotation3d(0, 0, getGyroYaw().getRadians()));
+            Pose2d estimatedRobotPose = visionPose3d.transformBy(camToTurretFrame).transformBy(turretToBotFrame).transformBy(botToFieldFrame).toPose2d();
+
+            SmartDashboard.putNumber("Drive Xe Adjusted", estimatedRobotPose.getX());
+            SmartDashboard.putNumber("Drive Ye Adjusted", estimatedRobotPose.getY());
+
+            swervePoseEstimator.addVisionMeasurement(
+                new Pose2d(estimatedRobotPose.getTranslation(), estimatedRobotPose.getRotation()),
+                            frontPoseEst.timestampSeconds);
+        }
     }
 
     @Override

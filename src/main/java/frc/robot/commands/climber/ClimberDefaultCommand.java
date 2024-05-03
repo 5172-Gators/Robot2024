@@ -9,11 +9,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Pitch;
-import frc.robot.subsystems.Stabilizer;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Climber.ClimbMode;
 
 public class ClimberDefaultCommand extends Command {
