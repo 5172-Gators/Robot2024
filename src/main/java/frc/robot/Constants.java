@@ -33,7 +33,7 @@ public final class Constants {
         // Physical Constants for calculating distance to target
         public static final double speakerAprilTagCenterHeight = 57.125; // inches
         public static final double limelightRadius = 10.5; //10.0625; // inches TODO measure this
-        public static final double camToShooterFrameAngle = 15;//12.1; // degrees
+        public static final double camToShooterFrameAngle = 15;//12.1; // degrees TODO measure this
         public static final double camToPivotAngle = 34.08;//31.9; // degrees
         public static final double floorToPivot = 12.82;//13.875; // inches
         
