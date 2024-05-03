@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8409919268288792,
-        "y": 5.054117590014457
+        "x": 5.6001858080748965,
+        "y": 4.333009521939158
       },
       "isLocked": false,
       "linkedName": "insideAuto1Path3end"
@@ -20,8 +20,8 @@
         "y": 4.098792791023527
       },
       "prevControl": {
-        "x": 8.176955773442089,
-        "y": 3.5577255270708177
+        "x": 6.736136953015703,
+        "y": 4.005106098657275
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,8 +29,38 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.65,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeAuto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -43,7 +73,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "insideAuto1",
+  "folder": "SourceAuto",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

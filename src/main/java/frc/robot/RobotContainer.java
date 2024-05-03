@@ -265,9 +265,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driveStick.getRawAxis(strafeAxis),
-                () -> -driveStick.getRawAxis(translationAxis), 
-                () -> -rotateStick.getRawAxis(rotationAxis), 
+                () -> MathUtil.applyDeadband(-driveStick.getRawAxis(strafeAxis), 0.05),
+                () -> MathUtil.applyDeadband(-driveStick.getRawAxis(translationAxis), 0.05), 
+                () -> MathUtil.applyDeadband(-rotateStick.getRawAxis(rotationAxis), 0.05), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -275,7 +275,7 @@ public class RobotContainer {
         s_Turret.setDefaultCommand(
             new TeleopTurret(
                 s_Turret,
-                () -> -operatorStick.getRawAxis(turretRotate) * 0.3 // divided by 2 to slow down the speed of rotating the turret
+                () -> MathUtil.applyDeadband(-operatorStick.getRawAxis(turretRotate) * 0.3, 0.05) // divided by 2 to slow down the speed of rotating the turret
             )
             // new SetTurretPosition(s_Turret, Constants.Turret.R_intakingPosition)
         );
@@ -311,7 +311,7 @@ public class RobotContainer {
         );
 
         s_Climber.setDefaultCommand(
-            new ClimberDefaultCommand(() -> operatorStick.getY(), this)
+            new ClimberDefaultCommand(() -> MathUtil.applyDeadband(operatorStick.getY(), 0.05), this)
         );
 
         s_Stabilizer.setDefaultCommand(new StabilizerDefaultCommand(s_Stabilizer));
@@ -453,21 +453,22 @@ public class RobotContainer {
 
     private void buildAutoRoutines() {
 
-        autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
-        autoChooser.addOption("auto1", new PathPlannerAuto("auto1")); 
-        autoChooser.addOption("auto1 new", new PathPlannerAuto("auto 1 new")); 
+        autoChooser.addOption("Middle Auto", new PathPlannerAuto("MiddleAuto"));
+        autoChooser.addOption("Source Side Auto", new PathPlannerAuto("SourceSideAuto"));
 
-        autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
-        autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
-        autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
-        autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
-
-        autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
+        // autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
+        // autoChooser.addOption("auto1", new PathPlannerAuto("auto1")); 
+        // autoChooser.addOption("auto1 new", new PathPlannerAuto("auto 1 new")); 
+        // autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
+        // autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
+        // autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
+        // autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
+        // autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
-        autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
-        autoChooser.addOption("auto5QP", new PathPlannerAuto("auto5QP"));
+        // autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
+        // autoChooser.addOption("auto5QP", new PathPlannerAuto("auto5QP"));
 
     }
 

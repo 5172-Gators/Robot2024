@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.6233758621363413,
+      "y": 4.499325921728767
+    },
+    "rotation": -58.96827263725303
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,30 +14,30 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1NewPath1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeAuto"
+            "pathName": "SourceAutoPath1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1NewPath2"
+            "pathName": "SourceAutoPath2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1NewPath3"
+            "pathName": "SourceAutoPath3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SourceAutoPath4"
           }
         }
       ]
     }
   },
-  "folder": "auto1",
+  "folder": "SourceSideAuto",
   "choreoAuto": false
 }
