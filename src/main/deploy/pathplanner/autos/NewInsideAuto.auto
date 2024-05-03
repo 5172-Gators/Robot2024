@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6233758621363413,
+      "y": 4.499325921728767
+    },
+    "rotation": -59.5344550805401
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NewInsideAutoPath1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "insideAuto",
+  "choreoAuto": false
+}
