@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.335415461130493,
-        "y": 4.988816368502922
+        "x": 3.773801002147459,
+        "y": 5.289398942434249
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6001858080748965,
-        "y": 4.333009521939158
+        "x": 6.297447525804143,
+        "y": 3.8133758976608876
       },
       "isLocked": false,
-      "linkedName": "insideAuto1Path3end"
+      "linkedName": "SourceAutoPath2End"
     },
     {
       "anchor": {
-        "x": 7.7198472228613495,
-        "y": 4.098792791023527
+        "x": 7.794490498071905,
+        "y": 4.113976955226638
       },
       "prevControl": {
-        "x": 6.736136953015703,
-        "y": 4.005106098657275
+        "x": 6.693698478306047,
+        "y": 4.179278176738172
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "insideAuto1Path2end"
+      "linkedName": "SourceAutoPath3End"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.65,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.05,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 4.0,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -45,11 +45,34 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "sequential",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stateEstimationShooting"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "forceShoot"
+              }
+            },
             {
               "type": "named",
               "data": {
@@ -78,5 +101,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

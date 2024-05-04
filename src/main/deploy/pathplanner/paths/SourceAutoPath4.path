@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.56760634776619,
-        "y": 4.122214464115091
+        "x": 7.794490498071905,
+        "y": 4.113976955226638
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.1271734526350645,
-        "y": 4.11050362756931
+        "x": 6.354009998700797,
+        "y": 4.113976955226638
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SourceAutoPath3End"
     },
     {
       "anchor": {
-        "x": 4.23001793221846,
-        "y": 5.117635570506519
+        "x": 3.5965548294732947,
+        "y": 5.233426466852934
       },
       "prevControl": {
-        "x": 5.225439038609888,
-        "y": 4.403274541213848
+        "x": 5.154455399819894,
+        "y": 4.1886069226683915
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.7,
+      "minWaypointRelativePos": 0.9,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
+        "maxVelocity": 0.75,
+        "maxAcceleration": 0.75,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -45,11 +45,34 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "forceShoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeAuto"
+              }
+            },
             {
               "type": "named",
               "data": {
@@ -62,15 +85,15 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.65,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "forceShoot"
+                "name": "stateEstimationShooting"
               }
             }
           ]
@@ -92,7 +115,7 @@
   "reversed": false,
   "folder": "SourceAuto",
   "previewStartingState": {
-    "rotation": 1.7357045889284408,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

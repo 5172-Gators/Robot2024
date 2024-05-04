@@ -151,10 +151,12 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
    // SmartDashboard.putNumber("WinchSetPoint", rotations);
-    SmartDashboard.putString("ClimbMode", currentClimbMode.name());
-    SmartDashboard.putNumber("Climber Position", getClimberPosition());
-    SmartDashboard.putNumber("Winch1 Percent Output", winchMotor1.getAppliedOutput());
-    SmartDashboard.putNumber("Winch2 Applied Output", winchMotor2.getAppliedOutput());
+
+    // SmartDashboard.putString("ClimbMode", currentClimbMode.name());
+    // SmartDashboard.putNumber("Climber Position", getClimberPosition());
+    // SmartDashboard.putNumber("Winch1 Percent Output", winchMotor1.getAppliedOutput());
+    // SmartDashboard.putNumber("Winch2 Applied Output", winchMotor2.getAppliedOutput());
+
     // SmartDashboard.putNumber("Winch Motor 2 Position", winchEncoder2.getPosition());
     // SmartDashboard.putNumber("ClimbSpeed", climbEncoder.getVelocity());
 

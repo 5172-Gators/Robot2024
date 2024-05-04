@@ -56,7 +56,7 @@ public class Turret extends SubsystemBase {
 
     absoluteEncoder = new CANcoder(Constants.Turret.absoluteEncoderID, "rio");
     rotateEncoder = rotateMotor.getEncoder();
-    rotateEncoder.setPosition(0);
+    rotateEncoder.setPosition(degreesToEncoderUnits(1.978));
     // rotateEncoder.setPosition(this.absoluteToRelativePosition(this.getAbsolutePosition()));
 
     // pid controller 
@@ -209,7 +209,7 @@ public class Turret extends SubsystemBase {
     if (m_currentAimMode == AimMode.kSetpoint) {
 
       double absError = Math.abs(this.getRotatePosition() - this.setpoint);
-      SmartDashboard.putNumber("TurretErrorDegrees", encoderUnitsToDegrees(absError));
+      // SmartDashboard.putNumber("TurretErrorDegrees", encoderUnitsToDegrees(absError));
 
       if (debounceAiming.calculate(absError <= degreesToEncoderUnits(tolerance))){
 
@@ -235,7 +235,7 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("absError", Math.abs(this.getTurretAngle().getDegrees() - Constants.Turret.ampPosition.getDegrees()));
-    SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
+    // SmartDashboard.putNumber("RelTurretPos", getRotatePosition());
     // SmartDashboard.putNumber("absEncoderPos", absoluteEncoder.getAbsolutePosition().getValue());
     // SmartDashboard.putNumber("relFromAbs", this.absoluteToRelativePosition(this.getAbsolutePosition()));
     SmartDashboard.putNumber("Turret Angle", encoderUnitsToDegrees(getRotatePosition()));

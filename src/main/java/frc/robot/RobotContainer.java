@@ -453,23 +453,18 @@ public class RobotContainer {
 
     private void buildAutoRoutines() {
 
-        autoChooser.addOption("Middle Auto", new PathPlannerAuto("MiddleAuto"));
-        autoChooser.addOption("Source Side Auto", new PathPlannerAuto("SourceSideAuto"));
-
-        // autoChooser.addOption("driveOnlyAuto", new PathPlannerAuto("driveOnlyAuto"));
         // autoChooser.addOption("auto1", new PathPlannerAuto("auto1")); 
-        // autoChooser.addOption("auto1 new", new PathPlannerAuto("auto 1 new")); 
-        // autoChooser.addOption("StateEstimation", new PathPlannerAuto("StateEstimation"));
-        // autoChooser.addOption("TestStateEstimation", new PathPlannerAuto("testStateEstimation"));
-        // autoChooser.addOption("outsideAuto1", new PathPlannerAuto("outsideAuto1"));
-        // autoChooser.addOption("insideAuto1", new PathPlannerAuto("insideAuto1"));
+        autoChooser.addOption("Middle Auto", new PathPlannerAuto("MiddleAuto"));  
+        autoChooser.addOption("Amp Side Auto", new PathPlannerAuto("outsideAuto1"));
+        autoChooser.addOption("Source Side Auto", new PathPlannerAuto("SourceAuto"));
+        autoChooser.addOption("Auto5motion", new PathPlannerAuto("auto5m"));
+
         // autoChooser.addOption("auto1+1", new PathPlannerAuto("auto1+1"));
         // autoChooser.addOption("shootParkSource", new PathPlannerAuto("shootParkSource"));
         // autoChooser.addOption("shootParkSourceAuto", new PathPlannerAuto("shootParkSourceAuto"));
         // autoChooser.addOption("auto2", new PathPlannerAuto("auto2"));
         // autoChooser.addOption("testAuto", new PathPlannerAuto("testAuto"));
         // autoChooser.addOption("auto5QP", new PathPlannerAuto("auto5QP"));
-
     }
 
     /**

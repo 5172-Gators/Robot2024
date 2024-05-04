@@ -244,8 +244,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("LeftShooterRPM", leftShooterEncoder.getVelocity());
     var tolerances = Constants.Targeting.kSpeakerTol;
     SmartDashboard.putBoolean("Shooter Ready", isReady(tolerances.leftTol, tolerances.rightTol));
-    SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
-    SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
+    // SmartDashboard.putBoolean("Shooter Flag", shooterSensorFlag);
+    // SmartDashboard.putBoolean("Kicker Flag", kickerSensorFlag);
     
     // SmartDashboard.putNumber("RightOutput", rightShooter.getAppliedOutput());
     // SmartDashboard.putNumber("LeftOutput", leftShooter.getAppliedOutput());

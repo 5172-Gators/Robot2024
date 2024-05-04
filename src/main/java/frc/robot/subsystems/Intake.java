@@ -53,10 +53,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.setIdleMode(IdleMode.kBrake);
     intakeMotor.setInverted(true);
     intakeMotor.setSmartCurrentLimit(39, 0);
-
-    // intakeMotor.burnFlash();
-
+    
     intakeWheelsEncoder = intakeMotor.getEncoder();
+
+    intakeMotor.burnFlash();
 
     // motor 2 controls the tiny roller
     intakeMotor2 = new CANSparkFlex(Constants.Intake.intakeMotor2ID, MotorType.kBrushless);
@@ -65,13 +65,13 @@ public class Intake extends SubsystemBase {
     intakeMotor2.setInverted(true);
     intakeMotor2.setSmartCurrentLimit(39, 0);
 
-    // intakeMotor2.burnFlash();
-
     intakeWheelsEncoder2 = intakeMotor2.getEncoder();
+    intakeMotor2.burnFlash();
 
     // motor that deploys + stows the intake3
     jointMotor = new CANSparkFlex(Constants.Intake.armID, MotorType.kBrushless);
     jointMotor.restoreFactoryDefaults();
+    jointMotor.setIdleMode(IdleMode.kBrake);
     jointMotor.setInverted(true);
     jointMotor.setSmartCurrentLimit(Constants.Intake.stall_current_lim, Constants.Intake.free_current_lim);
 
@@ -109,8 +109,6 @@ public class Intake extends SubsystemBase {
     // intakeWheelsPID2.setOutputRange(-1, 1);
     // intakeWheelsPID2.setIZone(Constants.Intake.wheels_IZone);
 
-    intakeMotor.burnFlash();
-    intakeMotor2.burnFlash();
     jointMotor.burnFlash();
   }
 
