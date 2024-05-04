@@ -33,13 +33,13 @@ public final class Constants {
         // Physical Constants for calculating distance to target
         public static final double speakerAprilTagCenterHeight = 57.125; // inches
         public static final double limelightRadius = 10.5; //10.0625; // inches TODO measure this
-        public static final double camToShooterFrameAngle = 15;//12.1; // degrees TODO measure this
+        public static final double camToShooterFrameAngle = 8.5;//12.1; // degrees
         public static final double camToPivotAngle = 34.08;//31.9; // degrees
         public static final double floorToPivot = 12.82;//13.875; // inches
         
-        public static final double pivotZOffset = 3; // inches TODO measure this
-        public static final Translation2d turretToRobotCenter = new Translation2d(0.5, 0); // inches TODO measure this
-        public static final double floorToTurret = 10; // inches TODO measure this
+        public static final double pivotZOffset = 3.6875; // inches (to turret frame mount)
+        public static final Translation2d turretToRobotCenter = new Translation2d(2.0, 0); // inches
+        public static final double floorToTurret = 9.4375; // inches
     }
 
     public static class LEDs {
