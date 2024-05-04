@@ -357,6 +357,18 @@ public class RobotContainer {
         lobShotButton.onTrue(
             new ParallelDeadlineGroup(
                 new AutoAimWithStateEstimation( fireShooter, 
+                                                () -> s_Swerve.getTranslationToMidfieldLob(), 
+                                                lobTables,
+                                                Constants.Targeting.kLobTol,
+                                                () -> false,
+                                                () -> false,
+                                                this),
+                new InstantCommand(() -> s_Climber.setClimbMode(ClimbMode.STOW))));
+
+        // Mid-field lob
+        testButton1.onTrue(
+            new ParallelDeadlineGroup(
+                new AutoAimWithStateEstimation( fireShooter, 
                                                 () -> s_Swerve.getTranslationToAmp(), 
                                                 lobTables,
                                                 Constants.Targeting.kLobTol,

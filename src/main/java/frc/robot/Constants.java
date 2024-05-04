@@ -21,6 +21,8 @@ public final class Constants {
         public static final Translation2d redSpeaker = new Translation2d(16.539, 5.41);
         public static final Translation2d blueAmp = new Translation2d(0, 6.89); // 7.01
         public static final Translation2d redAmp = new Translation2d(16.539, 6.89); // 7.01
+        public static final Translation2d blueMidfieldLob = new Translation2d(7.38, 7.0);
+        public static final Translation2d redMidfieldLob = new Translation2d(9.16, 7.0);
 
         public static final double speakerHeightMeters = 2.10566;
     }

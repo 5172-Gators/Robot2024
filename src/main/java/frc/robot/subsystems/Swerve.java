@@ -222,6 +222,17 @@ public class Swerve extends SubsystemBase {
         return Constants.Field.blueAmp.minus(getPose().getTranslation());
     }
 
+    public Translation2d getTranslationToMidfieldLob() {
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()) {
+            if(alliance.get() == DriverStation.Alliance.Red)
+                return Constants.Field.redMidfieldLob.minus(getPose().getTranslation());
+            else
+                return Constants.Field.blueMidfieldLob.minus(getPose().getTranslation());
+        }
+        return Constants.Field.blueMidfieldLob.minus(getPose().getTranslation());
+    }
+
     public boolean getInLobZone() {
         // Check if robot is in an allowable position to lob to avoid accruing penalty points
         var alliance = DriverStation.getAlliance();
