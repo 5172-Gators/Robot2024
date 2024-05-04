@@ -168,8 +168,8 @@ public final class Constants {
         public static final double kTargeting_dTheta_FF = -0.3 / 4; // Turret
 
         // Tolerances 
-        public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 75, 75);
-        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.0, 150, 150);
+        public static final AimingTolerances kSpeakerTol = new AimingTolerances(2, 0.5, 50, 50);
+        public static final AimingTolerances kLobTol = new AimingTolerances(2, 1.0, 75, 75);
 
     }
 
