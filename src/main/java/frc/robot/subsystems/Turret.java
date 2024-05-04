@@ -56,7 +56,7 @@ public class Turret extends SubsystemBase {
 
     absoluteEncoder = new CANcoder(Constants.Turret.absoluteEncoderID, "rio");
     rotateEncoder = rotateMotor.getEncoder();
-    rotateEncoder.setPosition(0);
+    rotateEncoder.setPosition(degreesToEncoderUnits(1.978));
     // rotateEncoder.setPosition(this.absoluteToRelativePosition(this.getAbsolutePosition()));
 
     // pid controller 
